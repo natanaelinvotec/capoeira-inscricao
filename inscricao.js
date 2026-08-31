@@ -1,9 +1,8 @@
-// Importando o Firebase (Versão 10 Modular) direto do Google
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// SUAS CHAVES DO FIREBASE (Já configuradas com os dados do seu print!)
+// SUAS CHAVES DO FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
   authDomain: "capoeira-liberdade.firebaseapp.com",
@@ -13,12 +12,50 @@ const firebaseConfig = {
   appId: "1:492022804215:web:c61aed556d9f1aa9576df2"
 };
 
-// Inicializando o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Lógica da Câmera
+// ----------------------------------------------------
+// 1. CÁLCULO DE IDADE E BLOQUEIO DE RESPONSÁVEL
+// ----------------------------------------------------
+const inputDataNasc = document.getElementById('dataNasc');
+const inputIdade = document.getElementById('campoIdade');
+const secaoResponsavel = document.getElementById('secaoResponsavel');
+const inputsResponsavel = secaoResponsavel.querySelectorAll('input');
+
+inputDataNasc.addEventListener('change', (e) => {
+    if (!e.target.value) return;
+    
+    const hoje = new Date();
+    const nascimento = new Date(e.target.value);
+    
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+    
+    // Ajusta a idade se ainda não fez aniversário no ano atual
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade--;
+    }
+    
+    inputIdade.value = idade;
+
+    // Se maior ou igual a 18, oculta a área de responsável e remove a obrigatoriedade
+    if (idade >= 18) {
+        secaoResponsavel.classList.add('hidden');
+        inputsResponsavel.forEach(input => {
+            input.removeAttribute('required');
+            input.value = ''; // Limpa caso já tivesse preenchido
+        });
+    } else {
+        secaoResponsavel.classList.remove('hidden');
+        inputsResponsavel.forEach(input => input.setAttribute('required', 'true'));
+    }
+});
+
+// ----------------------------------------------------
+// 2. LÓGICA DA CÂMERA
+// ----------------------------------------------------
 const startCamBtn = document.getElementById('startCam');
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -35,7 +72,7 @@ startCamBtn.addEventListener('click', async () => {
         startCamBtn.style.display = 'none';
     } catch (err) {
         alert("Erro ao acessar a câmera. Verifique as permissões do navegador.");
-        console.error("Erro na câmera:", err);
+        console.error(err);
     }
 });
 
@@ -55,7 +92,9 @@ snapBtn.addEventListener('click', () => {
     startCamBtn.style.background = '#666';
 });
 
-// Manipulação e Envio do Formulário para o Firebase
+// ----------------------------------------------------
+// 3. ENVIO PARA O FIREBASE
+// ----------------------------------------------------
 const form = document.getElementById('formInscricao');
 const submitBtn = document.querySelector('.btn-submit');
 
@@ -67,7 +106,6 @@ form.addEventListener('submit', async (e) => {
         return;
     }
     
-    // Altera o botão para mostrar que está enviando
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
     submitBtn.disabled = true;
     submitBtn.style.background = '#666';
@@ -76,14 +114,12 @@ form.addEventListener('submit', async (e) => {
     const data = Object.fromEntries(formData.entries());
     
     try {
-        // 1. Fazer o Upload da Foto no Firebase Storage
         const nomeArquivo = 'fotos_alunos/' + Date.now() + '_' + data.nome.replace(/\s+/g, '_') + '.jpg';
         const fotoRef = ref(storage, nomeArquivo);
         
         await uploadString(fotoRef, fotoDataUrl.value, 'data_url');
         const fotoFinalUrl = await getDownloadURL(fotoRef);
 
-        // 2. Salvar os dados de texto + a URL da foto no Firestore Database
         await addDoc(collection(db, "alunos"), {
             ...data,
             fotoUrl: fotoFinalUrl,
@@ -94,7 +130,6 @@ form.addEventListener('submit', async (e) => {
         
         alert("Inscrição realizada com sucesso! O cadastro já está no banco de dados.");
         
-        // Limpa o formulário
         form.reset();
         canvas.style.display = 'none';
         fotoDataUrl.value = '';
@@ -102,8 +137,8 @@ form.addEventListener('submit', async (e) => {
         startCamBtn.style.background = 'var(--secondary-blue)';
 
     } catch (error) {
-        console.error("Erro ao salvar inscrição: ", error);
-        alert("Ocorreu um erro ao enviar. Verifique se o Banco de Dados (Firestore) está ativado em 'modo de teste' no Firebase.");
+        console.error("Erro ao salvar: ", error);
+        alert("Ocorreu um erro ao enviar. Verifique se o Banco de Dados (Firestore) está liberado.");
     } finally {
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Finalizar Inscrição';
         submitBtn.disabled = false;
