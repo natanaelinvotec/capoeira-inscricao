@@ -11,6 +11,8 @@
 <body>
 
     <div class="header">
+        <!-- Logo adicionada aqui -->
+        <img src="logo-liberdade.jpg" alt="Logo Liberdade e Expressão" class="logo-esfera">
         <h1>Ficha de Inscrição Oficial</h1>
         <p>Grupo de Capoeira Liberdade e Expressão</p>
     </div>
@@ -31,20 +33,38 @@
 
             <!-- Dados do Aluno -->
             <h2>Dados Pessoais</h2>
+            
+            <div class="form-group">
+                <label>Local de Treinamento (Academia):</label>
+                <select name="localTreino" required>
+                    <option value="">Selecione sua academia...</option>
+                    <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
+                    <option value="Academia Mestre Omar">Academia Mestre Omar</option>
+                    <option value="Academia Professor Rafinha">Academia Professor Rafinha</option>
+                    <option value="Academia Professor Tigoy">Academia Professor Tigoy</option>
+                    <option value="Academia Professor Maick">Academia Professor Maick</option>
+                    <option value="Academia Professor Lebrinha">Academia Professor Lebrinha</option>
+                    <option value="Academia Instrutor Leiliano">Academia Instrutor Leiliano</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Nome completo:</label>
                 <input type="text" name="nome" required>
             </div>
+            
             <div class="grid-2">
                 <div class="form-group">
                     <label>Data de Nascimento:</label>
-                    <input type="date" name="dataNasc" required>
+                    <input type="date" name="dataNasc" id="dataNasc" required>
                 </div>
                 <div class="form-group">
                     <label>Idade:</label>
-                    <input type="number" name="idade" required>
+                    <!-- Campo bloqueado para edição manual -->
+                    <input type="number" name="idade" id="campoIdade" placeholder="Calculada automaticamente" readonly required>
                 </div>
             </div>
+            
             <div class="grid-2">
                 <div class="form-group">
                     <label>CPF ou RG:</label>
@@ -55,6 +75,7 @@
                     <input type="text" name="telefone" required>
                 </div>
             </div>
+            
             <div class="form-group">
                 <label>Endereço Completo:</label>
                 <input type="text" name="endereco" required>
@@ -70,20 +91,23 @@
                 </div>
             </div>
 
-            <!-- Dados de Emergência -->
-            <h2>Contatos de Emergência</h2>
-            <div class="form-group">
-                <label>Nome do Responsável:</label>
-                <input type="text" name="emergenciaNome" required>
-            </div>
-            <div class="grid-2">
+            <!-- Dados de Emergência / Responsável (Oculto se for maior de 18) -->
+            <div id="secaoResponsavel">
+                <h2>Contatos do Responsável</h2>
+                <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Obrigatório para menores de 18 anos.</p>
                 <div class="form-group">
-                    <label>Telefone:</label>
-                    <input type="text" name="emergenciaTel" required>
+                    <label>Nome do Responsável:</label>
+                    <input type="text" name="emergenciaNome" required>
                 </div>
-                <div class="form-group">
-                    <label>Parentesco:</label>
-                    <input type="text" name="parentesco" required>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Telefone:</label>
+                        <input type="text" name="emergenciaTel" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Parentesco:</label>
+                        <input type="text" name="parentesco" required>
+                    </div>
                 </div>
             </div>
 
@@ -177,7 +201,6 @@
         </form>
     </div>
 
-    <!-- Atenção aqui: type="module" -->
     <script type="module" src="inscricao.js"></script>
 </body>
 </html>
