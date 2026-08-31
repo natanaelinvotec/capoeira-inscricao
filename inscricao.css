@@ -6,175 +6,64 @@
     --text-dark: #333333;
     --white: #FFFFFF;
 }
-
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Nunito', sans-serif; 
-}
-
-body { 
-    background-color: var(--bg-light); 
-    color: var(--text-dark); 
-    padding-bottom: 50px; 
-}
-
-.header { 
-    background: var(--primary-blue); 
-    color: white; 
-    padding: 30px 20px; 
-    text-align: center; 
-    font-family: 'Montserrat', sans-serif; 
-}
-
-/* CSS para deixar a logo em forma de esfera perfeita */
-.logo-esfera {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--accent-green);
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
-    background-color: var(--white);
-}
-
-.container { 
-    max-width: 800px; 
-    margin: -30px auto 30px; 
-    background: var(--white); 
-    padding: 30px; 
-    border-radius: 20px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-    position: relative;
-    z-index: 2;
-}
-
-h2 { 
-    color: var(--secondary-blue); 
-    margin-bottom: 20px; 
-    border-bottom: 2px solid var(--accent-green); 
-    padding-bottom: 10px; 
-    font-family: 'Montserrat', sans-serif; 
-    margin-top: 30px;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+body { background-color: var(--bg-light); color: var(--text-dark); padding-bottom: 50px; }
+.header { background: var(--primary-blue); color: white; padding: 30px 20px; text-align: center; font-family: 'Montserrat', sans-serif; }
+.logo-esfera { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-green); box-shadow: 0 5px 20px rgba(0,0,0,0.5); margin-bottom: 20px; background-color: var(--white); }
+.container { max-width: 800px; margin: -30px auto 30px; background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; z-index: 2; }
+h2 { color: var(--secondary-blue); margin-bottom: 20px; border-bottom: 2px solid var(--accent-green); padding-bottom: 10px; font-family: 'Montserrat', sans-serif; margin-top: 30px; }
 h2:first-of-type { margin-top: 0; }
-
 .form-group { margin-bottom: 15px; }
+label { display: block; font-weight: 600; margin-bottom: 5px; }
+input[type="text"], input[type="date"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; outline: none; font-size: 1rem; }
+input[readonly] { background-color: #f0f0f0; color: #666; cursor: not-allowed; }
+input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus:not([readonly]), select:focus { border-color: var(--secondary-blue); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.radio-group { display: flex; gap: 15px; align-items: center; margin-top: 5px; }
+.camera-container { text-align: center; margin-bottom: 30px; background: #eaf2fb; padding: 20px; border-radius: 15px; }
+#video, #canvas { width: 100%; max-width: 320px; border-radius: 10px; border: 3px solid var(--primary-blue); display: none; margin: 0 auto; }
+.btn-cam { background: var(--secondary-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 1rem; }
+.btn-cam:hover { background: var(--primary-blue); }
+.action-buttons { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+.btn-submit { background: var(--accent-green); color: white; flex: 1; min-width: 250px; padding: 15px; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
+.btn-submit:hover { background: #008f33; }
+.btn-print { background: #333; color: white; flex: 1; min-width: 250px; padding: 15px; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
+.btn-print:hover { background: #111; }
+.info-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 0.9rem; line-height: 1.5; }
+.hidden { display: none !important; }
+@media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
 
-label { 
-    display: block; 
-    font-weight: 600; 
-    margin-bottom: 5px; 
-}
-
-input[type="text"], 
-input[type="date"], 
-input[type="number"], 
-select { 
-    width: 100%; 
-    padding: 12px; 
-    border: 1px solid #ccc; 
-    border-radius: 8px; 
-    outline: none; 
-    font-size: 1rem;
-}
-
-/* Identifica campo bloqueado */
-input[readonly] {
-    background-color: #f0f0f0;
-    color: #666;
-    cursor: not-allowed;
-}
-
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="number"]:focus:not([readonly]),
-select:focus { 
-    border-color: var(--secondary-blue); 
-}
-
-.grid-2 { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 15px; 
-}
-
-.radio-group { 
-    display: flex; 
-    gap: 15px; 
-    align-items: center; 
-    margin-top: 5px; 
-}
-
-.camera-container { 
-    text-align: center; 
-    margin-bottom: 30px; 
-    background: #eaf2fb; 
-    padding: 20px; 
-    border-radius: 15px; 
-}
-
-#video, #canvas { 
-    width: 100%; 
-    max-width: 320px; 
-    border-radius: 10px; 
-    border: 3px solid var(--primary-blue); 
-    display: none; 
-    margin: 0 auto; 
-}
-
-.btn-cam { 
-    background: var(--secondary-blue); 
-    color: white; 
-    border: none; 
-    padding: 10px 20px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-weight: bold; 
-    margin-top: 10px; 
-    font-size: 1rem;
-}
-
-.btn-cam:hover { 
-    background: var(--primary-blue); 
-}
-
-.btn-submit { 
-    background: var(--accent-green); 
-    color: white; 
-    width: 100%; 
-    padding: 15px; 
-    border: none; 
-    border-radius: 10px; 
-    font-size: 1.2rem; 
-    font-weight: bold; 
-    cursor: pointer; 
-    margin-top: 20px; 
-    text-transform: uppercase; 
-    transition: background 0.3s;
-}
-
-.btn-submit:hover { 
-    background: #008f33; 
-}
-
-.info-box { 
-    background: #fff3cd; 
-    border-left: 4px solid #ffc107; 
-    padding: 15px; 
-    margin-bottom: 20px; 
-    border-radius: 4px; 
-    font-size: 0.9rem; 
-    line-height: 1.5;
-}
-
-/* Classe para esconder a sessão do responsável */
-.hidden {
-    display: none !important;
-}
-
-@media (max-width: 600px) {
-    .grid-2 { grid-template-columns: 1fr; }
+/* ========================================================
+   CONFIGURAÇÃO DE IMPRESSÃO / SALVAR EM PDF
+======================================================== */
+@media print {
+    body { background: white; color: black; padding: 0; }
+    .container { box-shadow: none; margin: 0; padding: 0; max-width: 100%; border: none; }
+    .header { background: transparent; color: black; padding: 0 0 10px 0; }
+    .header p { color: black; }
+    .logo-esfera { width: 100px; height: 100px; border: 2px solid black; box-shadow: none; margin-bottom: 5px; }
+    h1 { font-size: 1.4rem; }
+    h2 { color: black; border-bottom: 1px solid black; margin-top: 15px; font-size: 1.1rem; padding-bottom: 5px; page-break-after: avoid; }
+    
+    /* Esconder o que não vai pro papel */
+    .action-buttons, .btn-cam, .info-box, .aviso-print, .checkbox-print, #video { display: none !important; }
+    
+    .camera-container { background: transparent; padding: 0; margin-bottom: 15px; text-align: left; }
+    #canvas { border: 2px solid black; max-width: 130px; display: block !important; margin: 0; }
+    
+    /* Transformar campos digitais em linhas sublinhadas */
+    input[type="text"], input[type="date"], input[type="number"], select { 
+        border: none; 
+        border-bottom: 1px solid #333; 
+        border-radius: 0; 
+        padding: 5px 0; 
+        background: transparent; 
+        appearance: none; 
+        color: black; 
+        font-weight: bold; 
+        font-size: 0.9rem;
+    }
+    input[readonly] { background-color: transparent; }
+    .form-group { margin-bottom: 10px; page-break-inside: avoid; }
+    .grid-2 { gap: 10px; }
 }
