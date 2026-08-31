@@ -33,19 +33,17 @@ inputDataNasc.addEventListener('change', (e) => {
     let idade = hoje.getFullYear() - nascimento.getFullYear();
     const mes = hoje.getMonth() - nascimento.getMonth();
     
-    // Ajusta a idade se ainda não fez aniversário no ano atual
     if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
         idade--;
     }
     
     inputIdade.value = idade;
 
-    // Se maior ou igual a 18, oculta a área de responsável e remove a obrigatoriedade
     if (idade >= 18) {
         secaoResponsavel.classList.add('hidden');
         inputsResponsavel.forEach(input => {
             input.removeAttribute('required');
-            input.value = ''; // Limpa caso já tivesse preenchido
+            input.value = ''; 
         });
     } else {
         secaoResponsavel.classList.remove('hidden');
@@ -93,7 +91,20 @@ snapBtn.addEventListener('click', () => {
 });
 
 // ----------------------------------------------------
-// 3. ENVIO PARA O FIREBASE
+// 3. IMPRIMIR PDF NATIVO
+// ----------------------------------------------------
+const btnImprimir = document.getElementById('btnImprimir');
+btnImprimir.addEventListener('click', () => {
+    if(!fotoDataUrl.value) {
+        alert("Por favor, tire a foto do aluno antes de gerar o PDF!");
+        return;
+    }
+    // O comando abaixo abre a tela de "Salvar como PDF" do celular ou computador
+    window.print();
+});
+
+// ----------------------------------------------------
+// 4. ENVIO PARA O FIREBASE
 // ----------------------------------------------------
 const form = document.getElementById('formInscricao');
 const submitBtn = document.querySelector('.btn-submit');
@@ -138,7 +149,7 @@ form.addEventListener('submit', async (e) => {
 
     } catch (error) {
         console.error("Erro ao salvar: ", error);
-        alert("Ocorreu um erro ao enviar. Verifique se o Banco de Dados (Firestore) está liberado.");
+        alert("Ocorreu um erro técnico: " + error.message);
     } finally {
         submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Finalizar Inscrição';
         submitBtn.disabled = false;
