@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrição - Capoeira Liberdade e Expressão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="inscricao.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Ficha de Inscrição Oficial</h1>
+        <p>Grupo de Capoeira Liberdade e Expressão</p>
+    </div>
+
+    <div class="container">
+        <form id="formInscricao">
+            
+            <!-- Captura de Foto -->
+            <h2><i class="fas fa-camera"></i> Foto do Aluno</h2>
+            <div class="camera-container">
+                <p style="margin-bottom: 10px;">Tire uma foto para o seu perfil e carteirinha.</p>
+                <button type="button" class="btn-cam" id="startCam"><i class="fas fa-video"></i> Abrir Câmera</button>
+                <video id="video" autoplay playsinline></video>
+                <button type="button" class="btn-cam" id="snapBtn" style="display:none; background:var(--accent-green);"><i class="fas fa-camera"></i> Capturar</button>
+                <canvas id="canvas"></canvas>
+                <input type="hidden" id="fotoDataUrl" name="fotoDataUrl">
+            </div>
+
+            <!-- Dados do Aluno -->
+            <h2>Dados Pessoais</h2>
+            <div class="form-group">
+                <label>Nome completo:</label>
+                <input type="text" name="nome" required>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Data de Nascimento:</label>
+                    <input type="date" name="dataNasc" required>
+                </div>
+                <div class="form-group">
+                    <label>Idade:</label>
+                    <input type="number" name="idade" required>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>CPF ou RG:</label>
+                    <input type="text" name="documento" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefone / WhatsApp:</label>
+                    <input type="text" name="telefone" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Endereço Completo:</label>
+                <input type="text" name="endereco" required>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Bairro:</label>
+                    <input type="text" name="bairro" required>
+                </div>
+                <div class="form-group">
+                    <label>Cidade:</label>
+                    <input type="text" name="cidade" required>
+                </div>
+            </div>
+
+            <!-- Dados de Emergência -->
+            <h2>Contatos de Emergência</h2>
+            <div class="form-group">
+                <label>Nome do Responsável:</label>
+                <input type="text" name="emergenciaNome" required>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Telefone:</label>
+                    <input type="text" name="emergenciaTel" required>
+                </div>
+                <div class="form-group">
+                    <label>Parentesco:</label>
+                    <input type="text" name="parentesco" required>
+                </div>
+            </div>
+
+            <!-- Informações de Saúde -->
+            <h2>Informações de Saúde</h2>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>1. Doença crônica?</label>
+                    <select name="doencaCronica"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                    <input type="text" name="qualDoenca" placeholder="Qual?" style="margin-top:5px;">
+                </div>
+                <div class="form-group">
+                    <label>2. Problemas cardíacos?</label>
+                    <select name="cardiaco"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                </div>
+                <div class="form-group">
+                    <label>3. Asma/Problemas respiratórios?</label>
+                    <select name="asma"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                </div>
+                <div class="form-group">
+                    <label>4. Lesões (joelho, coluna, etc.)?</label>
+                    <select name="lesoes"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                    <input type="text" name="qualLesao" placeholder="Qual?" style="margin-top:5px;">
+                </div>
+                <div class="form-group">
+                    <label>5. Já realizou cirurgia?</label>
+                    <select name="cirurgia"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                    <input type="text" name="qualCirurgia" placeholder="Qual?" style="margin-top:5px;">
+                </div>
+                <div class="form-group">
+                    <label>6. Uso contínuo de medicamentos?</label>
+                    <select name="medicamentos"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                    <input type="text" name="qualMedicamento" placeholder="Qual?" style="margin-top:5px;">
+                </div>
+                <div class="form-group">
+                    <label>7. Alergia a medicamentos?</label>
+                    <select name="alergia"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                    <input type="text" name="qualAlergia" placeholder="Qual?" style="margin-top:5px;">
+                </div>
+                <div class="form-group">
+                    <label>8. Apto(a) para atividades físicas?</label>
+                    <select name="apto" required><option value="sim">Sim</option><option value="nao">Não</option></select>
+                </div>
+            </div>
+
+            <!-- Capoeira -->
+            <h2>Experiência & Uniforme</h2>
+            <div class="form-group">
+                <label>Já praticou capoeira antes?</label>
+                <select name="jaPraticou"><option value="nao">Não</option><option value="sim">Sim</option></select>
+                <div class="grid-2" style="margin-top:5px;">
+                    <input type="text" name="ondePraticou" placeholder="Onde?">
+                    <input type="text" name="tempoPratica" placeholder="Tempo de prática?">
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Tamanho da Camiseta:</label>
+                    <select name="tamCamiseta"><option value="P">P</option><option value="M">M</option><option value="G">G</option><option value="GG">GG</option><option value="Infantil">Infantil</option></select>
+                </div>
+                <div class="form-group">
+                    <label>Tamanho da Calça:</label>
+                    <select name="tamCalca"><option value="P">P</option><option value="M">M</option><option value="G">G</option><option value="GG">GG</option><option value="Infantil">Infantil</option></select>
+                </div>
+            </div>
+
+            <!-- Autorizações e Termos -->
+            <h2>Autorizações</h2>
+            <div class="form-group">
+                <label>Autorização de Uso de Imagem:</label>
+                <p style="font-size: 0.85rem; color: #666;">Autorizo o uso de minha imagem em fotos e vídeos do grupo sem ônus.</p>
+                <div class="radio-group">
+                    <label><input type="radio" name="usoImagem" value="sim" required> Autorizo</label>
+                    <label><input type="radio" name="usoImagem" value="nao"> Não Autorizo</label>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong><i class="fas fa-exclamation-triangle"></i> Atenção:</strong><br>
+                A mensalidade tem o valor de R$ 50,00. O uniforme oficial é obrigatório. Não são permitidos atrasos, desrespeito ou uso de celular durante a aula.
+            </div>
+
+            <div class="form-group">
+                <label style="display: flex; gap: 10px; align-items: start;">
+                    <input type="checkbox" required style="margin-top: 5px;">
+                    <span>Declaro que as informações são verdadeiras, estou ciente das regras de disciplina, uniforme, sistema de cordões e mensalidade, assumindo total responsabilidade pela participação.</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Finalizar Inscrição</button>
+        </form>
+    </div>
+
+    <!-- Atenção aqui: type="module" -->
+    <script type="module" src="inscricao.js"></script>
+</body>
+</html>
