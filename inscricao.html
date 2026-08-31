@@ -11,7 +11,6 @@
 <body>
 
     <div class="header">
-        <!-- Logo adicionada aqui -->
         <img src="logo-liberdade.jpg" alt="Logo Liberdade e Expressão" class="logo-esfera">
         <h1>Ficha de Inscrição Oficial</h1>
         <p>Grupo de Capoeira Liberdade e Expressão</p>
@@ -20,7 +19,6 @@
     <div class="container">
         <form id="formInscricao">
             
-            <!-- Captura de Foto -->
             <h2><i class="fas fa-camera"></i> Foto do Aluno</h2>
             <div class="camera-container">
                 <p style="margin-bottom: 10px;">Tire uma foto para o seu perfil e carteirinha.</p>
@@ -31,9 +29,7 @@
                 <input type="hidden" id="fotoDataUrl" name="fotoDataUrl">
             </div>
 
-            <!-- Dados do Aluno -->
             <h2>Dados Pessoais</h2>
-            
             <div class="form-group">
                 <label>Local de Treinamento (Academia):</label>
                 <select name="localTreino" required>
@@ -60,7 +56,6 @@
                 </div>
                 <div class="form-group">
                     <label>Idade:</label>
-                    <!-- Campo bloqueado para edição manual -->
                     <input type="number" name="idade" id="campoIdade" placeholder="Calculada automaticamente" readonly required>
                 </div>
             </div>
@@ -91,10 +86,9 @@
                 </div>
             </div>
 
-            <!-- Dados de Emergência / Responsável (Oculto se for maior de 18) -->
             <div id="secaoResponsavel">
                 <h2>Contatos do Responsável</h2>
-                <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Obrigatório para menores de 18 anos.</p>
+                <p class="aviso-print" style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Obrigatório para menores de 18 anos.</p>
                 <div class="form-group">
                     <label>Nome do Responsável:</label>
                     <input type="text" name="emergenciaNome" required>
@@ -111,7 +105,6 @@
                 </div>
             </div>
 
-            <!-- Informações de Saúde -->
             <h2>Informações de Saúde</h2>
             <div class="grid-2">
                 <div class="form-group">
@@ -153,7 +146,6 @@
                 </div>
             </div>
 
-            <!-- Capoeira -->
             <h2>Experiência & Uniforme</h2>
             <div class="form-group">
                 <label>Já praticou capoeira antes?</label>
@@ -174,11 +166,10 @@
                 </div>
             </div>
 
-            <!-- Autorizações e Termos -->
             <h2>Autorizações</h2>
             <div class="form-group">
                 <label>Autorização de Uso de Imagem:</label>
-                <p style="font-size: 0.85rem; color: #666;">Autorizo o uso de minha imagem em fotos e vídeos do grupo sem ônus.</p>
+                <p class="aviso-print" style="font-size: 0.85rem; color: #666;">Autorizo o uso de minha imagem em fotos e vídeos do grupo sem ônus.</p>
                 <div class="radio-group">
                     <label><input type="radio" name="usoImagem" value="sim" required> Autorizo</label>
                     <label><input type="radio" name="usoImagem" value="nao"> Não Autorizo</label>
@@ -190,14 +181,19 @@
                 A mensalidade tem o valor de R$ 50,00. O uniforme oficial é obrigatório. Não são permitidos atrasos, desrespeito ou uso de celular durante a aula.
             </div>
 
-            <div class="form-group">
+            <div class="form-group checkbox-print">
                 <label style="display: flex; gap: 10px; align-items: start;">
                     <input type="checkbox" required style="margin-top: 5px;">
                     <span>Declaro que as informações são verdadeiras, estou ciente das regras de disciplina, uniforme, sistema de cordões e mensalidade, assumindo total responsabilidade pela participação.</span>
                 </label>
             </div>
 
-            <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Finalizar Inscrição</button>
+            <!-- Botões Lado a Lado -->
+            <div class="action-buttons">
+                <button type="button" class="btn-print" id="btnImprimir"><i class="fas fa-file-pdf"></i> Salvar PDF</button>
+                <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Finalizar Inscrição</button>
+            </div>
+
         </form>
     </div>
 
