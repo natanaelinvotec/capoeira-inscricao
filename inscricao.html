@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group">
                     <label>Nome completo:</label>
-                    <input type="text" name="nome" required>
+                    <input type="text" name="nome" id="inputNome" required>
                 </div>
                 <div class="grid-2">
                     <div class="form-group">
@@ -99,7 +99,7 @@
                     <h2>Contatos de Emergência (Responsável)</h2>
                     <div class="form-group">
                         <label>Nome do Responsável:</label>
-                        <input type="text" name="emergenciaNome" required>
+                        <input type="text" name="emergenciaNome" id="inputResponsavel" required>
                     </div>
                     <div class="grid-2">
                         <div class="form-group">
@@ -219,8 +219,30 @@
                     <p>Os cordões representam evolução, disciplina e tempo de dedicação, trocados mediante frequência e evolução técnica.</p>
                     <ul>
                         <li><strong>Mensalidade:</strong> R$ 50,00 por mês.</li>
-                        <li>Mensalidade não inclui uniforme, eventos, batizado e troca de cordão.</li>
                     </ul>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div class="form-group">
+                            <label>Melhor data para pagamento:</label>
+                            <select name="dataPagamento" required>
+                                <option value="">Selecione o dia...</option>
+                                <option value="Dia 5">Dia 5</option>
+                                <option value="Dia 10">Dia 10</option>
+                                <option value="Dia 15">Dia 15</option>
+                                <option value="Dia 20">Dia 20</option>
+                                <option value="Dia 25">Dia 25</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Forma de pagamento:</label>
+                            <select name="formaPagamento" required>
+                                <option value="">Selecione a forma...</option>
+                                <option value="Dinheiro">Dinheiro</option>
+                                <option value="PIX">PIX</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                <option value="Cartão de Débito">Cartão de Débito</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -231,9 +253,14 @@
                 <div class="rule-box">
                     <h3>Autorização de Uso de Imagem</h3>
                     <p>Eu autorizo o Grupo de Capoeira Liberdade e Expressão a utilizar minha imagem (ou do menor sob minha responsabilidade) em fotos e vídeos realizados durante aulas, treinos, eventos e apresentações, para fins de divulgação em redes sociais e materiais institucionais, sem qualquer ônus financeiro. Declaro estar ciente de que as imagens serão utilizadas de forma respeitosa e ética.</p>
-                    <div class="radio-group" style="margin-top: 10px;">
-                        <label><input type="radio" name="usoImagem" value="Autorizo" required> AUTORIZO</label>
-                        <label><input type="radio" name="usoImagem" value="Não Autorizo"> NÃO AUTORIZO</label>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Escolha uma opção:</label>
+                        <select name="usoImagem" required style="font-weight: bold; color: var(--primary-blue);">
+                            <option value="">Selecione...</option>
+                            <option value="AUTORIZO">AUTORIZO</option>
+                            <option value="NÃO AUTORIZO">NÃO AUTORIZO</option>
+                        </select>
                     </div>
                 </div>
 
@@ -246,10 +273,16 @@
                     </label>
                 </div>
                 
-                <div class="assinatura-print" style="display: none; margin-top: 50px;">
-                    <div style="border-top: 1px solid black; width: 80%; margin: 0 auto; text-align: center; padding-top: 5px;">
-                        Assinatura do Aluno ou Responsável<br>
-                        Data: ___/___/______
+                <!-- Assinatura Dinâmica para Impressão -->
+                <div class="assinatura-print" style="display: none; margin-top: 50px; text-align: center;">
+                    <div style="border-top: 1px solid black; width: 80%; margin: 0 auto; padding-top: 5px; font-weight: bold;">
+                        <span id="assinaturaNomeFicha">________________________________________________</span>
+                    </div>
+                    <div style="margin-top: 5px; font-size: 0.9rem;">
+                        Assinatura do Aluno ou Responsável
+                    </div>
+                    <div style="margin-top: 10px; font-size: 0.9rem;" id="dataHoraImpressaoFicha">
+                        Data e Hora: ___/___/______ --:--
                     </div>
                 </div>
             </div>
