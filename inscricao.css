@@ -84,13 +84,10 @@ input:focus, select:focus { border-color: var(--accent-green); background: white
     
     .assinatura-print { display: block !important; }
     .linha-assinatura {
-        border-top: 1px solid black; 
-        width: 80%; 
-        margin: 0 auto; 
-        padding-top: 5px; 
         font-family: 'Great Vibes', cursive;
-        font-size: 2rem;
+        font-size: 2.5rem;
         color: #001a4e;
-        line-height: 1rem;
+        line-height: 1.2rem;
+        margin-bottom: 5px;
     }
 }
