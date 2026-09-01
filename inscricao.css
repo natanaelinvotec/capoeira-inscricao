@@ -81,5 +81,16 @@ input:focus, select:focus { border-color: var(--accent-green); background: white
     
     input[type="text"], input[type="date"], input[type="number"], select { border: none; border-bottom: 1px solid #333; border-radius: 0; padding: 5px 0; background: transparent; appearance: none; color: black; font-weight: bold; }
     .rule-box { border: 1px solid #ccc; background: transparent; }
+    
     .assinatura-print { display: block !important; }
+    .linha-assinatura {
+        border-top: 1px solid black; 
+        width: 80%; 
+        margin: 0 auto; 
+        padding-top: 5px; 
+        font-family: 'Great Vibes', cursive;
+        font-size: 2rem;
+        color: #001a4e;
+        line-height: 1rem;
+    }
 }
