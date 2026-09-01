@@ -38,7 +38,6 @@ function updateFormSteps() {
         btnSubmit.style.display = 'none';
     }
 
-    // Rolagem automática para o topo com animação suave
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -64,6 +63,8 @@ const inputDataNasc = document.getElementById('dataNasc');
 const inputIdade = document.getElementById('campoIdade');
 const secaoResponsavel = document.getElementById('secaoResponsavel');
 const inputsResponsavel = secaoResponsavel.querySelectorAll('input');
+const inputNome = document.getElementById('inputNome');
+const inputResponsavel = document.getElementById('inputResponsavel');
 
 inputDataNasc.addEventListener('change', (e) => {
     if (!e.target.value) return;
@@ -136,6 +137,22 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if(!fotoDataUrl.value) { alert("Tire a foto do aluno no Passo 1 antes de finalizar!"); return; }
     
+    // Atualizar assinatura e data/hora do dispositivo antes de imprimir
+    const idadeAluno = parseInt(inputIdade.value) || 0;
+    const nomeAssinatura = document.getElementById('assinaturaNomeFicha');
+    const dataHoraFicha = document.getElementById('dataHoraImpressaoFicha');
+
+    if (idadeAluno >= 18) {
+        nomeAssinatura.textContent = inputNome.value ? inputNome.value.toUpperCase() : "_________________________________";
+    } else {
+        nomeAssinatura.textContent = inputResponsavel.value ? inputResponsavel.value.toUpperCase() : "_________________________________";
+    }
+
+    const agora = new Date();
+    const dataFormatada = agora.toLocaleDateString('pt-BR');
+    const horaFormatada = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    dataHoraFicha.textContent = `Data e Hora da Impressão: ${dataFormatada} às ${horaFormatada}`;
+
     btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
     btnSubmit.disabled = true;
 
