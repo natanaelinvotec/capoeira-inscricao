@@ -15,7 +15,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// --- PAGINAÇÃO (WIZARD) ---
 const steps = document.querySelectorAll('.form-step');
 const indicators = document.querySelectorAll('.step-indicator');
 const btnNext = document.getElementById('btnNext');
@@ -38,10 +37,12 @@ function updateFormSteps() {
         btnNext.style.display = 'inline-block';
         btnSubmit.style.display = 'none';
     }
+
+    // Rolagem automática para o topo com animação suave
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 btnNext.addEventListener('click', () => {
-    // Validação simples antes de avançar
     const currentInputs = steps[currentStep].querySelectorAll('input[required], select[required]');
     let allValid = true;
     currentInputs.forEach(input => { if (!input.value) allValid = false; });
@@ -59,7 +60,6 @@ btnPrev.addEventListener('click', () => {
     updateFormSteps();
 });
 
-// --- LÓGICA DE IDADE ---
 const inputDataNasc = document.getElementById('dataNasc');
 const inputIdade = document.getElementById('campoIdade');
 const secaoResponsavel = document.getElementById('secaoResponsavel');
@@ -84,7 +84,6 @@ inputDataNasc.addEventListener('change', (e) => {
     }
 });
 
-// --- CÂMERA FRONTAL/TRASEIRA ---
 const startCamBtn = document.getElementById('startCam');
 const flipCamBtn = document.getElementById('flipCam');
 const video = document.getElementById('video');
@@ -92,7 +91,7 @@ const canvas = document.getElementById('canvas');
 const snapBtn = document.getElementById('snapBtn');
 const fotoDataUrl = document.getElementById('fotoDataUrl');
 let stream;
-let currentFacingMode = 'user'; // Padrão: Frontal
+let currentFacingMode = 'user';
 
 async function initCamera() {
     if (stream) { stream.getTracks().forEach(track => track.stop()); }
@@ -127,16 +126,15 @@ snapBtn.addEventListener('click', () => {
     flipCamBtn.style.display = 'none';
     canvas.style.display = 'block';
     
-    startCamBtn.innerHTML = '<i class="fas fa-redo"></i> Tirar Outra';
+    startCamBtn.innerHTML = '<i class="fas fa-redo"></i> Tirar Outra Foto';
     startCamBtn.style.display = 'inline-block';
 });
 
-// --- ENVIO FIREBASE + PDF ---
 const form = document.getElementById('formInscricao');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if(!fotoDataUrl.value) { alert("Tire a foto do aluno no Passo 1!"); return; }
+    if(!fotoDataUrl.value) { alert("Tire a foto do aluno no Passo 1 antes de finalizar!"); return; }
     
     btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
     btnSubmit.disabled = true;
@@ -154,16 +152,14 @@ form.addEventListener('submit', async (e) => {
             ...data, fotoUrl: fotoFinalUrl, dataCadastro: new Date().toISOString(), statusPagamento: "Pendente", cordaoAtual: "Iniciante"
         });
         
-        alert("Inscrição e PDF gerados com sucesso!");
+        alert("Inscrição salva com sucesso! Gerando PDF para impressão...");
         
-        // Dispara a impressão do PDF automaticamente
         window.print();
         
-        // Reseta o formulário
         setTimeout(() => { location.reload(); }, 2000);
 
     } catch (error) {
-        alert("Erro técnico: " + error.message);
+        alert("Erro técnico ao salvar: " + error.message);
     } finally {
         btnSubmit.innerHTML = '<i class="fas fa-check-circle"></i> Enviar e Gerar PDF';
         btnSubmit.disabled = false;
