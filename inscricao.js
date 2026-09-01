@@ -2,7 +2,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// SUAS CHAVES DO FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
   authDomain: "capoeira-liberdade.firebaseapp.com",
@@ -16,9 +15,51 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// ----------------------------------------------------
-// 1. CÁLCULO DE IDADE E BLOQUEIO DE RESPONSÁVEL
-// ----------------------------------------------------
+// --- PAGINAÇÃO (WIZARD) ---
+const steps = document.querySelectorAll('.form-step');
+const indicators = document.querySelectorAll('.step-indicator');
+const btnNext = document.getElementById('btnNext');
+const btnPrev = document.getElementById('btnPrev');
+const btnSubmit = document.getElementById('btnSubmit');
+let currentStep = 0;
+
+function updateFormSteps() {
+    steps.forEach((step, index) => {
+        step.classList.toggle('active', index === currentStep);
+        indicators[index].classList.toggle('active', index <= currentStep);
+    });
+    
+    btnPrev.style.display = currentStep > 0 ? 'inline-block' : 'none';
+    
+    if (currentStep === steps.length - 1) {
+        btnNext.style.display = 'none';
+        btnSubmit.style.display = 'inline-block';
+    } else {
+        btnNext.style.display = 'inline-block';
+        btnSubmit.style.display = 'none';
+    }
+}
+
+btnNext.addEventListener('click', () => {
+    // Validação simples antes de avançar
+    const currentInputs = steps[currentStep].querySelectorAll('input[required], select[required]');
+    let allValid = true;
+    currentInputs.forEach(input => { if (!input.value) allValid = false; });
+    
+    if (!allValid) {
+        alert("Preencha todos os campos obrigatórios desta etapa.");
+        return;
+    }
+    currentStep++;
+    updateFormSteps();
+});
+
+btnPrev.addEventListener('click', () => {
+    currentStep--;
+    updateFormSteps();
+});
+
+// --- LÓGICA DE IDADE ---
 const inputDataNasc = document.getElementById('dataNasc');
 const inputIdade = document.getElementById('campoIdade');
 const secaoResponsavel = document.getElementById('secaoResponsavel');
@@ -26,52 +67,52 @@ const inputsResponsavel = secaoResponsavel.querySelectorAll('input');
 
 inputDataNasc.addEventListener('change', (e) => {
     if (!e.target.value) return;
-    
     const hoje = new Date();
     const nascimento = new Date(e.target.value);
-    
     let idade = hoje.getFullYear() - nascimento.getFullYear();
     const mes = hoje.getMonth() - nascimento.getMonth();
-    
-    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-        idade--;
-    }
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) idade--;
     
     inputIdade.value = idade;
 
     if (idade >= 18) {
         secaoResponsavel.classList.add('hidden');
-        inputsResponsavel.forEach(input => {
-            input.removeAttribute('required');
-            input.value = ''; 
-        });
+        inputsResponsavel.forEach(input => { input.removeAttribute('required'); input.value = ''; });
     } else {
         secaoResponsavel.classList.remove('hidden');
         inputsResponsavel.forEach(input => input.setAttribute('required', 'true'));
     }
 });
 
-// ----------------------------------------------------
-// 2. LÓGICA DA CÂMERA
-// ----------------------------------------------------
+// --- CÂMERA FRONTAL/TRASEIRA ---
 const startCamBtn = document.getElementById('startCam');
+const flipCamBtn = document.getElementById('flipCam');
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const snapBtn = document.getElementById('snapBtn');
 const fotoDataUrl = document.getElementById('fotoDataUrl');
 let stream;
+let currentFacingMode = 'user'; // Padrão: Frontal
 
-startCamBtn.addEventListener('click', async () => {
+async function initCamera() {
+    if (stream) { stream.getTracks().forEach(track => track.stop()); }
     try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode } });
         video.srcObject = stream;
         video.style.display = 'block';
         snapBtn.style.display = 'inline-block';
+        flipCamBtn.style.display = 'inline-block';
         startCamBtn.style.display = 'none';
+        canvas.style.display = 'none';
     } catch (err) {
-        alert("Erro ao acessar a câmera. Verifique as permissões do navegador.");
-        console.error(err);
+        alert("Erro ao acessar a câmera. Verifique permissões.");
     }
+}
+
+startCamBtn.addEventListener('click', initCamera);
+flipCamBtn.addEventListener('click', () => {
+    currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+    initCamera();
 });
 
 snapBtn.addEventListener('click', () => {
@@ -83,43 +124,22 @@ snapBtn.addEventListener('click', () => {
     stream.getTracks().forEach(track => track.stop());
     video.style.display = 'none';
     snapBtn.style.display = 'none';
+    flipCamBtn.style.display = 'none';
     canvas.style.display = 'block';
     
-    startCamBtn.innerHTML = '<i class="fas fa-redo"></i> Tirar Outra Foto';
+    startCamBtn.innerHTML = '<i class="fas fa-redo"></i> Tirar Outra';
     startCamBtn.style.display = 'inline-block';
-    startCamBtn.style.background = '#666';
 });
 
-// ----------------------------------------------------
-// 3. IMPRIMIR PDF NATIVO
-// ----------------------------------------------------
-const btnImprimir = document.getElementById('btnImprimir');
-btnImprimir.addEventListener('click', () => {
-    if(!fotoDataUrl.value) {
-        alert("Por favor, tire a foto do aluno antes de gerar o PDF!");
-        return;
-    }
-    // O comando abaixo abre a tela de "Salvar como PDF" do celular ou computador
-    window.print();
-});
-
-// ----------------------------------------------------
-// 4. ENVIO PARA O FIREBASE
-// ----------------------------------------------------
+// --- ENVIO FIREBASE + PDF ---
 const form = document.getElementById('formInscricao');
-const submitBtn = document.querySelector('.btn-submit');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if(!fotoDataUrl.value) { alert("Tire a foto do aluno no Passo 1!"); return; }
     
-    if(!fotoDataUrl.value) {
-        alert("Por favor, tire uma foto para a carteirinha e perfil do aluno!");
-        return;
-    }
-    
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-    submitBtn.disabled = true;
-    submitBtn.style.background = '#666';
+    btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
+    btnSubmit.disabled = true;
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -127,32 +147,25 @@ form.addEventListener('submit', async (e) => {
     try {
         const nomeArquivo = 'fotos_alunos/' + Date.now() + '_' + data.nome.replace(/\s+/g, '_') + '.jpg';
         const fotoRef = ref(storage, nomeArquivo);
-        
         await uploadString(fotoRef, fotoDataUrl.value, 'data_url');
         const fotoFinalUrl = await getDownloadURL(fotoRef);
 
         await addDoc(collection(db, "alunos"), {
-            ...data,
-            fotoUrl: fotoFinalUrl,
-            dataCadastro: new Date().toISOString(),
-            statusPagamento: "Pendente",
-            cordaoAtual: "Iniciante"
+            ...data, fotoUrl: fotoFinalUrl, dataCadastro: new Date().toISOString(), statusPagamento: "Pendente", cordaoAtual: "Iniciante"
         });
         
-        alert("Inscrição realizada com sucesso! O cadastro já está no banco de dados.");
+        alert("Inscrição e PDF gerados com sucesso!");
         
-        form.reset();
-        canvas.style.display = 'none';
-        fotoDataUrl.value = '';
-        startCamBtn.innerHTML = '<i class="fas fa-video"></i> Abrir Câmera';
-        startCamBtn.style.background = 'var(--secondary-blue)';
+        // Dispara a impressão do PDF automaticamente
+        window.print();
+        
+        // Reseta o formulário
+        setTimeout(() => { location.reload(); }, 2000);
 
     } catch (error) {
-        console.error("Erro ao salvar: ", error);
-        alert("Ocorreu um erro técnico: " + error.message);
+        alert("Erro técnico: " + error.message);
     } finally {
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Finalizar Inscrição';
-        submitBtn.disabled = false;
-        submitBtn.style.background = 'var(--accent-green)';
+        btnSubmit.innerHTML = '<i class="fas fa-check-circle"></i> Enviar e Gerar PDF';
+        btnSubmit.disabled = false;
     }
 });
