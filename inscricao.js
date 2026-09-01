@@ -137,21 +137,21 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if(!fotoDataUrl.value) { alert("Tire a foto do aluno no Passo 1 antes de finalizar!"); return; }
     
-    // Atualizar assinatura e data/hora do dispositivo antes de imprimir
     const idadeAluno = parseInt(inputIdade.value) || 0;
     const nomeAssinatura = document.getElementById('assinaturaNomeFicha');
     const dataHoraFicha = document.getElementById('dataHoraImpressaoFicha');
 
+    // Se maior de 18 usa o nome do aluno, se menor usa o nome do responsável
     if (idadeAluno >= 18) {
-        nomeAssinatura.textContent = inputNome.value ? inputNome.value.toUpperCase() : "_________________________________";
+        nomeAssinatura.textContent = inputNome.value ? inputNome.value : "_________________________________";
     } else {
-        nomeAssinatura.textContent = inputResponsavel.value ? inputResponsavel.value.toUpperCase() : "_________________________________";
+        nomeAssinatura.textContent = inputResponsavel.value ? inputResponsavel.value : "_________________________________";
     }
 
     const agora = new Date();
     const dataFormatada = agora.toLocaleDateString('pt-BR');
     const horaFormatada = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    dataHoraFicha.textContent = `Data e Hora da Impressão: ${dataFormatada} às ${horaFormatada}`;
+    dataHoraFicha.textContent = `Data e Hora da Inscrição: ${dataFormatada} às ${horaFormatada}`;
 
     btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processando...';
     btnSubmit.disabled = true;
