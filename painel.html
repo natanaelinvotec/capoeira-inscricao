@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capoeira Liberdade e Expressão</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/5567991293269" target="_blank" class="floating-whatsapp pulse-effect">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Top Action Button -->
+    <div class="top-action-bar">
+        <a href="https://wa.me/5567991293269" target="_blank" class="btn btn-green-outline hover-scale">AGENDE SUA AULA EXPERIMENTAL</a>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="navbar-curved">
+        <nav class="nav-left">
+            <a href="#inicio">INÍCIO</a>
+            <span class="separator">|</span>
+            <a href="#sobre">SOBRE NÓS</a>
+            <span class="separator">|</span>
+            <a href="#mestres">MESTRES E EQUIPE</a>
+            <span class="separator">|</span>
+            <a href="#agenda">AGENDA</a>
+        </nav>
+        
+        <div class="logo-wrapper">
+            <div class="logo-circle-bg" id="interactive-logo">
+                <img src="https://via.placeholder.com/150x150?text=LOGO+CAPOEIRA" alt="Logo Capoeira" class="logo-img">
+            </div>
+        </div>
+        
+        <nav class="nav-right">
+            <a href="#eventos">EVENTOS</a>
+            <span class="separator">|</span>
+            <a href="#academias">ACADEMIAS</a>
+            <span class="separator">|</span>
+            <a href="#kids">KIDS</a>
+            <span class="separator">|</span>
+            <a href="#contato">CONTATO</a>
+            <span class="separator">|</span>
+            <a href="#loja">LOJA ONLINE</a>
+        </nav>
+        
+        <div class="mobile-menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#inicio">INÍCIO</a>
+        <a href="#sobre">SOBRE NÓS</a>
+        <a href="#mestres">MESTRES E EQUIPE</a>
+        <a href="#agenda">AGENDA</a>
+        <a href="#eventos">EVENTOS</a>
+        <a href="#academias">ACADEMIAS</a>
+        <a href="#kids">KIDS</a>
+        <a href="#contato">CONTATO</a>
+        <a href="#loja">LOJA ONLINE</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content fade-in-up">
+            <h1>LIBERDADE, EXPRESSÃO E CULTURA:<br>CAPOEIRA EM CAMPO GRANDE - MS.</h1>
+            <a href="#academias" class="btn btn-blue btn-large hover-scale">CONHEÇA NOSSAS AULAS</a>
+        </div>
+    </section>
+
+    <!-- Mestres e Professores (Mosaico) -->
+    <section id="mestres" class="perfis-section fade-in-up">
+        <div class="perfis-header">
+            <h2>MESTRES E PROFESSORES</h2>
+        </div>
+        
+        <div class="bento-grid" id="mosaico-grid">
+            <!-- Os originais -->
+            <div class="bento-card card-tall" style="background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="card-content">
+                    <span class="card-tag">MESTRE FUNDADOR</span>
+                    <h3>Mestre Profeta</h3>
+                    <p>Dedica sua vida à cultura afro-brasileira e à educação antirracista através da Capoeira no grupo Liberdade e Expressão.</p>
+                    <button class="btn-leia-mais" onclick="openModal('modalProfeta')">Leia mais <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="bento-card card-wide card-dark-blue">
+                <div class="card-content">
+                    <span class="card-tag">PROFESSOR</span>
+                    <h3>Professor Rafinha</h3>
+                    <p>Dinâmico e engajado, comanda rodas vibrantes no Rancho Alegre, com foco na integração social e disciplina.</p>
+                    <button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="card-image-circle">
+                    <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Prof Rafinha">
+                </div>
+            </div>
+            
+            <div class="bento-card card-dark" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="card-content">
+                    <span class="card-tag">MESTRE</span>
+                    <h3>Mestre Omar</h3>
+                    <p>Referência técnica na região do Guanandi, liderando aulas infantis e adultas.</p>
+                    <button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="bento-card card-purple" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover;">
+                <div class="card-content">
+                    <span class="card-tag">PROFESSOR</span>
+                    <h3>Profº Maick</h3>
+                    <p>Líder do Projeto Meia Lua em Rochedo, transformando vidas de jovens locais.</p>
+                    <button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <div class="bento-card card-wide card-dark-blue-2" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1526506114705-559d8c0b291d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80') center/cover;">
+                <div class="card-content">
+                    <span class="card-tag">ESPECIALISTA KIDS</span>
+                    <h3>Profº Tigoy</h3>
+                    <p>Especialista em aulas para crianças e desenvolvimento motor, unindo saúde e tradição para os pequenos capoeiristas.</p>
+                    <button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais <i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Adicionando 7 Mosaicos 1x1 conforme solicitado -->
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1563299796-b729d0af54a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">INSTRUTOR</span><h3>Instrutor 1</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1518310383802-640c2de311b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">INSTRUTOR</span><h3>Instrutor 2</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1583416750470-965b2707b355?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">GRADUADO</span><h3>Graduado 1</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1555597408-26bc8e548a46?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">INSTRUTORA</span><h3>Instrutora 3</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1627885068940-7ec10ba46816?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">PROFESSOR</span><h3>Professor 4</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1599058917200-a8848a6bdc7e?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">GRADUADA</span><h3>Graduada 2</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+            <div class="bento-card card-normal" style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80') center/cover;">
+                <div class="card-content"><span class="card-tag">MESTRE</span><h3>Mestre 3</h3><button class="btn-leia-mais" onclick="openModal('modalGenerico')">Leia mais</button></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda (Este Semestre e Destaque) -->
+    <section id="agenda" class="agenda-container fade-in-up">
+        <div class="agenda-col">
+            <h2 class="agenda-title">ESTE SEMESTRE</h2>
+            <div class="timeline-area">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-row">
+                    <div class="time-date">10 DE<br>JULHO</div>
+                    <div class="time-dot dot-green"></div>
+                    <div class="time-content bubble-green">
+                        <img src="https://images.unsplash.com/photo-1552318965-6e6ad9d08434?w=200&h=120&fit=crop" alt="Evento">
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="time-date">28 DE<br>AGOSTO</div>
+                    <div class="time-dot dot-blue"></div>
+                    <div class="time-content bubble-round">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=150&h=150&fit=crop" alt="Profeta">
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="time-date">22 DE<br>AGOSTO</div>
+                    <div class="time-dot dot-blue"></div>
+                    <div class="time-content bubble-round bubble-border-green">
+                        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=150&h=150&fit=crop" alt="Rafinha">
+                    </div>
+                </div>
+
+                <div class="timeline-row">
+                    <div class="time-date">29 DE<br>AGOSTO</div>
+                    <div class="time-dot dot-gray"></div>
+                    <div class="time-content"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="agenda-col">
+            <div class="destaque-header">
+                <h2 class="agenda-title">DESTAQUE:</h2>
+                <div class="destaque-filters">
+                    <select><option>Filter by Event Type</option></select>
+                    <select><option>Teacher</option></select>
+                </div>
+            </div>
+            
+            <div class="destaque-card hover-scale">
+                <div class="badge-blue">SÁBADO - 22 DE AGOSTO</div>
+                <div class="destaque-time">às 15h00</div>
+                
+                <div class="destaque-title-area">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3011/3011400.png" alt="Corda" class="icon-corda-gray">
+                    <h3 class="destaque-title">BATIZADO<br>2026</h3>
+                </div>
+                
+                <div class="destaque-local">
+                    <i class="fas fa-map-marker-alt text-blue"></i>
+                    <div>
+                        <p class="local-strong">Complexo Esportivo do Santa Emilia,</p>
+                        <p class="local-light">R. Antônio Ignacio de Souza, 258</p>
+                    </div>
+                </div>
+                
+                <div class="destaque-map-frame">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3737.7915354972235!2d-54.6738!3d-20.4735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0!2sComplexo%20Esportivo%20do%20Santa%20Emilia!5e0!3m2!1sen!2sbr!4v1714570000000!5m2!1sen!2sbr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mapa e Academias -->
+    <section id="academias" class="mapa-academias-section fade-in-up">
+        <div class="map-bg-wrapper">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119634.34148425103!2d-54.69752535099238!3d-20.481163459141094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9486e66e6f987f1d%3A0xc354b38d727b14c3!2sCampo%20Grande%2C%20State%20of%20Mato%20Grosso%20do%20Sul!5e0!3m2!1sen!2sbr!4v1714570000000!5m2!1sen!2sbr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        
+        <div class="academias-cards-row">
+            <!-- Card 1 -->
+            <div class="aca-card hover-scale">
+                <div class="aca-header">
+                    <h4>Santa Emília</h4>
+                    <p class="aca-sub">Mato Grosso do Sul</p>
+                    <p class="aca-time"><i class="far fa-clock"></i> Bairro dojo 20ho</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1549476464-37392f717541?w=300&h=150&fit=crop" class="aca-img" alt="Local">
+                <div class="aca-actions">
+                    <button class="btn btn-blue-full">Get Directions</button>
+                    <p class="aca-pin"><i class="fas fa-map-marker-alt"></i> Get Directions</p>
+                    <div class="aca-teacher">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mestre">
+                        <span>Mestre Profeta</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="aca-card hover-scale">
+                <div class="aca-header">
+                    <h4>Mestre Omar</h4>
+                    <p class="aca-sub">Mato Grosso do Sul</p>
+                    <p class="aca-time"><i class="far fa-clock"></i> Bairro dojo 25ho</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300&h=150&fit=crop" class="aca-img" alt="Local">
+                <div class="aca-actions">
+                    <button class="btn btn-blue-full">Get Directions</button>
+                    <p class="aca-pin"><i class="fas fa-map-marker-alt"></i> Get Directions</p>
+                    <div class="aca-teacher">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Mestre">
+                        <span>Mestre Profeta</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="aca-card hover-scale">
+                <div class="aca-header">
+                    <h4>Rochedo</h4>
+                    <p class="aca-sub">Mato Grosso do Sul</p>
+                    <p class="aca-time"><i class="far fa-clock"></i> Bairro dojo 22ho</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=300&h=150&fit=crop" class="aca-img" alt="Local">
+                <div class="aca-actions">
+                    <button class="btn btn-blue-full">Get Directions</button>
+                    <p class="aca-pin"><i class="fas fa-map-marker-alt"></i> Get Directions</p>
+                    <div class="aca-teacher">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mestre">
+                        <span>Mestre Profeta</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="aca-card ac-card-dark hover-scale">
+                <div class="aca-header">
+                    <h4>Professor Maick</h4>
+                    <p class="aca-sub">Mato Grosso do Sul</p>
+                    <p class="aca-time"><i class="far fa-clock"></i> Bairro dojo 33ho</p>
+                </div>
+                <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=150&fit=crop" class="aca-img" alt="Local">
+                <div class="aca-actions">
+                    <button class="btn btn-blue-full">Get Directions</button>
+                    <p class="aca-pin"><i class="fas fa-map-marker-alt"></i> Get Directions</p>
+                    <div class="aca-teacher">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mestre">
+                        <span>Mestre Profeta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kids Section -->
+    <section id="kids" class="kids-section fade-in-up">
+        <div class="gamefied-banner">
+            <div class="kids-illustration left-illustration">
+                <img src="https://cdn-icons-png.flaticon.com/512/3011/3011394.png" alt="Criança">
+            </div>
+            
+            <div class="learning-path-content">
+                <h3>Gamefied Learning Path</h3>
+                <div class="path-steps">
+                    <div class="step-card orange-step">
+                        <span class="step-title">STEP 1</span>
+                        <span class="step-desc">Temos um</span>
+                        <a href="#" class="step-btn">Download</a>
+                    </div>
+                    <i class="fas fa-arrow-right step-arrow"></i>
+                    <div class="step-card green-step">
+                        <span class="step-title">STEP 2</span>
+                        <span class="step-desc">Preparação</span>
+                        <a href="#" class="step-btn">Download</a>
+                    </div>
+                    <i class="fas fa-arrow-right step-arrow"></i>
+                    <div class="step-card yellow-step">
+                        <span class="step-title">STEP 3</span>
+                        <span class="step-desc">Graduação</span>
+                        <a href="#" class="step-btn">Download</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kids-illustration right-illustration">
+                <img src="https://cdn-icons-png.flaticon.com/512/3011/3011400.png" alt="Criança">
+            </div>
+        </div>
+
+        <div class="kids-main-content">
+            <div class="kids-text">
+                <h2>A CAPOEIRA MAIS DIVERTIDA E EDUCATIVA PARA SEUS FILHOS!</h2>
+                <div class="kids-actions">
+                    <a href="https://wa.me/5567991293269" target="_blank" class="btn btn-blue-rounded hover-scale">AGENDE AULA KIDS</a>
+                    <a href="#sobre" class="btn btn-green-rounded hover-scale">SAIBA MAIS PARA PAIS</a>
+                </div>
+            </div>
+            <div class="kids-photo">
+                <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&h=500&fit=crop" alt="Turma Kids">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato e Redes Sociais -->
+    <section id="contato" class="contato-split-section fade-in-up">
+        <div class="contato-form-side">
+            <h2 class="contato-title">Contato</h2>
+            <form class="c-form">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <textarea placeholder="Mensagem" rows="3" required></textarea>
+                <button type="submit" class="btn-contato hover-scale">Contato</button>
+            </form>
+            <div class="c-info">
+                <p><i class="fab fa-whatsapp"></i> WhatsApp (67) 99129-3269</p>
+                <p><i class="far fa-envelope"></i> ccapoeirarochedo.com</p>
+            </div>
+        </div>
+        
+        <div class="contato-social-side">
+            <div class="social-row hover-scale">
+                <div class="s-icon icon-wa"><i class="fab fa-whatsapp"></i></div>
+                <div class="s-pill pill-ig">
+                    <i class="fab fa-instagram"></i> @capoeiraliberdadeeexpressao
+                </div>
+            </div>
+            
+            <div class="social-row hover-scale">
+                <div class="s-icon icon-ig"><i class="fab fa-instagram"></i></div>
+                <div class="s-pill pill-ig">
+                    <i class="fab fa-instagram"></i> @capoeirarochedo
+                </div>
+            </div>
+
+            <div class="social-row hover-scale">
+                <div class="s-icon icon-fb"><i class="fab fa-facebook-f"></i></div>
+                <div class="s-pill pill-blue">
+                    <i class="fas fa-globe"></i> @capoeirarochedo
+                </div>
+            </div>
+
+            <div class="social-row hover-scale">
+                <div class="s-icon icon-tk"><i class="fab fa-tiktok"></i></div>
+                <div class="s-pill pill-blue">
+                    <i class="fas fa-globe"></i> @capoeiraliberdadeeexpressao
+                </div>
+            </div>
+            
+            <a href="https://wa.me/5567991293269" target="_blank" class="wa-live-chat hover-scale">
+                WhatsApp Live Chat <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Loja Online -->
+    <section id="loja" class="loja-section fade-in-up">
+        <h2 class="text-center section-title-dark">Loja Online & Parceiros</h2>
+        
+        <div class="shop-grid">
+            <div class="shop-card hover-scale">
+                <i class="far fa-heart heart-icon"></i>
+                <img src="https://images.tcdn.com.br/img/img_prod/832729/berimbau_gunga_casca_de_guatambu_2821_1_20201211115324.jpg" alt="Berimbau">
+                <h4>Official berimbau</h4>
+                <p>R$150,00</p>
+            </div>
+            <div class="shop-card hover-scale">
+                <i class="far fa-heart heart-icon"></i>
+                <img src="https://images.tcdn.com.br/img/img_prod/832729/berimbau_gunga_casca_de_guatambu_2821_1_20201211115324.jpg" alt="Berimbau">
+                <h4>Official berimbau</h4>
+                <p>R$150,00</p>
+            </div>
+            <div class="shop-card hover-scale">
+                <i class="far fa-heart heart-icon"></i>
+                <img src="https://via.placeholder.com/200x250?text=Camisa+Preta" alt="Abadá">
+                <h4>Abadás Conigas</h4>
+                <p>R$85,00</p>
+            </div>
+            <div class="shop-card hover-scale">
+                <i class="far fa-heart heart-icon"></i>
+                <img src="https://via.placeholder.com/200x250?text=Camisa+Branca" alt="Camisa">
+                <h4>Camisas Camisa</h4>
+                <p>R$55,00</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parceiros -->
+    <section class="parceiros-section fade-in-up">
+        <h2 class="text-center section-title-dark">Nossos Parceiros</h2>
+        
+        <div class="parceiros-grid">
+            <div class="parceiro-item">
+                <img src="https://via.placeholder.com/150x60?text=Rochedo" alt="Rochedo" class="hover-scale">
+                <p>Prefeitura de Rochedo apoiando o esporte e a cultura local.</p>
+            </div>
+            <div class="parceiro-item">
+                <img src="https://via.placeholder.com/150x60?text=Projeto+Meia+Lua" alt="Projeto Meia Lua" class="hover-scale">
+                <p>Projeto Meia Lua, transformando a vida de jovens pela capoeira.</p>
+            </div>
+            <div class="parceiro-item">
+                <img src="https://via.placeholder.com/150x60?text=SASER" alt="SASER" class="hover-scale">
+                <p>Secretaria de Assistência Social parceira nos projetos.</p>
+            </div>
+            <div class="parceiro-item">
+                <img src="https://via.placeholder.com/150x60?text=SCFV" alt="SCFV" class="hover-scale">
+                <p>Serviço de Convivência e Fortalecimento de Vínculos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Idêntico ao Mockup -->
+    <footer class="footer-mockup">
+        <div class="f-container">
+            <div class="f-logo-area">
+                <img src="https://via.placeholder.com/120x120?text=LOGO+CAPOEIRA" alt="Logo" class="spin-hover">
+            </div>
+            
+            <div class="f-links-area">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#sobre">SOBRE NÓS</a></li>
+                    <li><a href="#mestres">MESTRES E EQUIPE</a></li>
+                    <li><a href="#agenda">AGENDA | EVENTOS</a></li>
+                    <li><a href="#academias">ACADEMIAS</a></li>
+                    <li><a href="#contato">INFO</a></li>
+                </ul>
+            </div>
+            
+            <div class="f-contact-area">
+                <p><i class="fas fa-map-marker-alt"></i> Av. Complexo Esportivo<br>do Santa Emilia, 230<br>Rochedo / MS</p>
+                <p><i class="fas fa-phone-alt"></i> <a href="https://wa.me/5567991293269">(67) 99129-3269</a></p>
+                <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/5567991293269">(67) 99129-3269</a></p>
+                <p><i class="far fa-envelope"></i> ccapoeirarochedo.com</p>
+            </div>
+            
+            <div class="f-social-area">
+                <div class="f-social-icons">
+                    <a href="https://wa.me/5567991293269" class="hover-scale"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="hover-scale"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover-scale"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="hover-scale"><i class="fab fa-tiktok"></i></a>
+                </div>
+                <p>@capoeiraliberdadeeexpressao</p>
+            </div>
+        </div>
+        <div class="f-bottom">
+            <p>Footer ooahao eoe cantoha cortoponida em - nocapoeirarochedo.</p>
+        </div>
+    </footer>
+
+    <!-- Modais Genéricos -->
+    <div class="modal-overlay" id="modalProfeta">
+        <div class="modal-box perfil-detalhe-box">
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalProfeta')"></i>
+            <div class="perfil-capa" style="background-image: url('https://images.unsplash.com/photo-1549476464-37392f717541?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="perfil-info">
+                <h3>Mestre Profeta</h3>
+                <p><i class="fas fa-map-marker-alt" style="color:var(--accent-green);"></i> Campo Grande / Coophasul</p>
+                <ul class="exames-lista">
+                    <li><strong>Idade/Tempo:</strong> 35+ Anos de Capoeira</li>
+                    <li><strong>Especialidade:</strong> Cultura afro-brasileira e educação antirracista.</li>
+                    <li><strong>Histórico:</strong> Fundador do grupo Liberdade e Expressão, Mestre Profeta dedica sua vida ao ensinamento das raízes da capoeira.</li>
+                </ul>
+                <a href="https://wa.me/5567991293269" target="_blank" class="btn btn-whatsapp w-100 mt-3"><i class="fa-brands fa-whatsapp"></i> Falar com o Mestre</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modalGenerico">
+        <div class="modal-box perfil-detalhe-box">
+            <i class="fa-solid fa-xmark close-modal" onclick="closeModal('modalGenerico')"></i>
+            <div class="perfil-capa" style="background-image: url('https://images.unsplash.com/photo-1552318965-6e6ad9d08434?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="perfil-info">
+                <h3>Profissional</h3>
+                <p><i class="fas fa-map-marker-alt" style="color:var(--accent-green);"></i> Campo Grande e Região</p>
+                <ul class="exames-lista">
+                    <li><strong>Especialidade:</strong> Aulas de Capoeira</li>
+                    <li><strong>Histórico:</strong> Comprometido com o desenvolvimento social, saúde e preservação da cultura afro-brasileira.</li>
+                </ul>
+                <a href="https://wa.me/5567991293269" target="_blank" class="btn btn-whatsapp w-100 mt-3"><i class="fa-brands fa-whatsapp"></i> Falar com o Professor</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+</body>
+</html>
