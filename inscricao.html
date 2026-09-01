@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscrição - Capoeira Liberdade e Expressão</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Importação de fonte cursiva para simular a assinatura -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="inscricao.css">
 </head>
@@ -273,15 +274,15 @@
                     </label>
                 </div>
                 
-                <!-- Assinatura Dinâmica para Impressão -->
+                <!-- Assinatura Estilizada Cursiva para Impressão -->
                 <div class="assinatura-print" style="display: none; margin-top: 50px; text-align: center;">
-                    <div style="border-top: 1px solid black; width: 80%; margin: 0 auto; padding-top: 5px; font-weight: bold;">
-                        <span id="assinaturaNomeFicha">________________________________________________</span>
+                    <div class="linha-assinatura">
+                        <span id="assinaturaNomeFicha"></span>
                     </div>
-                    <div style="margin-top: 5px; font-size: 0.9rem;">
+                    <div style="margin-top: 5px; font-size: 0.9rem; font-weight: bold;">
                         Assinatura do Aluno ou Responsável
                     </div>
-                    <div style="margin-top: 10px; font-size: 0.9rem;" id="dataHoraImpressaoFicha">
+                    <div style="margin-top: 8px; font-size: 0.85rem; color: #444;" id="dataHoraImpressaoFicha">
                         Data e Hora: ___/___/______ --:--
                     </div>
                 </div>
