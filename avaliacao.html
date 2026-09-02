@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Evolução - Capoeira Liberdade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="avaliacao.css">
+</head>
+<body>
+
+    <div class="perfil-container">
+        <!-- Cabeçalho do Aluno -->
+        <div class="perfil-header">
+            <img src="https://via.placeholder.com/100" alt="Foto do Aluno" class="perfil-foto" id="alunoFoto">
+            <div class="perfil-info">
+                <h1 id="alunoNome">João Silva</h1>
+                <p>Idade: <span id="alunoIdade">25</span> anos (<span id="alunoCategoria">Adulto</span>)</p>
+                <p>Cordão Atual: <strong id="alunoCordaoAtual">Fugitivo (Cinza e Bege)</strong></p>
+                <div class="badges">
+                    <span class="badge" id="alunoStatus">Em Avaliação</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animação do Cordão (Progresso) -->
+        <div class="progresso-section">
+            <div class="progresso-header">
+                <h3>Progresso para: <span id="proximoCordaoNome" style="color: var(--accent-green);">Quilombola</span></h3>
+                <span id="porcentagemTexto">0%</span>
+            </div>
+            
+            <div class="cordao-track">
+                <!-- A barra que simula o trançado do cordão -->
+                <div class="cordao-fill" id="cordaoFill"></div>
+            </div>
+            
+            <p class="meta-texto">Pontuação atingida: <strong id="pontosAtuais">0</strong> / <span id="pontosNecessarios">0</span> (70% do exigido)</p>
+        </div>
+
+        <!-- Lista de Critérios de Avaliação -->
+        <div class="avaliacao-section">
+            <h2>Critérios de Avaliação</h2>
+            <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Deslize ou clique nas estrelas para avaliar (0 a 10).</p>
+            
+            <div id="listaCriterios">
+                <!-- Os critérios serão injetados via JavaScript dependendo da categoria do aluno -->
+            </div>
+        </div>
+
+        <button class="btn-salvar" id="btnSalvarAvaliacao"><i class="fas fa-save"></i> Salvar Evolução</button>
+    </div>
+
+    <script type="module" src="avaliacao.js"></script>
+</body>
+</html>
