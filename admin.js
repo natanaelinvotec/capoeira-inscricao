@@ -15,6 +15,7 @@ const db = getFirestore(app);
 
 let todosAlunos = [];
 let listaAcademias = [];
+let academiasDBGlobais = []; // Variável nova para segurar os IDs para edição
 let alunoSelecionado = null;
 let academiaEditandoID = null;
 let deleteConfirm = false;
@@ -27,7 +28,6 @@ const academiasPadrao = [
     "Academia Professor Lebrinha"
 ];
 
-// Hierarquia estrita de cordões para a pirâmide
 const ordemCordoes = [
     "Iniciante", "Cinza Claro", "Cinza e Bege", "Bege",
     "Escravo", "Fugitivo", "Quilombola", "Vagante", 
@@ -75,14 +75,16 @@ window.irParaRelatorios = function() {
     setTimeout(() => { document.getElementById('secao-graficos').scrollIntoView({ behavior: 'smooth' }); }, 100);
 }
 
+// ==========================================
 // 1. GESTÃO DE ACADEMIAS
+// ==========================================
 async function carregarAcademias() {
     try {
         const snap = await getDocs(collection(db, "academias"));
-        let academiasDB = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        academiasDBGlobais = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Salva os dados brutos para edição
         
         let nomesUnicos = new Set(academiasPadrao);
-        academiasDB.forEach(ac => nomesUnicos.add(ac.nome));
+        academiasDBGlobais.forEach(ac => nomesUnicos.add(ac.nome));
         listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
         
         let selectHtml = '<option value="">Todas as Academias</option>';
@@ -91,12 +93,12 @@ async function carregarAcademias() {
         const listaPainel = document.getElementById('listaAcademiasPainel');
         listaPainel.innerHTML = '';
 
-        academiasDB.forEach(ac => {
+        academiasDBGlobais.forEach(ac => {
             listaPainel.innerHTML += `
                 <div class="academia-card">
                     <h4><i class="fas fa-map-marker-alt"></i> ${ac.nome}</h4>
-                    <p><strong>Prof:</strong> ${ac.professor}</p>
-                    <p><strong>E-mail:</strong> ${ac.email}</p>
+                    <p><strong>Prof:</strong> ${ac.professor || 'Não informado'}</p>
+                    <p><strong>E-mail:</strong> ${ac.email || 'Não informado'}</p>
                     <div class="academia-actions">
                         <button class="btn-edit-ac" onclick="abrirEditarAcademia('${ac.id}')"><i class="fas fa-edit"></i> Editar</button>
                         <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${ac.nome}')"><i class="fas fa-trash"></i> Excluir</button>
@@ -126,13 +128,15 @@ window.excluirAcademia = async function(id, nome) {
         try { await deleteDoc(doc(db, "academias", id)); alert("Excluída!"); carregarAcademias(); carregarAlunos(); } catch(e) {}
     }
 }
+
+// Correção exata do Modal de Edição
 window.abrirEditarAcademia = function(id) {
     academiaEditandoID = id;
-    const ac = listaAcademias.find(a => a.id === id);
+    const ac = academiasDBGlobais.find(a => a.id === id);
     if(ac) {
-        document.getElementById('editNomeAcademia').value = ac.nome;
-        document.getElementById('editNomeProfessor').value = ac.professor;
-        document.getElementById('editEmailProfessor').value = ac.email;
+        document.getElementById('editNomeAcademia').value = ac.nome || '';
+        document.getElementById('editNomeProfessor').value = ac.professor || '';
+        document.getElementById('editEmailProfessor').value = ac.email || '';
         document.getElementById('editSenhaProfessor').value = ""; 
         document.getElementById('modalEditarAcademia').style.display = 'flex';
     }
@@ -151,12 +155,17 @@ document.getElementById('formEditAcademia').addEventListener('submit', async (e)
 
     try {
         await updateDoc(doc(db, "academias", academiaEditandoID), objUpdate);
-        alert("Dados atualizados!");
-        fecharModalAcademia(); carregarAcademias(); carregarAlunos();
+        alert("Dados atualizados com sucesso!");
+        fecharModalAcademia(); 
+        carregarAcademias(); 
+        carregarAlunos();
     } catch(e) { alert("Erro ao editar."); }
 });
 
-// 2. GRID, FILTROS E GRÁFICOS DINÂMICOS
+
+// ==========================================
+// 2. GRID E GRÁFICOS RESTANTES (MANTIDOS INTACTOS)
+// ==========================================
 async function carregarAlunos() {
     try {
         const snap = await getDocs(collection(db, "alunos"));
@@ -211,7 +220,7 @@ window.transferirAluno = async function(idAluno, novaAcademia) {
     }
 }
 
-// 3. MÓDULO DE AVALIAÇÃO E NOTAS (Com cálculo sincronizado)
+// 3. MÓDULO DE AVALIAÇÃO E NOTAS
 let notasAtuais = {};
 let criteriosAtivos = [];
 window.abrirModal = function(id) {
@@ -279,7 +288,6 @@ function atualizarNota(idCrit, valor, starsArray) {
     calcularPorcentagem();
 }
 
-// Matemática padronizada para UI e Gráfico (Porcentagem pura)
 function calcularPorcentagem() {
     let totalPontos = 0;
     criteriosAtivos.forEach(c => {
@@ -293,12 +301,8 @@ function calcularPorcentagem() {
     const cssCordao = document.getElementById('cordaoTrancado');
     cssCordao.style.width = `${porc > 100 ? 100 : porc}%`;
     
-    // Feedback visual quando atinge a meta de 70%
-    if (porc >= 70) {
-        cssCordao.style.boxShadow = "0 0 15px rgba(0, 230, 118, 0.8)";
-    } else {
-        cssCordao.style.boxShadow = "none";
-    }
+    if (porc >= 70) { cssCordao.style.boxShadow = "0 0 15px rgba(0, 230, 118, 0.8)"; } 
+    else { cssCordao.style.boxShadow = "none"; }
 }
 
 window.excluirAlunoBtn = async function() {
@@ -324,7 +328,7 @@ window.salvarEdicaoAluno = async function() {
 
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
 
-// 4. GRÁFICOS (CHART.JS - Matemática 100% Sincronizada)
+// 4. GRÁFICOS (CHART.JS)
 function obterCorPorCordao(nome) {
     const mapa = {
         'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#DEB887',
@@ -347,7 +351,6 @@ function desenharGraficos(alunosAtuais) {
         const local = a.localTreino || 'Sem Academia'; academiaCount[local] = (academiaCount[local] || 0) + 1;
         const rank = a.cordaoAtual || 'Iniciante'; rankCount[rank] = (rankCount[rank] || 0) + 1;
 
-        // Calcula a porcentagem real (Mesma lógica da UI)
         let idxCordao = cordoesAdulto.findIndex(c => c.nome === rank);
         if(idadeAluno < 12) idxCordao = cordoesKids.findIndex(c => c.nome === rank);
         if(idxCordao === -1) idxCordao = 0;
@@ -366,16 +369,8 @@ function desenharGraficos(alunosAtuais) {
                 }
             });
             let porc = maxPontos > 0 ? (totalPontosAluno / maxPontos) * 100 : 0;
-            
-            // SE A PORCENTAGEM BATER 70% OU MAIS = APTO (Fica Verde)
-            if(maxPontos > 0 && porc >= 70) {
-                aptos++;
-            } else {
-                desenv++;
-            }
-        } else { 
-            desenv++; 
-        }
+            if(maxPontos > 0 && porc >= 70) aptos++; else desenv++;
+        } else { desenv++; }
     });
 
     let labelFundamentos = [], dataFundamentos = [];
@@ -388,7 +383,6 @@ function desenharGraficos(alunosAtuais) {
     criarGrafico('chartTermometro', 'pie', ['Aptos (Candidatos Formatura)', 'Em Desenvolvimento'], [aptos, desenv], [colorGreen, colorYellow]);
     criarGrafico('chartStatus', 'doughnut', ['Ativos', 'Inativos/Pausa'], [ativos, inativos], [colorTeal, colorRed]);
     
-    // Pirâmide baseada na Ordem Hierárquica Estrita
     let piramideLabels = [];
     let piramideData = [];
     let piramideColors = [];
