@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Master - Capoeira Liberdade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- NAVEGAÇÃO SUPERIOR -->
+    <header class="top-nav">
+        <div class="logo-area">
+            <img src="logo-liberdade.jpg" alt="Logo" class="nav-logo">
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-item" onclick="mudarAba('dashboard')">Painel Principal</a>
+            <a href="#" class="nav-item active" onclick="mudarAba('alunos')">Alunos Master</a>
+            <a href="#" class="nav-item" onclick="mudarAba('academias')">Gestão de Academias</a>
+            <a href="#" class="nav-item" onclick="mudarAba('financeiro')">Financeiro</a>
+            <a href="#" class="nav-item" onclick="mudarAba('relatorios')">Relatórios</a>
+        </nav>
+        <div class="user-area">
+            <div class="search-bar">
+                <input type="text" id="buscaGeral" placeholder="Buscar...">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="admin-profile">
+                <img src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
+                <span>Admin</span>
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- CONTEÚDO PRINCIPAL (Esquerda/Centro) -->
+        <main class="content-area">
+            
+            <!-- ABA ALUNOS (Principal da Imagem) -->
+            <section id="aba-alunos" class="aba-content active">
+                <div class="section-header">
+                    <h2>Lista Completa de Alunos Master e Candidatos a Instrutor - Painel de Controle</h2>
+                </div>
+                
+                <!-- Grid de Alunos puxados do Firebase -->
+                <div class="alunos-grid" id="gridAlunos">
+                    <!-- Os cards entrarão aqui dinamicamente via JS -->
+                    <p style="text-align: center; grid-column: 1/-1;">Carregando banco de dados...</p>
+                </div>
+
+                <!-- Gráficos Fictícios da Imagem -->
+                <div class="chart-section">
+                    <h3>Gráficos de Atividade de Distribuição</h3>
+                    <div class="fake-chart">
+                        <div class="chart-y-axis">
+                            <span>100</span><span>80</span><span>60</span><span>40</span>
+                        </div>
+                        <div class="chart-bars">
+                            <div class="bar" style="height: 40%;"></div>
+                            <div class="bar" style="height: 90%;"></div>
+                            <div class="bar" style="height: 60%;"></div>
+                            <div class="bar" style="height: 30%;"></div>
+                            <div class="bar" style="height: 40%;"></div>
+                            <div class="bar" style="height: 70%;"></div>
+                            <div class="bar" style="height: 50%;"></div>
+                        </div>
+                        <div class="chart-legend">
+                            <div><i class="fas fa-globe" style="color:#389e92"></i> Status Geral</div>
+                            <div><i class="fas fa-check-circle" style="color:#389e92"></i> Transferências Sucesso</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABA GESTÃO DE ACADEMIAS -->
+            <section id="aba-academias" class="aba-content">
+                <div class="section-header"><h2>Gestão de Academias e Permissões</h2></div>
+                <div class="card-padrao">
+                    <h3>Cadastrar Nova Academia / Professor</h3>
+                    <form id="formNovaAcademia" style="display: grid; gap: 15px; margin-top: 20px;">
+                        <input type="text" id="nomeAcademia" placeholder="Nome da Academia (Ex: Academia Buriti)" class="input-padrao" required>
+                        <input type="text" id="nomeProfessor" placeholder="Nome do Professor Responsável" class="input-padrao" required>
+                        <input type="email" id="emailProfessor" placeholder="E-mail de Login do Professor" class="input-padrao" required>
+                        <input type="password" id="senhaProfessor" placeholder="Senha de Acesso" class="input-padrao" required>
+                        <button type="submit" class="btn-detalhes">Criar Acesso Restrito</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ABA FINANCEIRO -->
+            <section id="aba-financeiro" class="aba-content">
+                <div class="section-header"><h2>Gestão de Pagamentos (Mensalidades)</h2></div>
+                <div class="card-padrao">
+                    <p>Módulo de pagamentos em construção. Aqui entrará a gestão de PIX e mensalidades pagas.</p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- SIDEBAR LATERAL DIREITA (Widgets da Imagem) -->
+        <aside class="sidebar">
+            
+            <div class="widget">
+                <h3>Filtros Avançados</h3>
+                <select class="input-padrao" id="filtroAcademia" style="margin-bottom: 10px;">
+                    <option value="">Todas as Academias</option>
+                    <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
+                    <option value="Academia Mestre Omar">Academia Mestre Omar</option>
+                </select>
+                <select class="input-padrao" id="filtroCordao">
+                    <option value="">Todos os Cordões</option>
+                    <option value="Iniciante">Iniciante</option>
+                    <option value="Escravo">Escravo (Cinza escuro)</option>
+                    <option value="Fugitivo">Fugitivo (Cinza e Bege)</option>
+                </select>
+            </div>
+
+            <div class="widget">
+                <h3>Relatórios Rápidos</h3>
+                <div class="skeleton-line" style="width: 80%"></div>
+                <div class="skeleton-line" style="width: 60%"></div>
+                <div class="skeleton-line" style="width: 90%"></div>
+            </div>
+
+            <div class="widget">
+                <h3>Chat Interno (Mestres)</h3>
+                <p style="font-size: 0.8rem; color: #888;">Nenhuma mensagem nova.</p>
+                <div class="skeleton-line" style="width: 100%; height: 30px;"></div>
+            </div>
+
+            <div class="widget">
+                <h3>Vagas e Transferências</h3>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <img src="logo-liberdade.jpg" style="width: 40px; border-radius: 50%;">
+                    <img src="logo-liberdade.jpg" style="width: 40px; border-radius: 50%;">
+                </div>
+            </div>
+
+        </aside>
+    </div>
+
+    <!-- MODAL DE AVALIAÇÃO E EDIÇÃO (POPUP DELICADO) -->
+    <div class="modal-overlay" id="modalAvaliacao">
+        <div class="modal-content">
+            <button class="close-modal" onclick="fecharModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-header">
+                <img src="" id="modFoto" class="mod-foto">
+                <div class="mod-info">
+                    <h2 id="modNome">Nome do Aluno</h2>
+                    <p><span id="modIdade">--</span> anos | <i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Coluna Esquerda: Status e Graduação -->
+                <div class="mod-col">
+                    <label>Status do Aluno:</label>
+                    <select id="modStatus" class="input-padrao">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Pausa">Pausa</option>
+                        <option value="Lesionado">Lesionado</option>
+                        <option value="Em Viagem">Em Viagem</option>
+                    </select>
+
+                    <label style="margin-top: 15px;">Graduação (Cordão Atual):</label>
+                    <select id="modCordao" class="input-padrao">
+                        <option value="Iniciante">Iniciante</option>
+                        <option value="Escravo (Cinza Escuro)">Escravo (Cinza Escuro)</option>
+                        <option value="Fugitivo (Cinza e Bege)">Fugitivo (Cinza e Bege)</option>
+                        <option value="Quilombola (Bege)">Quilombola (Bege)</option>
+                        <option value="Vagante (Bege e Vermelho)">Vagante (Bege e Vermelho)</option>
+                        <option value="Liberto (Vermelho)">Liberto (Vermelho)</option>
+                    </select>
+                </div>
+
+                <!-- Coluna Direita: Avaliação de Estrelas -->
+                <div class="mod-col mod-estrelas">
+                    <h3 style="margin-bottom: 10px; font-size: 1rem; color: #389e92;">Critérios de Evolução</h3>
+                    <div class="criterio-mini">
+                        <span>Frequência/Disciplina</span>
+                        <div class="stars" data-crit="disciplina">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="criterio-mini">
+                        <span>Ginga e Movimentos</span>
+                        <div class="stars" data-crit="movimentos">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="criterio-mini">
+                        <span>Musicalidade (Toque/Canto)</span>
+                        <div class="stars" data-crit="musica">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-salvar-modal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar Prontuário</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>
