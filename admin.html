@@ -6,21 +6,27 @@
     <title>Painel Master - Capoeira Liberdade</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
     <header class="top-nav">
         <div class="logo-area">
-            <img src="logo-liberdade.jpg" alt="Logo" class="nav-logo">
+            <img src="logo-liberdade150.png" alt="Logo" class="nav-logo">
         </div>
-        <nav class="nav-links">
+        
+        <div class="menu-toggle" id="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+        
+        <nav class="nav-links" id="nav-links">
             <a href="#" class="nav-item" onclick="mudarAba('dashboard')">Painel Principal</a>
             <a href="#" class="nav-item active" onclick="mudarAba('alunos')">Alunos Master</a>
             <a href="#" class="nav-item" onclick="mudarAba('academias')">Gestão de Academias</a>
             <a href="#" class="nav-item" onclick="mudarAba('financeiro')">Financeiro</a>
-            <a href="#" class="nav-item" onclick="mudarAba('relatorios')">Relatórios</a>
+            <!-- Botão de Relatórios rola até os gráficos estilo Landing Page -->
+            <a href="#" class="nav-item" onclick="irParaRelatorios()">Relatórios</a>
         </nav>
+        
         <div class="user-area">
             <div class="search-bar">
                 <input type="text" id="buscaGeral" placeholder="Buscar...">
@@ -29,7 +35,6 @@
             <div class="admin-profile">
                 <img src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
                 <span>Admin Master</span>
-                <i class="fas fa-cog"></i>
             </div>
         </div>
     </header>
@@ -37,7 +42,7 @@
     <div class="main-layout">
         <main class="content-area">
             
-            <!-- ABA ALUNOS -->
+            <!-- ABA ALUNOS E RELATÓRIOS -->
             <section id="aba-alunos" class="aba-content active">
                 <div class="section-header">
                     <h2>Lista Completa de Alunos - Painel de Controle e Distribuição</h2>
@@ -47,18 +52,42 @@
                     <p style="text-align: center; grid-column: 1/-1;">Carregando banco de dados...</p>
                 </div>
 
-                <div class="chart-section">
-                    <h3>Gráficos de Atividade e Evolução</h3>
-                    <div class="fake-chart">
-                        <div class="chart-y-axis"><span>100</span><span>80</span><span>60</span><span>40</span></div>
-                        <div class="chart-bars">
-                            <div class="bar" style="height: 40%;"></div><div class="bar" style="height: 90%;"></div>
-                            <div class="bar" style="height: 60%;"></div><div class="bar" style="height: 30%;"></div>
-                            <div class="bar" style="height: 80%;"></div><div class="bar" style="height: 70%;"></div>
+                <!-- SEÇÃO DE GRÁFICOS (Relatórios) -->
+                <div id="secao-graficos" class="chart-section" style="margin-top: 40px;">
+                    <div class="section-header" style="background: #002D72;">
+                        <h2><i class="fas fa-chart-pie"></i> Inteligência de Dados e Evolução</h2>
+                    </div>
+                    
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h3>Termômetro de Aprovação (Aptos vs Desenvolvimento)</h3>
+                            <canvas id="chartTermometro"></canvas>
                         </div>
-                        <div class="chart-legend">
-                            <div><i class="fas fa-globe" style="color:#389e92"></i> Status Geral</div>
-                            <div><i class="fas fa-check-circle" style="color:#389e92"></i> Transferências Sucesso</div>
+                        
+                        <div class="chart-box">
+                            <h3>Desempenho por Fundamentos (Média do Grupo)</h3>
+                            <canvas id="chartFundamentos"></canvas>
+                        </div>
+                        
+                        <div class="chart-box">
+                            <h3>Pirâmide de Graduação (Quantidade por Cordão)</h3>
+                            <canvas id="chartPiramide"></canvas>
+                        </div>
+
+                        <div class="chart-box">
+                            <h3>Distribuição de Alunos por Academia</h3>
+                            <canvas id="chartAcademias"></canvas>
+                        </div>
+
+                        <div class="chart-box" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <h3>Demografia (Kids vs Adultos)</h3>
+                                <canvas id="chartIdades"></canvas>
+                            </div>
+                            <div>
+                                <h3>Status de Retenção (Ativos vs Inativos)</h3>
+                                <canvas id="chartStatus"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,25 +96,28 @@
             <!-- ABA ACADEMIAS -->
             <section id="aba-academias" class="aba-content">
                 <div class="section-header"><h2>Gestão de Academias e Permissões</h2></div>
-                <div class="card-padrao">
+                <div class="card-padrao" style="margin-bottom: 20px;">
                     <h3>Cadastrar Nova Academia / Professor</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Ao criar uma academia, ela aparecerá nas opções de transferência e no filtro de buscas.</p>
-                    <form id="formNovaAcademia" style="display: grid; gap: 15px;">
+                    <form id="formNovaAcademia" style="display: grid; gap: 15px; margin-top: 15px;">
                         <input type="text" id="nomeAcademia" placeholder="Nome da Academia (Ex: Academia Buriti)" class="input-padrao" required>
                         <input type="text" id="nomeProfessor" placeholder="Nome do Professor Responsável" class="input-padrao" required>
                         <input type="email" id="emailProfessor" placeholder="E-mail de Login do Professor" class="input-padrao" required>
                         <input type="password" id="senhaProfessor" placeholder="Senha de Acesso" class="input-padrao" required>
-                        <button type="submit" class="btn-detalhes" style="width: 250px;">Criar Acesso Restrito</button>
+                        <button type="submit" class="btn-detalhes" style="width: 250px;">Cadastrar Academia</button>
                     </form>
                 </div>
-                <div id="listaAcademiasPainel" style="margin-top: 20px;"></div>
+                
+                <h3>Academias Registradas</h3>
+                <div class="academias-grid" id="listaAcademiasPainel">
+                    <!-- Lista injetada via JS -->
+                </div>
             </section>
 
             <!-- ABA FINANCEIRO -->
             <section id="aba-financeiro" class="aba-content">
                 <div class="section-header"><h2>Gestão Financeira e Pagamentos</h2></div>
                 <div class="card-padrao">
-                    <p>Módulo de pagamentos em construção. Controle de PIX, Mensalidades e Inadimplência.</p>
+                    <p>Módulo em construção para o próximo passo. Acompanhamento de PIX e mensalidades.</p>
                 </div>
             </section>
         </main>
@@ -96,85 +128,62 @@
                 <h3>Filtros Avançados</h3>
                 <select class="input-padrao" id="filtroAcademia" style="margin-bottom: 10px;">
                     <option value="">Todas as Academias</option>
-                    <!-- Preenchido via JS -->
                 </select>
-                <select class="input-padrao" id="filtroCordao">
-                    <option value="">Todos os Cordões</option>
-                    <option value="Iniciante">Iniciante</option>
-                    <option value="Escravo">Escravo</option>
-                    <option value="Fugitivo">Fugitivo</option>
-                    <option value="Quilombola">Quilombola</option>
-                    <option value="Vagante">Vagante</option>
-                    <option value="Liberto">Liberto</option>
-                    <option value="Instrutor">Instrutor</option>
-                    <option value="Professor">Professor</option>
-                    <option value="Mestre">Mestre</option>
-                </select>
-            </div>
-            <div class="widget">
-                <h3>Chat Interno (Mestres)</h3>
-                <p style="font-size: 0.8rem; color: #888;">Sistema de mensagens criptografadas em breve.</p>
             </div>
         </aside>
     </div>
 
-    <!-- MODAL POPUP MASTER -->
+    <!-- MODAL POPUP ALUNO -->
     <div class="modal-overlay" id="modalAvaliacao">
+        <!-- Código do Modal do Aluno (Mantido idêntico ao anterior para poupar espaço, o JS cuidará dele) -->
         <div class="modal-content modal-large">
             <button class="close-modal" onclick="fecharModal()"><i class="fas fa-times"></i></button>
-            
             <div class="modal-header-centered">
                 <img src="" id="modFoto" class="mod-foto-large">
-                <h2 id="modNome" style="text-transform: uppercase;">NOME DO ALUNO</h2>
+                <h2 id="modNome">NOME</h2>
                 <p><span id="modIdade">--</span> anos | <i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
             </div>
-
-            <!-- MÓDULO 4: BARRA DE CORDÃO ANIMADA -->
             <div class="cordao-container">
-                <div class="cordao-header">
-                    <span id="textoEvolucao">Progresso para: <strong>Próximo Cordão</strong></span>
-                    <span id="porcentagemEvolucao">0%</span>
-                </div>
-                <div class="cordao-track">
-                    <div class="cordao-fill" id="cordaoTrancado"></div>
-                </div>
-                <div style="font-size: 0.8rem; color: #888; text-align: right; margin-top: 5px;">Meta: 70% para aprovação</div>
+                <div class="cordao-header"><span id="textoEvolucao">Progresso</span><span id="porcentagemEvolucao">0%</span></div>
+                <div class="cordao-track"><div class="cordao-fill" id="cordaoTrancado"></div></div>
             </div>
-
             <div class="modal-body-split">
-                <!-- Esquerda: Status e Info -->
                 <div class="mod-left">
                     <div class="form-group-mod">
                         <label>Status do Aluno:</label>
                         <select id="modStatus" class="input-padrao mod-input">
-                            <option value="Ativo">Ativo</option>
-                            <option value="Inativo">Inativo</option>
-                            <option value="Pausa">Pausa</option>
-                            <option value="Lesionado">Lesionado</option>
-                            <option value="Em Viagem">Em Viagem</option>
+                            <option value="Ativo">Ativo</option><option value="Inativo">Inativo</option><option value="Pausa">Pausa</option><option value="Lesionado">Lesionado</option><option value="Em Viagem">Em Viagem</option>
                         </select>
                     </div>
                     <div class="form-group-mod">
                         <label>Graduação Atual:</label>
-                        <select id="modCordao" class="input-padrao mod-input">
-                            <!-- Options populadas via JS -->
-                        </select>
+                        <select id="modCordao" class="input-padrao mod-input"></select>
                     </div>
                     <button class="btn-excluir-aluno" id="btnExcluirModal" onclick="excluirAlunoBtn()"><i class="fas fa-trash"></i> Excluir Aluno</button>
                 </div>
-
-                <!-- Direita: 15 Critérios (Estrelas) -->
                 <div class="mod-right">
                     <h3 class="mod-title-right">Critérios de Evolução (0 a 10)</h3>
-                    <div class="criterios-grid" id="gridCriterios">
-                        <!-- Estrelas injetadas via JS dependendo da idade/cordão -->
-                    </div>
+                    <div class="criterios-grid" id="gridCriterios"></div>
                 </div>
             </div>
-
             <div class="modal-footer-centered">
                 <button class="btn-salvar-modal" id="btnSalvarModal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR ACADEMIA -->
+    <div class="modal-overlay" id="modalEditarAcademia">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="close-modal" onclick="fecharModalAcademia()"><i class="fas fa-times"></i></button>
+            <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Editar Academia</h2>
+            <form id="formEditAcademia" style="display: grid; gap: 15px;">
+                <div><label>Nome da Academia</label><input type="text" id="editNomeAcademia" class="input-padrao" required></div>
+                <div><label>Professor Responsável</label><input type="text" id="editNomeProfessor" class="input-padrao" required></div>
+                <div><label>E-mail de Login</label><input type="email" id="editEmailProfessor" class="input-padrao" required></div>
+                <div><label>Nova Senha (opcional)</label><input type="password" id="editSenhaProfessor" class="input-padrao" placeholder="Deixe em branco para não alterar"></div>
+                <button type="submit" class="btn-salvar-modal" style="width: 100%; margin-top: 10px;"><i class="fas fa-save"></i> Salvar Alterações</button>
+            </form>
         </div>
     </div>
 
