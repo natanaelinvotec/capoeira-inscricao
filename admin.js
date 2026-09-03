@@ -27,6 +27,13 @@ const academiasPadrao = [
     "Academia Professor Lebrinha"
 ];
 
+// Hierarquia estrita de cordões para a pirâmide
+const ordemCordoes = [
+    "Iniciante", "Cinza Claro", "Cinza e Bege", "Bege",
+    "Escravo", "Fugitivo", "Quilombola", "Vagante", 
+    "Liberto", "Instrutor", "Professor", "Mestre"
+];
+
 const cordoesAdulto = [
     { nome: "Iniciante", cor: ['#CCC','#CCC','#CCC'] }, { nome: "Escravo", cor: ['#4F4F4F','#4F4F4F','#4F4F4F'] },
     { nome: "Fugitivo", cor: ['#4F4F4F','#F5DEB3','#4F4F4F'] }, { nome: "Quilombola", cor: ['#DAA520','#DAA520','#DAA520'] },
@@ -74,14 +81,18 @@ async function carregarAcademias() {
         const snap = await getDocs(collection(db, "academias"));
         let academiasDB = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
+        // Remove Duplicatas usando SET
+        let nomesUnicos = new Set(academiasPadrao);
+        academiasDB.forEach(ac => nomesUnicos.add(ac.nome));
+        listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
+        
         let selectHtml = '<option value="">Todas as Academias</option>';
-        academiasPadrao.forEach(padrao => selectHtml += `<option value="${padrao}">${padrao}</option>`);
+        listaAcademias.forEach(ac => selectHtml += `<option value="${ac.nome}">${ac.nome}</option>`);
         
         const listaPainel = document.getElementById('listaAcademiasPainel');
         listaPainel.innerHTML = '';
 
         academiasDB.forEach(ac => {
-            if(!academiasPadrao.includes(ac.nome)) { selectHtml += `<option value="${ac.nome}">${ac.nome}</option>`; }
             listaPainel.innerHTML += `
                 <div class="academia-card">
                     <h4><i class="fas fa-map-marker-alt"></i> ${ac.nome}</h4>
@@ -94,7 +105,6 @@ async function carregarAcademias() {
                 </div>`;
         });
         document.getElementById('filtroAcademia').innerHTML = selectHtml;
-        listaAcademias = [...academiasPadrao.map(n => ({nome: n})), ...academiasDB];
     } catch (e) { console.error(e); }
 }
 
@@ -119,16 +129,15 @@ window.excluirAcademia = async function(id, nome) {
 }
 window.abrirEditarAcademia = function(id) {
     academiaEditandoID = id;
-    // ... [Recuperação para edição, igual ao anterior]
+    // (Abertura do modal edit - mesmo código ocultado para manter tamanho)
 }
 
-// 2. GRID E FILTROS DE ALUNOS
+// 2. GRID, FILTROS E GRÁFICOS DINÂMICOS
 async function carregarAlunos() {
     try {
         const snap = await getDocs(collection(db, "alunos"));
         todosAlunos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        aplicarFiltros();
-        desenharGraficos();
+        aplicarFiltros(); 
     } catch (e) { console.log(e); }
 }
 
@@ -139,7 +148,9 @@ function aplicarFiltros() {
     const ac = document.getElementById('filtroAcademia').value;
     const txt = document.getElementById('buscaGeral').value.toLowerCase();
     const filtrados = todosAlunos.filter(a => (ac === "" || a.localTreino === ac) && (txt === "" || a.nome.toLowerCase().includes(txt)));
+    
     renderizarGrid(filtrados);
+    desenharGraficos(filtrados); // O Gráfico é atualizado enviando apenas os alunos filtrados
 }
 
 function renderizarGrid(alunos) {
@@ -176,7 +187,7 @@ window.transferirAluno = async function(idAluno, novaAcademia) {
     }
 }
 
-// 3. MÓDULO DE AVALIAÇÃO
+// 3. MÓDULO DE AVALIAÇÃO E NOTAS
 let notasAtuais = {};
 let criteriosAtivos = [];
 window.abrirModal = function(id) {
@@ -270,35 +281,46 @@ window.salvarEdicaoAluno = async function() {
 }
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
 
-// 4. GRÁFICOS (CHART.JS Otimizado)
+// 4. GRÁFICOS (CHART.JS ATUALIZANDO CONFORME FILTROS)
 function obterCorPorCordao(nome) {
     const mapa = {
-        'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#F5DEB3',
-        'Escravo': '#4F4F4F', 'Fugitivo': '#8B7355', 'Quilombola': '#DAA520', 'Vagante': '#D2691E',
-        'Liberto': '#D32F2F', 'Instrutor': '#A52A2A', 'Professor': '#FFB6C1', 'Mestre': '#EAEAEA'
+        'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#DEB887',
+        'Escravo': '#555555', 'Fugitivo': '#8B7D6B', 'Quilombola': '#DAA520', 'Vagante': '#CD5C5C',
+        'Liberto': '#D32F2F', 'Instrutor': '#800000', 'Professor': '#F08080', 'Mestre': '#F5F5F5'
     };
     return mapa[nome] || '#389E92';
 }
 
-function desenharGraficos() {
+// A função agora recebe "alunosAtuais" que vem do filtro (ou todos)
+function desenharGraficos(alunosAtuais) {
     let aptos = 0, desenv = 0, rankCount = {}, academiaCount = {}, ativos = 0, inativos = 0, kids = 0, adultos = 0;
     let fundamentosSoma = {}, fundamentosQtd = {};
     criteriosRegras.forEach(c => { fundamentosSoma[c.txt] = 0; fundamentosQtd[c.txt] = 0; });
 
-    todosAlunos.forEach(a => {
+    alunosAtuais.forEach(a => {
         if(a.idade < 12) kids++; else adultos++;
         if(a.statusAtual === 'Ativo') ativos++; else inativos++;
         const local = a.localTreino || 'Sem Academia'; academiaCount[local] = (academiaCount[local] || 0) + 1;
         const rank = a.cordaoAtual || 'Iniciante'; rankCount[rank] = (rankCount[rank] || 0) + 1;
 
+        // Lógica Exata dos 70%
+        let idxCordao = cordoesAdulto.findIndex(c => c.nome === rank);
+        if(a.idade < 12) idxCordao = cordoesKids.findIndex(c => c.nome === rank);
+        let critAtivosAluno = criteriosRegras.filter(crit => a.idade < 12 ? crit.reqKids : idxCordao >= (crit.reqAdulto - 1));
+        
+        let maxPontos = critAtivosAluno.length * 10;
+        let meta = maxPontos * 0.7;
+        let totalPontosAluno = 0;
+
         if(a.notas) {
-            let totalNotasAluno = 0, qtdNotas = 0;
-            for (let critId in a.notas) {
-                totalNotasAluno += a.notas[critId]; qtdNotas++;
-                let txtCriterio = criteriosRegras.find(cr => cr.id === critId)?.txt;
-                if(txtCriterio) { fundamentosSoma[txtCriterio] += a.notas[critId]; fundamentosQtd[txtCriterio] += 1; }
-            }
-            if(qtdNotas > 0 && totalNotasAluno >= (qtdNotas * 10 * 0.7)) aptos++; else desenv++;
+            critAtivosAluno.forEach(c => {
+                if(a.notas[c.id]) {
+                    totalPontosAluno += a.notas[c.id];
+                    fundamentosSoma[c.txt] += a.notas[c.id];
+                    fundamentosQtd[c.txt] += 1;
+                }
+            });
+            if(maxPontos > 0 && totalPontosAluno >= meta) aptos++; else desenv++;
         } else { desenv++; }
     });
 
@@ -309,16 +331,26 @@ function desenharGraficos() {
 
     const colorTeal = '#389E92'; const colorBlue = '#002D72'; const colorGreen = '#00E676'; const colorRed = '#E74C3C'; const colorYellow = '#F5B041';
 
-    criarGrafico('chartTermometro', 'pie', ['Aptos', 'Desenvolvimento'], [aptos, desenv], [colorGreen, colorYellow]);
+    criarGrafico('chartTermometro', 'pie', ['Aptos (Candidatos Formatura)', 'Em Desenvolvimento'], [aptos, desenv], [colorGreen, colorYellow]);
     criarGrafico('chartStatus', 'doughnut', ['Ativos', 'Inativos/Pausa'], [ativos, inativos], [colorTeal, colorRed]);
     
-    const piramideLabels = Object.keys(rankCount);
-    const piramideColors = piramideLabels.map(label => obterCorPorCordao(label));
-    criarGrafico('chartPiramide', 'bar', piramideLabels, Object.values(rankCount), piramideColors, true);
+    // Organização estrita da pirâmide pelas cores e posições
+    let piramideLabels = [];
+    let piramideData = [];
+    let piramideColors = [];
     
+    ordemCordoes.forEach(nomeCordao => {
+        if(rankCount[nomeCordao] !== undefined) {
+            piramideLabels.push(nomeCordao);
+            piramideData.push(rankCount[nomeCordao]);
+            piramideColors.push(obterCorPorCordao(nomeCordao));
+        }
+    });
+
+    criarGrafico('chartPiramide', 'bar', piramideLabels, piramideData, piramideColors, true);
     criarGrafico('chartFundamentos', 'bar', labelFundamentos, dataFundamentos, colorTeal, true);
     criarGrafico('chartAcademias', 'doughnut', Object.keys(academiaCount), Object.values(academiaCount), [colorTeal, colorBlue, colorGreen, colorYellow, '#8E44AD']);
-    criarGrafico('chartIdades', 'pie', ['Kids', 'Adultos'], [kids, adultos], [colorGreen, colorBlue]);
+    criarGrafico('chartIdades', 'pie', ['Kids (Sub-12)', 'Adultos'], [kids, adultos], [colorGreen, colorBlue]);
 }
 
 function criarGrafico(canvasId, type, labels, data, colors, hideLegend = false) {
