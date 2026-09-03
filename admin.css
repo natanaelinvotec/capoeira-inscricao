@@ -19,7 +19,6 @@ body { background-color: var(--bg-app); color: var(--text-dark); overflow-x: hid
 .search-bar input { border: none; background: transparent; outline: none; width: 150px; }
 .admin-profile { display: flex; align-items: center; gap: 10px; font-weight: bold; }
 .admin-avatar { width: 40px; height: 40px; border-radius: 50%; }
-
 .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-blue); }
 
 @media (max-width: 850px) {
@@ -49,7 +48,7 @@ body { background-color: var(--bg-app); color: var(--text-dark); overflow-x: hid
 .select-encaminhar { border: 1px solid #ccc; padding: 8px; border-radius: 6px; font-size: 0.85rem; outline: none; background: #fafafa; }
 .btn-detalhes { background: var(--primary-teal); color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
 
-/* GESTÃO DE ACADEMIAS */
+/* GESTÃO DE ACADEMIAS (Cards) */
 .academias-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 15px; }
 .academia-card { background: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 .academia-card h4 { color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 5px; }
@@ -60,12 +59,10 @@ body { background-color: var(--bg-app); color: var(--text-dark); overflow-x: hid
 
 /* GRÁFICOS (Solução do Bug de Rolagem e Layout 2 colunas) */
 .charts-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; position: relative; }
-/* Divisão no meio da página */
 .charts-grid-layout::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--border-color); z-index: 0; }
 .chart-box { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border: 1px solid var(--border-color); z-index: 1; display: flex; flex-direction: column; }
 .chart-box.full-width { grid-column: 1 / -1; }
 .chart-box h3 { color: var(--primary-blue); margin-bottom: 15px; font-family: 'Montserrat', sans-serif; text-align: center; font-size: 1rem; }
-/* Altura fixa rigorosa resolve o bug de redimensionamento infinito do Chart.js */
 .canvas-container { height: 300px; width: 100%; position: relative; flex: 1; }
 @media (max-width: 900px) { .charts-grid-layout { grid-template-columns: 1fr; } .charts-grid-layout::after { display: none; } }
 
