@@ -13,7 +13,7 @@
 
     <header class="top-nav">
         <div class="logo-area">
-            <img src="logo-liberdade150.png" alt="Logo" class="nav-logo">
+            <img src="logo-liberdade.jpg" alt="Logo" class="nav-logo">
         </div>
         
         <div class="menu-toggle" id="mobile-menu-btn"><i class="fas fa-bars"></i></div>
@@ -28,7 +28,7 @@
         
         <div class="user-area">
             <div class="search-bar">
-                <input type="text" id="buscaGeral" placeholder="Buscar...">
+                <input type="text" id="buscaGeral" placeholder="Buscar aluno...">
                 <i class="fas fa-search"></i>
             </div>
             <div class="admin-profile">
@@ -59,7 +59,7 @@
                     
                     <div class="charts-grid-layout">
                         <div class="chart-box">
-                            <h3>Termômetro de Aprovação</h3>
+                            <h3>Termômetro de Aprovação (Meta 70%)</h3>
                             <div class="canvas-container"><canvas id="chartTermometro"></canvas></div>
                         </div>
                         
@@ -125,18 +125,10 @@
         <aside class="sidebar">
             <div class="widget">
                 <h3>Filtros Avançados</h3>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">Ao filtrar, os gráficos mostrarão apenas os dados da academia selecionada.</p>
                 <select class="input-padrao" id="filtroAcademia" style="margin-bottom: 10px;">
                     <option value="">Todas as Academias</option>
-                    <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
-                    <option value="Academia Professora Taynara">Academia Professora Taynara</option>
-                    <option value="Academia Mestre Abraão">Academia Mestre Abraão</option>
-                    <option value="Academia Mestre Omar">Academia Mestre Omar</option>
-                    <option value="Academia Mestre Carlinhos">Academia Mestre Carlinhos</option>
-                    <option value="Academia Professor Maick">Academia Professor Maick</option>
-                    <option value="Academia Professor Tigoy">Academia Professor Tigoy</option>
-                    <option value="Academia Professor Rafinha">Academia Professor Rafinha</option>
-                    <option value="Academia Instrutor Leiliano">Academia Instrutor Leiliano</option>
-                    <option value="Academia Professor Lebrinha">Academia Professor Lebrinha</option>
+                    <!-- Injetado dinamicamente -->
                 </select>
             </div>
         </aside>
@@ -175,7 +167,7 @@
                 </div>
             </div>
             <div class="modal-footer-centered">
-                <button class="btn-salvar-modal" id="btnSalvarModal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar</button>
+                <button class="btn-salvar-modal" id="btnSalvarModal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar Prontuário</button>
             </div>
         </div>
     </div>
