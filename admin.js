@@ -13,19 +13,26 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Função inteligente para remover "Academia " da frente de qualquer texto do Banco de Dados
+const normalizarAcademia = (nome) => {
+    if (!nome) return 'Não informada';
+    return nome.replace(/^Academia\s+/i, '').trim();
+};
+
 let todosAlunos = [];
 let listaAcademias = [];
-let academiasDBGlobais = []; // Variável nova para segurar os IDs para edição
+let academiasDBGlobais = [];
 let alunoSelecionado = null;
 let academiaEditandoID = null;
 let deleteConfirm = false;
 let chartsInstances = {}; 
 
+// Array padrão já limpo (sem a palavra "Academia")
 const academiasPadrao = [
-    "Academia Mestre Profeta", "Academia Professora Taynara", "Academia Mestre Abraão", 
-    "Academia Mestre Omar", "Academia Mestre Carlinhos", "Academia Professor Maick", 
-    "Academia Professor Tigoy", "Academia Professor Rafinha", "Academia Instrutor Leiliano", 
-    "Academia Professor Lebrinha"
+    "Mestre Profeta", "Professora Taynara", "Mestre Abraão", 
+    "Mestre Omar", "Mestre Carlinhos", "Professor Maick", 
+    "Professor Tigoy", "Professor Rafinha", "Instrutor Leiliano", 
+    "Professor Lebrinha"
 ];
 
 const ordemCordoes = [
@@ -76,15 +83,17 @@ window.irParaRelatorios = function() {
 }
 
 // ==========================================
-// 1. GESTÃO DE ACADEMIAS
+// 1. GESTÃO DE ACADEMIAS (LIMPEZA AUTOMÁTICA)
 // ==========================================
 async function carregarAcademias() {
     try {
         const snap = await getDocs(collection(db, "academias"));
-        academiasDBGlobais = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Salva os dados brutos para edição
+        academiasDBGlobais = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         let nomesUnicos = new Set(academiasPadrao);
-        academiasDBGlobais.forEach(ac => nomesUnicos.add(ac.nome));
+        // Adiciona as do banco já limpando o nome
+        academiasDBGlobais.forEach(ac => nomesUnicos.add(normalizarAcademia(ac.nome)));
+        
         listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
         
         let selectHtml = '<option value="">Todas as Academias</option>';
@@ -94,14 +103,15 @@ async function carregarAcademias() {
         listaPainel.innerHTML = '';
 
         academiasDBGlobais.forEach(ac => {
+            let nomeLimpo = normalizarAcademia(ac.nome);
             listaPainel.innerHTML += `
                 <div class="academia-card">
-                    <h4><i class="fas fa-map-marker-alt"></i> ${ac.nome}</h4>
+                    <h4><i class="fas fa-map-marker-alt"></i> ${nomeLimpo}</h4>
                     <p><strong>Prof:</strong> ${ac.professor || 'Não informado'}</p>
                     <p><strong>E-mail:</strong> ${ac.email || 'Não informado'}</p>
                     <div class="academia-actions">
                         <button class="btn-edit-ac" onclick="abrirEditarAcademia('${ac.id}')"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${ac.nome}')"><i class="fas fa-trash"></i> Excluir</button>
+                        <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${nomeLimpo}')"><i class="fas fa-trash"></i> Excluir</button>
                     </div>
                 </div>`;
         });
@@ -112,8 +122,9 @@ async function carregarAcademias() {
 document.getElementById('formNovaAcademia').addEventListener('submit', async (e) => {
     e.preventDefault();
     try {
+        let nomeRaw = document.getElementById('nomeAcademia').value;
         await addDoc(collection(db, "academias"), { 
-            nome: document.getElementById('nomeAcademia').value, 
+            nome: normalizarAcademia(nomeRaw), // Salva já limpo
             professor: document.getElementById('nomeProfessor').value, 
             email: document.getElementById('emailProfessor').value, 
             senha: document.getElementById('senhaProfessor').value, 
@@ -129,12 +140,11 @@ window.excluirAcademia = async function(id, nome) {
     }
 }
 
-// Correção exata do Modal de Edição
 window.abrirEditarAcademia = function(id) {
     academiaEditandoID = id;
     const ac = academiasDBGlobais.find(a => a.id === id);
     if(ac) {
-        document.getElementById('editNomeAcademia').value = ac.nome || '';
+        document.getElementById('editNomeAcademia').value = normalizarAcademia(ac.nome);
         document.getElementById('editNomeProfessor').value = ac.professor || '';
         document.getElementById('editEmailProfessor').value = ac.email || '';
         document.getElementById('editSenhaProfessor').value = ""; 
@@ -145,8 +155,9 @@ window.fecharModalAcademia = () => document.getElementById('modalEditarAcademia'
 
 document.getElementById('formEditAcademia').addEventListener('submit', async (e) => {
     e.preventDefault();
+    let nomeRaw = document.getElementById('editNomeAcademia').value;
     const objUpdate = {
-        nome: document.getElementById('editNomeAcademia').value,
+        nome: normalizarAcademia(nomeRaw),
         professor: document.getElementById('editNomeProfessor').value,
         email: document.getElementById('editEmailProfessor').value
     };
@@ -156,15 +167,13 @@ document.getElementById('formEditAcademia').addEventListener('submit', async (e)
     try {
         await updateDoc(doc(db, "academias", academiaEditandoID), objUpdate);
         alert("Dados atualizados com sucesso!");
-        fecharModalAcademia(); 
-        carregarAcademias(); 
-        carregarAlunos();
+        fecharModalAcademia(); carregarAcademias(); carregarAlunos();
     } catch(e) { alert("Erro ao editar."); }
 });
 
 
 // ==========================================
-// 2. GRID E GRÁFICOS RESTANTES (MANTIDOS INTACTOS)
+// 2. GRID E FILTROS DE ALUNOS
 // ==========================================
 async function carregarAlunos() {
     try {
@@ -180,7 +189,11 @@ document.getElementById('buscaGeral').addEventListener('input', aplicarFiltros);
 function aplicarFiltros() {
     const ac = document.getElementById('filtroAcademia').value;
     const txt = document.getElementById('buscaGeral').value.toLowerCase();
-    const filtrados = todosAlunos.filter(a => (ac === "" || a.localTreino === ac) && (txt === "" || a.nome.toLowerCase().includes(txt)));
+    
+    const filtrados = todosAlunos.filter(a => {
+        const localLimpo = normalizarAcademia(a.localTreino);
+        return (ac === "" || localLimpo === ac) && (txt === "" || a.nome.toLowerCase().includes(txt));
+    });
     
     renderizarGrid(filtrados);
     desenharGraficos(filtrados);
@@ -194,6 +207,7 @@ function renderizarGrid(alunos) {
 
     if(alunos.length === 0) { grid.innerHTML = '<p style="grid-column: 1/-1;">Nenhum aluno encontrado.</p>'; return; }
     alunos.forEach(a => {
+        let localLimpo = normalizarAcademia(a.localTreino);
         grid.innerHTML += `
             <div class="aluno-card">
                 <div class="card-top">
@@ -202,7 +216,7 @@ function renderizarGrid(alunos) {
                         <h3>${a.nome}</h3>
                         <p>Rank: <strong>${a.cordaoAtual || 'Iniciante'}</strong></p>
                         <p>Idade: <strong>${a.idade} anos</strong></p>
-                        <p>Academia: <strong>${a.localTreino}</strong></p>
+                        <p>Academia: <strong>${localLimpo}</strong></p>
                         <p>Status: <strong style="color:${a.statusAtual==='Ativo'?'#389E92':'#E74C3C'}">${a.statusAtual||'Ativo'}</strong></p>
                     </div>
                 </div>
@@ -216,11 +230,13 @@ function renderizarGrid(alunos) {
 window.transferirAluno = async function(idAluno, novaAcademia) {
     if(novaAcademia === "") return;
     if(confirm(`Confirmar transferência para ${novaAcademia}?`)) {
-        try { await updateDoc(doc(db, "alunos", idAluno), { localTreino: novaAcademia }); alert("Transferido!"); carregarAlunos(); } catch(e) {}
+        try { await updateDoc(doc(db, "alunos", idAluno), { localTreino: normalizarAcademia(novaAcademia) }); alert("Transferido!"); carregarAlunos(); } catch(e) {}
     }
 }
 
-// 3. MÓDULO DE AVALIAÇÃO E NOTAS
+// ==========================================
+// 3. MÓDULO DE AVALIAÇÃO
+// ==========================================
 let notasAtuais = {};
 let criteriosAtivos = [];
 window.abrirModal = function(id) {
@@ -232,7 +248,7 @@ window.abrirModal = function(id) {
     document.getElementById('modFoto').src = alunoSelecionado.fotoUrl || 'https://via.placeholder.com/90';
     document.getElementById('modNome').textContent = alunoSelecionado.nome;
     document.getElementById('modIdade').textContent = alunoSelecionado.idade;
-    document.getElementById('modAcademia').textContent = alunoSelecionado.localTreino;
+    document.getElementById('modAcademia').textContent = normalizarAcademia(alunoSelecionado.localTreino);
     document.getElementById('modStatus').value = alunoSelecionado.statusAtual || 'Ativo';
 
     const selCordao = document.getElementById('modCordao');
@@ -323,12 +339,14 @@ window.salvarEdicaoAluno = async function() {
     try {
         await updateDoc(doc(db, "alunos", alunoSelecionado.id), { statusAtual: document.getElementById('modStatus').value, cordaoAtual: document.getElementById('modCordao').value, notas: notasAtuais });
         alert("Salvo!"); fecharModal(); carregarAlunos();
-    } catch(e) {} finally { btn.innerHTML = '<i class="fas fa-save"></i> Atualizar'; btn.disabled = false; }
+    } catch(e) {} finally { btn.innerHTML = '<i class="fas fa-save"></i> Atualizar Prontuário'; btn.disabled = false; }
 }
 
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
 
+// ==========================================
 // 4. GRÁFICOS (CHART.JS)
+// ==========================================
 function obterCorPorCordao(nome) {
     const mapa = {
         'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#DEB887',
@@ -348,7 +366,7 @@ function desenharGraficos(alunosAtuais) {
         if(idadeAluno < 12) kids++; else adultos++;
         
         if(a.statusAtual === 'Ativo') ativos++; else inativos++;
-        const local = a.localTreino || 'Sem Academia'; academiaCount[local] = (academiaCount[local] || 0) + 1;
+        const local = normalizarAcademia(a.localTreino); academiaCount[local] = (academiaCount[local] || 0) + 1;
         const rank = a.cordaoAtual || 'Iniciante'; rankCount[rank] = (rankCount[rank] || 0) + 1;
 
         let idxCordao = cordoesAdulto.findIndex(c => c.nome === rank);
