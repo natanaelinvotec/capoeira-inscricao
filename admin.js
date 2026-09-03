@@ -81,7 +81,6 @@ async function carregarAcademias() {
         const snap = await getDocs(collection(db, "academias"));
         let academiasDB = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        // Remove Duplicatas usando SET
         let nomesUnicos = new Set(academiasPadrao);
         academiasDB.forEach(ac => nomesUnicos.add(ac.nome));
         listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
@@ -129,8 +128,33 @@ window.excluirAcademia = async function(id, nome) {
 }
 window.abrirEditarAcademia = function(id) {
     academiaEditandoID = id;
-    // (Abertura do modal edit - mesmo código ocultado para manter tamanho)
+    const ac = listaAcademias.find(a => a.id === id);
+    if(ac) {
+        document.getElementById('editNomeAcademia').value = ac.nome;
+        document.getElementById('editNomeProfessor').value = ac.professor;
+        document.getElementById('editEmailProfessor').value = ac.email;
+        document.getElementById('editSenhaProfessor').value = ""; 
+        document.getElementById('modalEditarAcademia').style.display = 'flex';
+    }
 }
+window.fecharModalAcademia = () => document.getElementById('modalEditarAcademia').style.display = 'none';
+
+document.getElementById('formEditAcademia').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const objUpdate = {
+        nome: document.getElementById('editNomeAcademia').value,
+        professor: document.getElementById('editNomeProfessor').value,
+        email: document.getElementById('editEmailProfessor').value
+    };
+    const s = document.getElementById('editSenhaProfessor').value;
+    if(s.trim() !== "") objUpdate.senha = s;
+
+    try {
+        await updateDoc(doc(db, "academias", academiaEditandoID), objUpdate);
+        alert("Dados atualizados!");
+        fecharModalAcademia(); carregarAcademias(); carregarAlunos();
+    } catch(e) { alert("Erro ao editar."); }
+});
 
 // 2. GRID, FILTROS E GRÁFICOS DINÂMICOS
 async function carregarAlunos() {
@@ -150,7 +174,7 @@ function aplicarFiltros() {
     const filtrados = todosAlunos.filter(a => (ac === "" || a.localTreino === ac) && (txt === "" || a.nome.toLowerCase().includes(txt)));
     
     renderizarGrid(filtrados);
-    desenharGraficos(filtrados); // O Gráfico é atualizado enviando apenas os alunos filtrados
+    desenharGraficos(filtrados);
 }
 
 function renderizarGrid(alunos) {
@@ -187,7 +211,7 @@ window.transferirAluno = async function(idAluno, novaAcademia) {
     }
 }
 
-// 3. MÓDULO DE AVALIAÇÃO E NOTAS
+// 3. MÓDULO DE AVALIAÇÃO E NOTAS (Com cálculo sincronizado)
 let notasAtuais = {};
 let criteriosAtivos = [];
 window.abrirModal = function(id) {
@@ -204,19 +228,22 @@ window.abrirModal = function(id) {
 
     const selCordao = document.getElementById('modCordao');
     selCordao.innerHTML = '';
-    const listaCordoes = alunoSelecionado.idade < 12 ? cordoesKids : cordoesAdulto;
+    const idadeNumero = Number(alunoSelecionado.idade) || 0;
+    const listaCordoes = idadeNumero < 12 ? cordoesKids : cordoesAdulto;
+    
     listaCordoes.forEach((c, index) => { selCordao.innerHTML += `<option value="${c.nome}" data-idx="${index}">${c.nome}</option>`; });
     selCordao.value = alunoSelecionado.cordaoAtual || "Iniciante";
     
     notasAtuais = alunoSelecionado.notas || {};
-    gerarCriteriosUI(listaCordoes);
+    gerarCriteriosUI(listaCordoes, idadeNumero);
     document.getElementById('modalAvaliacao').style.display = 'flex';
 }
 
-function gerarCriteriosUI(listaCordoes) {
+function gerarCriteriosUI(listaCordoes, idadeNumero) {
     const grid = document.getElementById('gridCriterios');
     grid.innerHTML = '';
-    const idxCordaoAtual = listaCordoes.findIndex(c => c.nome === document.getElementById('modCordao').value) || 0;
+    let idxCordaoAtual = listaCordoes.findIndex(c => c.nome === document.getElementById('modCordao').value);
+    if(idxCordaoAtual === -1) idxCordaoAtual = 0;
     const proximoCordao = listaCordoes[idxCordaoAtual + 1] || listaCordoes[idxCordaoAtual];
     
     document.getElementById('textoEvolucao').innerHTML = `Progresso para: <strong>${proximoCordao.nome}</strong>`;
@@ -225,7 +252,7 @@ function gerarCriteriosUI(listaCordoes) {
     cssCordao.style.setProperty('--c2', proximoCordao.cor[1]);
     cssCordao.style.setProperty('--c3', proximoCordao.cor[2]);
 
-    criteriosAtivos = criteriosRegras.filter(crit => alunoSelecionado.idade < 12 ? crit.reqKids : idxCordaoAtual >= (crit.reqAdulto - 1));
+    criteriosAtivos = criteriosRegras.filter(crit => idadeNumero < 12 ? crit.reqKids : idxCordaoAtual >= (crit.reqAdulto - 1));
 
     criteriosAtivos.forEach(crit => {
         if(!notasAtuais[crit.id]) notasAtuais[crit.id] = 0;
@@ -252,12 +279,26 @@ function atualizarNota(idCrit, valor, starsArray) {
     calcularPorcentagem();
 }
 
+// Matemática padronizada para UI e Gráfico (Porcentagem pura)
 function calcularPorcentagem() {
     let totalPontos = 0;
-    criteriosAtivos.forEach(c => totalPontos += notasAtuais[c.id]);
-    let porc = (totalPontos / (criteriosAtivos.length * 10 * 0.7)) * 100;
+    criteriosAtivos.forEach(c => {
+        if(notasAtuais[c.id]) totalPontos += Number(notasAtuais[c.id]);
+    });
+    
+    const maxPontos = criteriosAtivos.length * 10;
+    let porc = maxPontos > 0 ? (totalPontos / maxPontos) * 100 : 0;
+    
     document.getElementById('porcentagemEvolucao').textContent = `${Math.floor(porc > 100 ? 100 : porc)}%`;
-    document.getElementById('cordaoTrancado').style.width = `${porc > 100 ? 100 : porc}%`;
+    const cssCordao = document.getElementById('cordaoTrancado');
+    cssCordao.style.width = `${porc > 100 ? 100 : porc}%`;
+    
+    // Feedback visual quando atinge a meta de 70%
+    if (porc >= 70) {
+        cssCordao.style.boxShadow = "0 0 15px rgba(0, 230, 118, 0.8)";
+    } else {
+        cssCordao.style.boxShadow = "none";
+    }
 }
 
 window.excluirAlunoBtn = async function() {
@@ -271,6 +312,7 @@ window.excluirAlunoBtn = async function() {
         try { await deleteDoc(doc(db, "alunos", alunoSelecionado.id)); alert("Cadastro excluído."); fecharModal(); carregarAlunos(); } catch(e) {}
     }
 }
+
 window.salvarEdicaoAluno = async function() {
     const btn = document.getElementById('btnSalvarModal');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Atualizando...'; btn.disabled = true;
@@ -279,9 +321,10 @@ window.salvarEdicaoAluno = async function() {
         alert("Salvo!"); fecharModal(); carregarAlunos();
     } catch(e) {} finally { btn.innerHTML = '<i class="fas fa-save"></i> Atualizar'; btn.disabled = false; }
 }
+
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
 
-// 4. GRÁFICOS (CHART.JS ATUALIZANDO CONFORME FILTROS)
+// 4. GRÁFICOS (CHART.JS - Matemática 100% Sincronizada)
 function obterCorPorCordao(nome) {
     const mapa = {
         'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#DEB887',
@@ -291,37 +334,48 @@ function obterCorPorCordao(nome) {
     return mapa[nome] || '#389E92';
 }
 
-// A função agora recebe "alunosAtuais" que vem do filtro (ou todos)
 function desenharGraficos(alunosAtuais) {
     let aptos = 0, desenv = 0, rankCount = {}, academiaCount = {}, ativos = 0, inativos = 0, kids = 0, adultos = 0;
     let fundamentosSoma = {}, fundamentosQtd = {};
     criteriosRegras.forEach(c => { fundamentosSoma[c.txt] = 0; fundamentosQtd[c.txt] = 0; });
 
     alunosAtuais.forEach(a => {
-        if(a.idade < 12) kids++; else adultos++;
+        const idadeAluno = Number(a.idade) || 0;
+        if(idadeAluno < 12) kids++; else adultos++;
+        
         if(a.statusAtual === 'Ativo') ativos++; else inativos++;
         const local = a.localTreino || 'Sem Academia'; academiaCount[local] = (academiaCount[local] || 0) + 1;
         const rank = a.cordaoAtual || 'Iniciante'; rankCount[rank] = (rankCount[rank] || 0) + 1;
 
-        // Lógica Exata dos 70%
+        // Calcula a porcentagem real (Mesma lógica da UI)
         let idxCordao = cordoesAdulto.findIndex(c => c.nome === rank);
-        if(a.idade < 12) idxCordao = cordoesKids.findIndex(c => c.nome === rank);
-        let critAtivosAluno = criteriosRegras.filter(crit => a.idade < 12 ? crit.reqKids : idxCordao >= (crit.reqAdulto - 1));
+        if(idadeAluno < 12) idxCordao = cordoesKids.findIndex(c => c.nome === rank);
+        if(idxCordao === -1) idxCordao = 0;
         
+        let critAtivosAluno = criteriosRegras.filter(crit => idadeAluno < 12 ? crit.reqKids : idxCordao >= (crit.reqAdulto - 1));
         let maxPontos = critAtivosAluno.length * 10;
-        let meta = maxPontos * 0.7;
         let totalPontosAluno = 0;
 
         if(a.notas) {
             critAtivosAluno.forEach(c => {
-                if(a.notas[c.id]) {
-                    totalPontosAluno += a.notas[c.id];
-                    fundamentosSoma[c.txt] += a.notas[c.id];
+                if(a.notas[c.id] !== undefined && a.notas[c.id] !== null) {
+                    let notaVal = Number(a.notas[c.id]);
+                    totalPontosAluno += notaVal;
+                    fundamentosSoma[c.txt] += notaVal;
                     fundamentosQtd[c.txt] += 1;
                 }
             });
-            if(maxPontos > 0 && totalPontosAluno >= meta) aptos++; else desenv++;
-        } else { desenv++; }
+            let porc = maxPontos > 0 ? (totalPontosAluno / maxPontos) * 100 : 0;
+            
+            // SE A PORCENTAGEM BATER 70% OU MAIS = APTO (Fica Verde)
+            if(maxPontos > 0 && porc >= 70) {
+                aptos++;
+            } else {
+                desenv++;
+            }
+        } else { 
+            desenv++; 
+        }
     });
 
     let labelFundamentos = [], dataFundamentos = [];
@@ -334,7 +388,7 @@ function desenharGraficos(alunosAtuais) {
     criarGrafico('chartTermometro', 'pie', ['Aptos (Candidatos Formatura)', 'Em Desenvolvimento'], [aptos, desenv], [colorGreen, colorYellow]);
     criarGrafico('chartStatus', 'doughnut', ['Ativos', 'Inativos/Pausa'], [ativos, inativos], [colorTeal, colorRed]);
     
-    // Organização estrita da pirâmide pelas cores e posições
+    // Pirâmide baseada na Ordem Hierárquica Estrita
     let piramideLabels = [];
     let piramideData = [];
     let piramideColors = [];
