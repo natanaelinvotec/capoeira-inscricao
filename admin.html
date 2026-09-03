@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- NAVEGAÇÃO SUPERIOR -->
     <header class="top-nav">
         <div class="logo-area">
             <img src="logo-liberdade.jpg" alt="Logo" class="nav-logo">
@@ -29,43 +28,33 @@
             </div>
             <div class="admin-profile">
                 <img src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
-                <span>Admin</span>
+                <span>Admin Master</span>
                 <i class="fas fa-cog"></i>
             </div>
         </div>
     </header>
 
     <div class="main-layout">
-        <!-- CONTEÚDO PRINCIPAL (Esquerda/Centro) -->
         <main class="content-area">
             
-            <!-- ABA ALUNOS (Principal da Imagem) -->
+            <!-- ABA ALUNOS -->
             <section id="aba-alunos" class="aba-content active">
                 <div class="section-header">
-                    <h2>Lista Completa de Alunos Master e Candidatos a Instrutor - Painel de Controle</h2>
+                    <h2>Lista Completa de Alunos - Painel de Controle e Distribuição</h2>
                 </div>
                 
-                <!-- Grid de Alunos puxados do Firebase -->
                 <div class="alunos-grid" id="gridAlunos">
-                    <!-- Os cards entrarão aqui dinamicamente via JS -->
                     <p style="text-align: center; grid-column: 1/-1;">Carregando banco de dados...</p>
                 </div>
 
-                <!-- Gráficos Fictícios da Imagem -->
                 <div class="chart-section">
-                    <h3>Gráficos de Atividade de Distribuição</h3>
+                    <h3>Gráficos de Atividade e Evolução</h3>
                     <div class="fake-chart">
-                        <div class="chart-y-axis">
-                            <span>100</span><span>80</span><span>60</span><span>40</span>
-                        </div>
+                        <div class="chart-y-axis"><span>100</span><span>80</span><span>60</span><span>40</span></div>
                         <div class="chart-bars">
-                            <div class="bar" style="height: 40%;"></div>
-                            <div class="bar" style="height: 90%;"></div>
-                            <div class="bar" style="height: 60%;"></div>
-                            <div class="bar" style="height: 30%;"></div>
-                            <div class="bar" style="height: 40%;"></div>
-                            <div class="bar" style="height: 70%;"></div>
-                            <div class="bar" style="height: 50%;"></div>
+                            <div class="bar" style="height: 40%;"></div><div class="bar" style="height: 90%;"></div>
+                            <div class="bar" style="height: 60%;"></div><div class="bar" style="height: 30%;"></div>
+                            <div class="bar" style="height: 80%;"></div><div class="bar" style="height: 70%;"></div>
                         </div>
                         <div class="chart-legend">
                             <div><i class="fas fa-globe" style="color:#389e92"></i> Status Geral</div>
@@ -75,135 +64,116 @@
                 </div>
             </section>
 
-            <!-- ABA GESTÃO DE ACADEMIAS -->
+            <!-- ABA ACADEMIAS -->
             <section id="aba-academias" class="aba-content">
                 <div class="section-header"><h2>Gestão de Academias e Permissões</h2></div>
                 <div class="card-padrao">
                     <h3>Cadastrar Nova Academia / Professor</h3>
-                    <form id="formNovaAcademia" style="display: grid; gap: 15px; margin-top: 20px;">
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Ao criar uma academia, ela aparecerá nas opções de transferência e no filtro de buscas.</p>
+                    <form id="formNovaAcademia" style="display: grid; gap: 15px;">
                         <input type="text" id="nomeAcademia" placeholder="Nome da Academia (Ex: Academia Buriti)" class="input-padrao" required>
                         <input type="text" id="nomeProfessor" placeholder="Nome do Professor Responsável" class="input-padrao" required>
                         <input type="email" id="emailProfessor" placeholder="E-mail de Login do Professor" class="input-padrao" required>
                         <input type="password" id="senhaProfessor" placeholder="Senha de Acesso" class="input-padrao" required>
-                        <button type="submit" class="btn-detalhes">Criar Acesso Restrito</button>
+                        <button type="submit" class="btn-detalhes" style="width: 250px;">Criar Acesso Restrito</button>
                     </form>
                 </div>
+                <div id="listaAcademiasPainel" style="margin-top: 20px;"></div>
             </section>
 
             <!-- ABA FINANCEIRO -->
             <section id="aba-financeiro" class="aba-content">
-                <div class="section-header"><h2>Gestão de Pagamentos (Mensalidades)</h2></div>
+                <div class="section-header"><h2>Gestão Financeira e Pagamentos</h2></div>
                 <div class="card-padrao">
-                    <p>Módulo de pagamentos em construção. Aqui entrará a gestão de PIX e mensalidades pagas.</p>
+                    <p>Módulo de pagamentos em construção. Controle de PIX, Mensalidades e Inadimplência.</p>
                 </div>
             </section>
-
         </main>
 
-        <!-- SIDEBAR LATERAL DIREITA (Widgets da Imagem) -->
+        <!-- SIDEBAR -->
         <aside class="sidebar">
-            
             <div class="widget">
                 <h3>Filtros Avançados</h3>
                 <select class="input-padrao" id="filtroAcademia" style="margin-bottom: 10px;">
                     <option value="">Todas as Academias</option>
-                    <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
-                    <option value="Academia Mestre Omar">Academia Mestre Omar</option>
+                    <!-- Preenchido via JS -->
                 </select>
                 <select class="input-padrao" id="filtroCordao">
                     <option value="">Todos os Cordões</option>
                     <option value="Iniciante">Iniciante</option>
-                    <option value="Escravo">Escravo (Cinza escuro)</option>
-                    <option value="Fugitivo">Fugitivo (Cinza e Bege)</option>
+                    <option value="Escravo">Escravo</option>
+                    <option value="Fugitivo">Fugitivo</option>
+                    <option value="Quilombola">Quilombola</option>
+                    <option value="Vagante">Vagante</option>
+                    <option value="Liberto">Liberto</option>
+                    <option value="Instrutor">Instrutor</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Mestre">Mestre</option>
                 </select>
             </div>
-
-            <div class="widget">
-                <h3>Relatórios Rápidos</h3>
-                <div class="skeleton-line" style="width: 80%"></div>
-                <div class="skeleton-line" style="width: 60%"></div>
-                <div class="skeleton-line" style="width: 90%"></div>
-            </div>
-
             <div class="widget">
                 <h3>Chat Interno (Mestres)</h3>
-                <p style="font-size: 0.8rem; color: #888;">Nenhuma mensagem nova.</p>
-                <div class="skeleton-line" style="width: 100%; height: 30px;"></div>
+                <p style="font-size: 0.8rem; color: #888;">Sistema de mensagens criptografadas em breve.</p>
             </div>
-
-            <div class="widget">
-                <h3>Vagas e Transferências</h3>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <img src="logo-liberdade.jpg" style="width: 40px; border-radius: 50%;">
-                    <img src="logo-liberdade.jpg" style="width: 40px; border-radius: 50%;">
-                </div>
-            </div>
-
         </aside>
     </div>
 
-    <!-- MODAL DE AVALIAÇÃO E EDIÇÃO (POPUP DELICADO) -->
+    <!-- MODAL POPUP MASTER -->
     <div class="modal-overlay" id="modalAvaliacao">
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <button class="close-modal" onclick="fecharModal()"><i class="fas fa-times"></i></button>
             
-            <div class="modal-header">
-                <img src="" id="modFoto" class="mod-foto">
-                <div class="mod-info">
-                    <h2 id="modNome">Nome do Aluno</h2>
-                    <p><span id="modIdade">--</span> anos | <i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
-                </div>
+            <div class="modal-header-centered">
+                <img src="" id="modFoto" class="mod-foto-large">
+                <h2 id="modNome" style="text-transform: uppercase;">NOME DO ALUNO</h2>
+                <p><span id="modIdade">--</span> anos | <i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
             </div>
 
-            <div class="modal-body">
-                <!-- Coluna Esquerda: Status e Graduação -->
-                <div class="mod-col">
-                    <label>Status do Aluno:</label>
-                    <select id="modStatus" class="input-padrao">
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                        <option value="Pausa">Pausa</option>
-                        <option value="Lesionado">Lesionado</option>
-                        <option value="Em Viagem">Em Viagem</option>
-                    </select>
+            <!-- MÓDULO 4: BARRA DE CORDÃO ANIMADA -->
+            <div class="cordao-container">
+                <div class="cordao-header">
+                    <span id="textoEvolucao">Progresso para: <strong>Próximo Cordão</strong></span>
+                    <span id="porcentagemEvolucao">0%</span>
+                </div>
+                <div class="cordao-track">
+                    <div class="cordao-fill" id="cordaoTrancado"></div>
+                </div>
+                <div style="font-size: 0.8rem; color: #888; text-align: right; margin-top: 5px;">Meta: 70% para aprovação</div>
+            </div>
 
-                    <label style="margin-top: 15px;">Graduação (Cordão Atual):</label>
-                    <select id="modCordao" class="input-padrao">
-                        <option value="Iniciante">Iniciante</option>
-                        <option value="Escravo (Cinza Escuro)">Escravo (Cinza Escuro)</option>
-                        <option value="Fugitivo (Cinza e Bege)">Fugitivo (Cinza e Bege)</option>
-                        <option value="Quilombola (Bege)">Quilombola (Bege)</option>
-                        <option value="Vagante (Bege e Vermelho)">Vagante (Bege e Vermelho)</option>
-                        <option value="Liberto (Vermelho)">Liberto (Vermelho)</option>
-                    </select>
+            <div class="modal-body-split">
+                <!-- Esquerda: Status e Info -->
+                <div class="mod-left">
+                    <div class="form-group-mod">
+                        <label>Status do Aluno:</label>
+                        <select id="modStatus" class="input-padrao mod-input">
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                            <option value="Pausa">Pausa</option>
+                            <option value="Lesionado">Lesionado</option>
+                            <option value="Em Viagem">Em Viagem</option>
+                        </select>
+                    </div>
+                    <div class="form-group-mod">
+                        <label>Graduação Atual:</label>
+                        <select id="modCordao" class="input-padrao mod-input">
+                            <!-- Options populadas via JS -->
+                        </select>
+                    </div>
+                    <button class="btn-excluir-aluno" id="btnExcluirModal" onclick="excluirAlunoBtn()"><i class="fas fa-trash"></i> Excluir Aluno</button>
                 </div>
 
-                <!-- Coluna Direita: Avaliação de Estrelas -->
-                <div class="mod-col mod-estrelas">
-                    <h3 style="margin-bottom: 10px; font-size: 1rem; color: #389e92;">Critérios de Evolução</h3>
-                    <div class="criterio-mini">
-                        <span>Frequência/Disciplina</span>
-                        <div class="stars" data-crit="disciplina">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="criterio-mini">
-                        <span>Ginga e Movimentos</span>
-                        <div class="stars" data-crit="movimentos">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="criterio-mini">
-                        <span>Musicalidade (Toque/Canto)</span>
-                        <div class="stars" data-crit="musica">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
+                <!-- Direita: 15 Critérios (Estrelas) -->
+                <div class="mod-right">
+                    <h3 class="mod-title-right">Critérios de Evolução (0 a 10)</h3>
+                    <div class="criterios-grid" id="gridCriterios">
+                        <!-- Estrelas injetadas via JS dependendo da idade/cordão -->
                     </div>
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button class="btn-salvar-modal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar Prontuário</button>
+            <div class="modal-footer-centered">
+                <button class="btn-salvar-modal" id="btnSalvarModal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar</button>
             </div>
         </div>
     </div>
