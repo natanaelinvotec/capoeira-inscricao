@@ -15,16 +15,27 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
         body { background-color: var(--bg-app); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* TOP NAV */
-        .top-nav { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 12px 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        /* TOP NAV & RESPONSIVO */
+        .top-nav { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 12px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .logo-area { display: flex; align-items: center; gap: 12px; }
-        .nav-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-teal); }
+        .nav-logo { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-teal); }
+        
         .nav-links { display: flex; gap: 20px; }
         .nav-item { text-decoration: none; color: var(--text-dark); font-weight: 700; cursor: pointer; padding: 8px 15px; border-radius: 20px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
         .nav-item:hover, .nav-item.active { background: rgba(56, 158, 146, 0.1); color: var(--primary-teal); transform: translateY(-2px); }
         
+        .user-area-right { display: flex; align-items: center; gap: 15px; }
         .btn-sair { background: #E74C3C; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2); }
         .btn-sair:hover { background: #C0392B; transform: translateY(-2px); }
+
+        .menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; color: var(--primary-blue); }
+
+        @media (max-width: 850px) {
+            .menu-toggle { display: block; }
+            .top-nav { padding: 12px 20px; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: white; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); z-index: 1000; gap: 10px; border-bottom: 1px solid var(--border-color); }
+            .nav-links.show { display: flex; }
+        }
 
         .main-container { max-width: 1250px; margin: 30px auto; padding: 0 20px; }
         .aba-aluno { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -34,15 +45,15 @@
         /* BANNER DO PERFIL */
         .perfil-banner { background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal)); color: white; padding: 35px; border-radius: 24px; display: flex; align-items: center; gap: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-bottom: 30px; position: relative; overflow: hidden; }
         .perfil-banner::after { content: ""; position: absolute; right: -50px; bottom: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-        .perfil-foto { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .perfil-info h1 { font-family: 'Montserrat', sans-serif; font-size: 2rem; margin-bottom: 8px; letter-spacing: 0.5px; }
-        .perfil-info p { opacity: 0.95; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+        .perfil-foto { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); flex-shrink: 0; }
+        .perfil-info h1 { font-family: 'Montserrat', sans-serif; font-size: 2rem; margin-bottom: 8px; letter-spacing: 0.5px; word-break: break-word; }
+        .perfil-info p { opacity: 0.95; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
         /* CARDS E EVOLUÇÃO */
         .card-evolucao { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 25px; transition: transform 0.3s; }
         .card-evolucao:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.07); }
         
-        /* BARRA DE PROGRESSO ANIMADA (IGUAL AO ADMIN) */
+        /* BARRA DE PROGRESSO ANIMADA */
         .cordao-track-box { width: 100%; height: 24px; background: #e0e0e0; border-radius: 20px; overflow: hidden; margin: 20px 0 10px 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); }
         .cordao-fill-bar { 
             height: 100%; width: 0%; border-radius: 20px; transition: width 1s cubic-bezier(0.1, 1, 0.1, 1); 
@@ -85,10 +96,9 @@
         .btn-assistir:hover { background: var(--primary-blue); }
 
         @media(max-width: 768px) {
-            .perfil-banner { flex-direction: column; text-align: center; }
+            .perfil-banner { flex-direction: column; text-align: center; padding: 25px 20px; }
             .professor-box { flex-direction: column; text-align: center; }
-            .top-nav { padding: 12px 20px; flex-direction: column; gap: 15px; }
-            .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .perfil-info h1 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -98,19 +108,23 @@
             <img src="logo-liberdade150.png" class="nav-logo" alt="Logo">
             <span style="font-weight: 800; color: var(--primary-blue); font-family: 'Montserrat'; font-size: 1.1rem;">Área do Aluno</span>
         </div>
-        <nav class="nav-links">
+
+        <div class="menu-toggle" id="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+
+        <nav class="nav-links" id="nav-links">
             <a class="nav-item active" onclick="mudarAbaAluno('evolucao')"><i class="fas fa-chart-line"></i> Minha Evolução</a>
             <a class="nav-item" onclick="mudarAbaAluno('financeiro')"><i class="fas fa-wallet"></i> Financeiro & Loja</a>
             <a class="nav-item" onclick="mudarAbaAluno('aulas')"><i class="fas fa-video"></i> Aulas & História</a>
         </nav>
-        <div>
+        
+        <div class="user-area-right">
             <button class="btn-sair" onclick="sairAluno()"><i class="fas fa-sign-out-alt"></i> Sair</button>
         </div>
     </header>
 
     <div class="main-container">
         
-        <!-- ================= AB 1: MINHA EVOLUÇÃO ================= -->
+        <!-- ================= ABA 1: MINHA EVOLUÇÃO ================= -->
         <section id="aba-evolucao" class="aba-aluno active">
             <div class="perfil-banner">
                 <img id="alunoFoto" src="" class="perfil-foto" alt="Foto Aluno">
@@ -267,6 +281,11 @@
     </div>
 
     <script>
+        // Configuração do menu hamburguer mobile
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('nav-links').classList.toggle('show');
+        });
+
         const sessaoAluno = JSON.parse(sessionStorage.getItem('sessaoAluno'));
         if(!sessaoAluno) { window.location.href = 'login.html'; }
 
@@ -275,7 +294,6 @@
         document.getElementById('alunoCordao').textContent = sessaoAluno.cordaoAtual || 'Iniciante';
         document.getElementById('alunoFoto').src = sessaoAluno.fotoUrl || 'https://via.placeholder.com/150';
 
-        // Definição dos cordões para calcular a próxima graduação e suas cores animadas
         const cordoesAdulto = [
             { nome: "Iniciante", cor: ['#CCC','#CCC','#CCC'] }, { nome: "Escravo", cor: ['#4F4F4F','#4F4F4F','#4F4F4F'] },
             { nome: "Fugitivo", cor: ['#4F4F4F','#F5DEB3','#4F4F4F'] }, { nome: "Quilombola", cor: ['#DAA520','#DAA520','#DAA520'] },
@@ -288,7 +306,6 @@
             { nome: "Cinza e Bege", cor: ['#D3D3D3','#F5DEB3','#D3D3D3'] }, { nome: "Bege", cor: ['#F5DEB3','#F5DEB3','#F5DEB3'] }
         ];
 
-        // Base de dados de apresentação dos professores
         const professoresBase = {
             "Mestre Profeta": { nome: "Mestre Profeta (Isaías Ramos Maior)", formacao: "Mestre de Capoeira - Fundador", historia: "Pioneiro do grupo com mais de 30 anos dedicados à capoeira, formando centenas de alunos e disseminando a cultura e disciplina por onde passa.", foto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200" },
             "Professora Taynara": { nome: "Professora Taynara", formacao: "Educadora Física & Professora Responsável", historia: "Especialista em pedagogia da capoeira e capacitação motora infantil, unindo rigor técnico, alegria e respeito às tradições.", foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200" },
@@ -312,16 +329,13 @@
             if(idxAtual === -1) idxAtual = 0;
             const proximoCordaoObj = listaCordoes[idxAtual + 1] || listaCordoes[idxAtual];
 
-            // Atualiza o título com o nome da próxima graduação
             document.getElementById('tituloTermometro').innerHTML = `<i class="fas fa-thermometer-half"></i> Termômetro de Prontidão para Graduação: <span style="color: var(--primary-teal);">${proximoCordaoObj.nome}</span>`;
 
-            // Configura a barra de progresso com as cores do próximo cordão
             const cssCordao = document.getElementById('barraProgresso');
             cssCordao.style.setProperty('--c1', proximoCordaoObj.cor[0]);
             cssCordao.style.setProperty('--c2', proximoCordaoObj.cor[1]);
             cssCordao.style.setProperty('--c3', proximoCordaoObj.cor[2]);
 
-            // Renderiza dados do Professor baseado na academia do aluno
             const academiaNome = (sessaoAluno.localTreino || '').replace(/^Academia\s+/i, '').trim();
             const profInfo = professoresBase[academiaNome] || professoresBase["default"];
             
@@ -330,7 +344,6 @@
             document.getElementById('profHistoria').textContent = profInfo.historia;
             document.getElementById('profFoto').src = profInfo.foto;
 
-            // Critérios de avaliação
             const criteriosPadrao = [
                 { id: 'c1', txt: 'Ginga e Base' }, { id: 'c2', txt: 'Acrobacias' },
                 { id: 'c3', txt: 'Respeito' }, { id: 'c4', txt: 'Disciplina' },
@@ -379,6 +392,8 @@
             document.querySelectorAll('.aba-aluno, .nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`aba-${abaId}`).classList.add('active');
             event.currentTarget.classList.add('active');
+            // Fecha o menu hamburguer ao clicar em uma aba no mobile
+            document.getElementById('nav-links').classList.remove('show');
         }
 
         function comprarItem(nomeProduto) {
