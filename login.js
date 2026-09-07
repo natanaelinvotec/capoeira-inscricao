@@ -13,7 +13,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Configuração do acesso Admin Master (Altere a senha conforme desejado)
 const CREDENCIAIS_ADMIN = {
     email: "admin@capoeira.com.br",
     senha: "adminmaster123"
@@ -27,13 +26,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const btn = document.getElementById('btnAcessar');
     const errorMsg = document.getElementById('errorMsg');
 
-    // Feedback visual de carregamento
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Autenticando...';
     btn.disabled = true;
     errorMsg.style.display = 'none';
 
     try {
-        // 1. Verifica se é o Admin Master
         if (email === CREDENCIAIS_ADMIN.email && senha === CREDENCIAIS_ADMIN.senha) {
             const sessao = { role: 'admin', nome: 'Admin Master' };
             sessionStorage.setItem('sessaoCapoeira', JSON.stringify(sessao));
@@ -41,7 +38,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             return;
         }
 
-        // 2. Se não for admin, busca na coleção 'academias' pelos professores
         const q = query(collection(db, "academias"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
 
@@ -50,7 +46,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            // Verifica a senha armazenada (Nota de especialista: em produção, Firebase Auth é o ideal)
             if (data.senha === senha) {
                 professorAutenticado = true;
                 academiaDados = data;
@@ -58,9 +53,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         });
 
         if (professorAutenticado) {
-            // Limpa o nome da academia da mesma forma que você fez no admin.js
             const nomeAcademiaLimpo = academiaDados.nome.replace(/^Academia\s+/i, '').trim();
-            
             const sessao = { 
                 role: 'professor', 
                 nome: academiaDados.professor,
