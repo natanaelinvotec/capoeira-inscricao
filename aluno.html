@@ -1,0 +1,209 @@
+<!-- aluno.html - Painel do Aluno / Loja / Financeiro -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Aluno - Capoeira Liberdade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --bg-app: #EAF2F1; --card-bg: #FFFFFF; --primary-teal: #389E92; --primary-blue: #002D72; --accent-green: #00E676; --text-dark: #2C3E50; --border-color: #E0E6E5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+        body { background-color: var(--bg-app); color: var(--text-dark); }
+        .top-nav { display: flex; align-items: center; justify-content: space-between; background: var(--card-bg); padding: 15px 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .nav-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-item { text-decoration: none; color: var(--text-dark); font-weight: 700; cursor: pointer; padding-bottom: 5px; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { color: var(--primary-teal); border-bottom-color: var(--primary-teal); }
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        .aba-aluno { display: none; animation: fadeIn 0.4s ease; }
+        .aba-aluno.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Perfil Card */
+        .perfil-banner { background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal)); color: white; padding: 30px; border-radius: 20px; display: flex; align-items: center; gap: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .perfil-foto { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .perfil-info h1 { font-family: 'Montserrat', sans-serif; font-size: 1.8rem; margin-bottom: 5px; }
+        .perfil-info p { opacity: 0.9; font-size: 1rem; }
+
+        /* Evolução Cordão */
+        .card-evolucao { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .cordao-track-box { width: 100%; height: 25px; background: #e0e0e0; border-radius: 20px; overflow: hidden; margin: 15px 0; }
+        .cordao-fill-bar { height: 100%; width: 0%; border-radius: 20px; transition: width 1s ease; background: repeating-linear-gradient(45deg, #ccc 0, #ccc 10px, #aaa 10px, #aaa 20px); }
+        
+        /* Loja / Financeiro Grid */
+        .loja-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .produto-card { background: white; border-radius: 15px; padding: 20px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
+        .produto-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .produto-card h3 { color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 10px; }
+        .produto-card p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+        .preco { font-size: 1.2rem; font-weight: bold; color: var(--primary-teal); margin-bottom: 15px; }
+        .btn-comprar { background: var(--accent-green); color: var(--text-dark); border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-comprar:hover { filter: brightness(0.9); }
+    </style>
+</head>
+<body>
+    <header class="top-nav">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="logo-liberdade150.png" class="nav-logo">
+            <span style="font-weight: 800; color: var(--primary-blue); font-family: 'Montserrat';">Área do Aluno</span>
+        </div>
+        <nav class="nav-links">
+            <a class="nav-item active" onclick="mudarAbaAluno('evolucao')"><i class="fas fa-chart-line"></i> Minha Evolução</a>
+            <a class="nav-item" onclick="mudarAbaAluno('financeiro')"><i class="fas fa-wallet"></i> Financeiro & Loja</a>
+        </nav>
+        <div>
+            <button onclick="sairAluno()" style="background: #E74C3C; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- ABA EVOLUÇÃO -->
+        <section id="aba-evolucao" class="aba-aluno active">
+            <div class="perfil-banner">
+                <img id="alunoFoto" src="" class="perfil-foto">
+                <div class="perfil-info">
+                    <h1 id="alunoNome">Carregando...</h1>
+                    <p><i class="fas fa-map-marker-alt"></i> Academia: <strong id="alunoAcademia">--</strong> | Graduação Atual: <strong id="alunoCordao">--</strong></p>
+                </div>
+            </div>
+
+            <div class="card-evolucao">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="color: var(--primary-blue);"><i class="fas fa-award"></i> Termômetro de Prontidão para Graduação</h3>
+                    <span id="porcentagemTexto" style="font-size: 1.3rem; font-weight: 800; color: var(--primary-teal);">0%</span>
+                </div>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">Atinga 70% ou mais nos critérios avaliados pelo seu Mestre/Professor para estar apto à nova fase!</p>
+                <div class="cordao-track-box">
+                    <div class="cordao-fill-bar" id="barraProgresso"></div>
+                </div>
+            </div>
+
+            <div class="card-evolucao">
+                <h3 style="color: var(--primary-blue); margin-bottom: 15px;"><i class="fas fa-star"></i> Notas por Fundamentos e Critérios</h3>
+                <div id="listaNotasAluno" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;">
+                    <!-- Injetado via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA FINANCEIRO & LOJA -->
+        <section id="aba-financeiro" class="aba-aluno">
+            <div class="card-evolucao" style="margin-bottom: 25px;">
+                <h3 style="color: var(--primary-blue); margin-bottom: 10px;"><i class="fas fa-file-invoice-dollar"></i> Mensalidade e Assinaturas</h3>
+                <p style="color: #666; margin-bottom: 15px;">Mantenha sua mensalidade em dia para garantir sua participação nas rodas e eventos oficiais.</p>
+                <div style="background: #F8FBFB; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>Mensalidade Vigente - Plano Mensal</strong>
+                        <p style="color: #7F8C8D; font-size: 0.85rem;">Vencimento todo dia 10</p>
+                    </div>
+                    <button onclick="alert('Gerando QR Code PIX para pagamento...')" style="background: var(--primary-teal); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">Pagar com PIX (R$ 120,00)</button>
+                </div>
+            </div>
+
+            <h3 style="color: var(--primary-blue); margin-bottom: 15px;"><i class="fas fa-store"></i> Loja Oficial Capoeira Liberdade</h3>
+            <div class="loja-grid">
+                <div class="produto-card">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Abadá">
+                    <div>
+                        <h3>Abadá Oficial</h3>
+                        <p>Tecido leve e resistente com o brasão oficial da escola.</p>
+                        <div class="preco">R$ 90,00</div>
+                    </div>
+                    <button class="btn-comprar" onclick="comprarItem('Abadá Oficial')"><i class="fas fa-cart-plus"></i> Comprar Agora</button>
+                </div>
+                <div class="produto-card">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400" alt="Berimbau">
+                    <div>
+                        <h3>Berimbau Profissional</h3>
+                        <p>Verga de biriba selecionada, cabaça afinada e arame importado.</p>
+                        <div class="preco">R$ 220,00</div>
+                    </div>
+                    <button class="btn-comprar" onclick="comprarItem('Berimbau Profissional')"><i class="fas fa-cart-plus"></i> Comprar Agora</button>
+                </div>
+                <div class="produto-card">
+                    <img src="https://images.unsplash.com/photo-1543169174-ac58be27914f?w=400" alt="Pandeiro">
+                    <div>
+                        <h3>Pandeiro Profissional</h3>
+                        <p>Pele animal, tarraxas reforçadas e excelente projeção de som.</p>
+                        <div class="preco">R$ 180,00</div>
+                    </div>
+                    <button class="btn-comprar" onclick="comprarItem('Pandeiro Profissional')"><i class="fas fa-cart-plus"></i> Comprar Agora</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const sessaoAluno = JSON.parse(sessionStorage.getItem('sessaoAluno'));
+        if(!sessaoAluno) { window.location.href = 'login.html'; }
+
+        document.getElementById('alunoNome').textContent = sessaoAluno.nome;
+        document.getElementById('alunoAcademia').textContent = sessaoAluno.localTreino || 'Não informada';
+        document.getElementById('alunoCordao').textContent = sessaoAluno.cordaoAtual || 'Iniciante';
+        document.getElementById('alunoFoto').src = sessaoAluno.fotoUrl || 'https://via.placeholder.com/150';
+
+        const criteriosPadrao = [
+            { id: 'c1', txt: 'Ginga e Base' }, { id: 'c2', txt: 'Acrobacias' },
+            { id: 'c3', txt: 'Respeito' }, { id: 'c4', txt: 'Disciplina' },
+            { id: 'c5', txt: 'Pontualidade' }, { id: 'c6', txt: 'Freq. Aulas' },
+            { id: 'c7', txt: 'Freq. Rodas' }, { id: 'c8', txt: 'Eventos' },
+            { id: 'c9', txt: 'Pandeiro' }, { id: 'c10', txt: 'Atabaque' },
+            { id: 'c11', txt: 'Berimbau' }, { id: 'c12', txt: 'Canta/Responde' },
+            { id: 'c13', txt: 'Higiene' }, { id: 'c14', txt: 'Aprendizado' },
+            { id: 'c15', txt: 'Fundamentos' }
+        ];
+
+        function renderizarEvolucaoAluno() {
+            const notas = sessaoAluno.notas || {};
+            const container = document.getElementById('listaNotasAluno');
+            container.innerHTML = '';
+            
+            let total = 0, qtd = 0;
+            criteriosPadrao.forEach(c => {
+                const notaVal = Number(notas[c.id]) || 0;
+                total += notaVal;
+                qtd++;
+                container.innerHTML += `
+                    <div style="background: #F8FBFB; border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; font-size: 0.9rem;">${c.txt}</span>
+                        <span style="font-weight: 800; color: var(--primary-teal); background: #EAF2F1; padding: 4px 10px; border-radius: 6px;">${notaVal}/10</span>
+                    </div>
+                `;
+            });
+
+            const maxTotal = qtd * 10;
+            const porc = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
+            const porcArredondada = Math.floor(porc > 100 ? 100 : porc);
+
+            document.getElementById('porcentagemTexto').textContent = `${porcArredondada}%`;
+            const barra = document.getElementById('barraProgresso');
+            barra.style.width = `${porcArredondada}%`;
+            if(porcArredondada >= 70) {
+                barra.style.background = '#00E676';
+                barra.style.boxShadow = '0 0 15px rgba(0, 230, 118, 0.6)';
+            } else {
+                barra.style.background = 'var(--primary-teal)';
+            }
+        }
+
+        renderizarEvolucaoAluno();
+
+        function mudarAbaAluno(abaId) {
+            document.querySelectorAll('.aba-aluno, .nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`aba-${abaId}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function comprarItem(nomeProduto) {
+            alert(`Pedido de "${nomeProduto}" registrado com sucesso! Redirecionando para o pagamento via PIX/Cartão.`);
+        }
+
+        function sairAluno() {
+            sessionStorage.removeItem('sessaoAluno');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
