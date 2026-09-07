@@ -1,5 +1,6 @@
+/* login.js */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
@@ -21,7 +22,7 @@ const CREDENCIAIS_ADMIN = {
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const email = document.getElementById('email').value.trim();
+    const identificador = document.getElementById('loginIdentificador').value.trim().toLowerCase();
     const senha = document.getElementById('senha').value.trim();
     const btn = document.getElementById('btnAcessar');
     const errorMsg = document.getElementById('errorMsg');
@@ -31,39 +32,61 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     errorMsg.style.display = 'none';
 
     try {
-        if (email === CREDENCIAIS_ADMIN.email && senha === CREDENCIAIS_ADMIN.senha) {
-            const sessao = { role: 'admin', nome: 'Admin Master' };
-            sessionStorage.setItem('sessaoCapoeira', JSON.stringify(sessao));
+        // 1. Admin Master Check
+        if (identificador === CREDENCIAIS_ADMIN.email && senha === CREDENCIAIS_ADMIN.senha) {
+            sessionStorage.setItem('sessaoCapoeira', JSON.stringify({ role: 'admin', nome: 'Admin Master' }));
             window.location.href = 'admin.html';
             return;
         }
 
-        const q = query(collection(db, "academias"), where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-
-        let professorAutenticado = false;
-        let academiaDados = null;
-
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.senha === senha) {
-                professorAutenticado = true;
-                academiaDados = data;
+        // 2. Professores Check (Coleção 'academias')
+        const snapAcademias = await getDocs(collection(db, "academias"));
+        let professorEncontrado = null;
+        snapAcademias.forEach(docSnap => {
+            const data = docSnap.data();
+            const emailDb = (data.email || '').trim().toLowerCase();
+            const telDb = (data.celular || '').trim().toLowerCase();
+            if ((emailDb === identificador || telDb === identificador) && data.senha === senha) {
+                professorEncontrado = data;
             }
         });
 
-        if (professorAutenticado) {
-            const nomeAcademiaLimpo = academiaDados.nome.replace(/^Academia\s+/i, '').trim();
-            const sessao = { 
+        if (professorEncontrado) {
+            const nomeAcademiaLimpo = professorEncontrado.nome.replace(/^Academia\s+/i, '').trim();
+            sessionStorage.setItem('sessaoCapoeira', JSON.stringify({ 
                 role: 'professor', 
-                nome: academiaDados.professor,
+                nome: professorEncontrado.professor,
                 academia: nomeAcademiaLimpo
-            };
-            sessionStorage.setItem('sessaoCapoeira', JSON.stringify(sessao));
+            }));
             window.location.href = 'admin.html';
-        } else {
-            throw new Error("Credenciais inválidas");
+            return;
         }
+
+        // 3. Alunos / Responsáveis Check (Coleção 'alunos')
+        const snapAlunos = await getDocs(collection(db, "alunos"));
+        let alunoEncontrado = null;
+        snapAlunos.forEach(docSnap => {
+            const data = docSnap.data();
+            const emailAluno = (data.email || '').trim().toLowerCase();
+            const telAluno = (data.celular || '').trim().toLowerCase();
+            const emailResp = (data.emailResponsavel || '').trim().toLowerCase();
+            const telResp = (data.celularResponsavel || '').trim().toLowerCase();
+            const senhaDb = data.senha || '';
+
+            if (
+                ((emailAluno === identificador || telAluno === identificador || emailResp === identificador || telResp === identificador) && senhaDb === senha)
+            ) {
+                alunoEncontrado = { id: docSnap.id, ...data };
+            }
+        });
+
+        if (alunoEncontrado) {
+            sessionStorage.setItem('sessaoAluno', JSON.stringify(alunoEncontrado));
+            window.location.href = 'aluno.html';
+            return;
+        }
+
+        throw new Error("Usuário ou senha inválidos");
 
     } catch (error) {
         errorMsg.style.display = 'block';
