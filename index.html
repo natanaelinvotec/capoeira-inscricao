@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capoeira Liberdade e Expressão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER E LOGO 3D -->
+    <header class="header">
+        <div class="header-top"><i class="fas fa-bolt"></i> Aulas de Capoeira em MS | Matricule-se Hoje!</div>
+        <div class="header-bg"></div>
+        <div class="nav-container">
+            <ul class="nav-menu left" id="nav-menu-left">
+                <li><a href="#inicio" class="nav-link">Início</a></li>
+                <li><a href="#mestres" class="nav-link">Mestres</a></li>
+                <li><a href="#agenda" class="nav-link">Agenda</a></li>
+            </ul>
+            <div class="logo-wrapper" id="logo-container">
+                <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo" class="logo-3d" id="logo-img"></a>
+            </div>
+            <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+            <ul class="nav-menu right" id="nav-menu-right">
+                <li><a href="#academias" class="nav-link">Academias</a></li>
+                <li><a href="#kids" class="nav-link">Kids</a></li>
+                <li><a href="login.html" class="btn btn-primary"><i class="fas fa-user-circle"></i> Portal Aluno</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <i class="fas fa-music particle p1"></i><i class="fas fa-star particle p2"></i><i class="fas fa-fire particle p3"></i>
+        <div class="container hero-content">
+            <h1>LIBERDADE, EXPRESSÃO E CULTURA: CAPOEIRA EM MS</h1>
+            <p>Desenvolva corpo e mente através da arte, música e ancestralidade afro-brasileira.</p>
+            <a href="#academias" class="btn btn-green"><i class="fas fa-play-circle"></i> Conheça Nossas Aulas</a>
+        </div>
+    </section>
+
+    <!-- MESTRES E EQUIPE (SCROLL HORIZONTAL) -->
+    <section id="mestres" class="container section-spacing">
+        <div class="section-title title-spaced">
+            <h2>Mestres e Professores</h2>
+            <p>Nossa equipe altamente qualificada pronta para guiar sua jornada.</p>
+        </div>
+        <div class="scroll-container" id="mestres-container">
+            <!-- Injetado via main.js -->
+        </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section id="agenda" class="container section-spacing">
+        <div class="section-title">
+            <h2>Agenda do Semestre</h2>
+            <p>Clique nas datas ao lado para ver os detalhes do evento.</p>
+        </div>
+        <div class="agenda-wrapper">
+            <div class="agenda-scroll-box" id="timeline-container">
+                <!-- Injetado via main.js (Com lógica de Evento Concluído) -->
+            </div>
+            <div class="destaque-card" id="card-destaque">
+                <span class="destaque-badge"><i class="fas fa-star"></i> DESTAQUE SELECIONADO</span>
+                <h3 id="dest-title">Selecione um evento</h3>
+                <div class="destaque-info"><i class="fas fa-calendar-check"></i> <span id="dest-date">--</span></div>
+                <div class="destaque-info"><i class="fas fa-clock"></i> <span id="dest-time">--</span></div>
+                <div class="destaque-info"><i class="fas fa-map-marked-alt"></i> <span id="dest-location">--</span></div>
+                <a href="#contato" class="btn btn-primary btn-full"><i class="fas fa-ticket-alt"></i> Confirmar Presença</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACADEMIAS E LOCAIS -->
+    <section id="academias" class="bg-white section-spacing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Academias & Locais</h2>
+                <p>Encontre o polo de treino mais próximo de você e agende sua aula.</p>
+            </div>
+            <div class="locais-grid">
+                <div class="map-container">
+                    <iframe id="mapa-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119743.41162463212!2d-54.69746358327932!3d-20.463991207173167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9486e66e8cb57db7%3A0xc39217036a144e78!2sCampo%20Grande%2C%20MS!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="locais-lista" id="locais-container">
+                    <!-- Injetado via main.js (Mais de 12 locais) -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÓDULO KIDS (ANIMAÇÃO + SLIDER) -->
+    <section id="kids" class="kids-section">
+        <div class="container kids-content">
+            <div class="kids-text">
+                <h2>A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga" style="color: white; margin-left: 10px;"></i></h2>
+                <p>Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
+                <div class="flex-gap">
+                    <a href="#contato" class="btn btn-kids"><i class="fas fa-calendar-plus"></i> Agendar Aula Experimental</a>
+                </div>
+            </div>
+            <div class="kids-image">
+                <img id="kids-slider" src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=600" alt="Capoeira Kids">
+            </div>
+        </div>
+    </section>
+
+    <!-- LOJA ONLINE (AUTO-SCROLL) -->
+    <section id="loja" class="bg-white section-spacing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Loja Oficial & Equipamentos</h2>
+            </div>
+            <div class="scroll-container loja-scroll" id="loja-container">
+                <!-- Injetado via main.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- POPUP DO PROFESSOR (MODAL) -->
+    <div class="modal-prof" id="modalProf">
+        <div class="modal-prof-content">
+            <button class="close-modal" id="closeProf"><i class="fas fa-times"></i></button>
+            <img src="" id="popupProfFoto" class="modal-prof-img">
+            <h2 id="popupProfNome" style="margin-top: 20px; color: var(--blue-dark);">Nome</h2>
+            <h4 id="popupProfTitulo" style="color: var(--blue-vibrant); margin-bottom: 15px;">Título</h4>
+            <p id="popupProfBio" style="color: var(--text-muted); margin-bottom: 25px;">Biografia...</p>
+            <div class="flex-gap" style="justify-content: center;">
+                <a href="#" id="popupProfWhats" target="_blank" class="btn btn-green"><i class="fab fa-whatsapp"></i> Falar no WhatsApp</a>
+                <a href="#" id="popupProfMaps" target="_blank" class="btn btn-primary"><i class="fas fa-map-marker-alt"></i> Ver Academia</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

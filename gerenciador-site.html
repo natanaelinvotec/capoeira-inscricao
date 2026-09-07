@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão do Site - Capoeira Liberdade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .cms-grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; margin-top: 20px; }
+        .cms-menu { display: flex; flex-direction: column; gap: 10px; }
+        .cms-btn { padding: 15px; background: white; border: 1px solid var(--border-color); border-radius: 12px; font-weight: bold; color: var(--primary-blue); cursor: pointer; text-align: left; transition: 0.3s; }
+        .cms-btn.active, .cms-btn:hover { background: var(--primary-teal); color: white; border-color: var(--primary-teal); }
+        .cms-form { display: grid; gap: 15px; background: white; padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 30px; }
+        .img-preview { width: 100px; height: 100px; border-radius: 12px; object-fit: cover; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #999; overflow: hidden; }
+        .item-list { display: grid; gap: 15px; }
+        .item-card { display: flex; align-items: center; gap: 20px; background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); }
+        .item-card img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
+        .item-actions { margin-left: auto; display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <header class="top-nav">
+        <div class="logo-area">
+            <img src="logo-liberdade150.png" alt="Logo" class="nav-logo">
+            <span style="margin-left: 15px; font-weight: 800; color: var(--primary-blue); font-family: 'Montserrat';">Gerenciador do Site</span>
+        </div>
+        <nav class="nav-links">
+            <a href="admin.html" class="nav-item">Voltar ao Painel de Alunos</a>
+        </nav>
+    </header>
+
+    <div class="main-layout" style="max-width: 1400px;">
+        <div class="cms-grid">
+            <!-- Menu Lateral do CMS -->
+            <aside class="cms-menu">
+                <button class="cms-btn active" onclick="mudarAbaCms('mestres')"><i class="fas fa-users"></i> Equipe e Professores</button>
+                <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar-alt"></i> Agenda de Eventos</button>
+                <button class="cms-btn" onclick="mudarAbaCms('locais')"><i class="fas fa-map-marked-alt"></i> Academias e Locais</button>
+                <button class="cms-btn" onclick="mudarAbaCms('loja')"><i class="fas fa-store"></i> Loja Online</button>
+                <button class="cms-btn" onclick="mudarAbaCms('kids')"><i class="fas fa-child"></i> Slider Kids</button>
+            </aside>
+
+            <!-- Área de Conteúdo -->
+            <main>
+                <!-- ABA MESTRES -->
+                <section id="aba-mestres" class="aba-content active">
+                    <div class="section-header"><h2>Cadastrar Novo Profissional (Mestres/Professores)</h2></div>
+                    <form id="formMestres" class="cms-form">
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            <div class="img-preview" id="previewMestre"><i class="fas fa-image"></i></div>
+                            <input type="file" id="fotoMestre" accept="image/*" required>
+                        </div>
+                        <input type="text" id="nomeMestre" class="input-padrao" placeholder="Nome Completo / Apelido" required>
+                        <input type="text" id="tituloMestre" class="input-padrao" placeholder="Ex: Professor Responsável" required>
+                        <textarea id="bioMestre" class="input-padrao" placeholder="História e breve biografia do profissional..." rows="3" required></textarea>
+                        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <input type="text" id="whatsMestre" class="input-padrao" placeholder="Número WhatsApp (Ex: 5567999999999)" required>
+                            <input type="url" id="mapsMestre" class="input-padrao" placeholder="Link do Google Maps da Academia principal">
+                        </div>
+                        <button type="submit" class="btn-detalhes"><i class="fas fa-save"></i> Publicar Profissional no Site</button>
+                    </form>
+                    <h3>Profissionais Ativos no Site</h3>
+                    <div id="listaMestres" class="item-list"></div>
+                </section>
+
+                <!-- ABA AGENDA -->
+                <section id="aba-agenda" class="aba-content">
+                    <div class="section-header"><h2>Adicionar Evento na Agenda</h2></div>
+                    <form id="formAgenda" class="cms-form">
+                        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <input type="date" id="dataEvento" class="input-padrao" required>
+                            <input type="time" id="horaEvento" class="input-padrao" required>
+                        </div>
+                        <input type="text" id="tituloEvento" class="input-padrao" placeholder="Título do Evento (Ex: Batizado 2026)" required>
+                        <input type="text" id="localEvento" class="input-padrao" placeholder="Local (Ex: Praça da Coophasul)" required>
+                        <input type="url" id="linkMidiaEvento" class="input-padrao" placeholder="Link do Álbum/Vídeo (Aparecerá quando o evento concluir)">
+                        <button type="submit" class="btn-detalhes"><i class="fas fa-save"></i> Agendar Evento</button>
+                    </form>
+                    <h3>Próximos Eventos</h3>
+                    <div id="listaAgenda" class="item-list"></div>
+                </section>
+
+                <!-- Outras abas seguem a mesma estrutura de formulário dinâmico -->
+                <section id="aba-locais" class="aba-content"><p>Módulo de Locais em construção...</p></section>
+                <section id="aba-loja" class="aba-content"><p>Módulo de Loja em construção...</p></section>
+                <section id="aba-kids" class="aba-content"><p>Módulo de Fotos Kids em construção...</p></section>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="gerenciador-site.js"></script>
+    <script>
+        function mudarAbaCms(aba) {
+            document.querySelectorAll('.aba-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.cms-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`aba-${aba}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
