@@ -1,6 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// ====== VERIFICAÇÃO DE SESSÃO ======
+// Executa imediatamente para barrar usuários não autenticados
+const sessaoString = sessionStorage.getItem('sessaoCapoeira');
+if (!sessaoString) {
+    window.location.href = 'login.html';
+}
+const usuarioLogado = JSON.parse(sessaoString);
+// ===================================
+
 const firebaseConfig = {
   apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
   authDomain: "capoeira-liberdade.firebaseapp.com",
@@ -64,9 +73,33 @@ const criteriosRegras = [
 ];
 
 window.onload = async () => {
+    // 1. Atualiza o perfil visual no topo direito com o nome de quem logou
+    const profileSpan = document.querySelector('.admin-profile span');
+    if(profileSpan) profileSpan.textContent = usuarioLogado.nome;
+
+    // 2. Adaptação da Interface se for Professor
+    if (usuarioLogado.role === 'professor') {
+        // Esconde abas de gestão e financeiro
+        const abaAcademias = document.querySelector('a[onclick="mudarAba(\'academias\')"]');
+        const abaFinanceiro = document.querySelector('a[onclick="mudarAba(\'financeiro\')"]');
+        if (abaAcademias) abaAcademias.style.display = 'none';
+        if (abaFinanceiro) abaFinanceiro.style.display = 'none';
+        
+        // Altera o título para refletir a academia do professor
+        const headerAlunos = document.querySelector('#aba-alunos .section-header h2');
+        if (headerAlunos) {
+            headerAlunos.innerHTML = `<i class="fas fa-users"></i> Alunos - Academia ${usuarioLogado.academia}`;
+        }
+
+        // Esconde a sidebar de filtros (ele só verá a própria academia)
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.style.display = 'none';
+    }
+
     document.getElementById('mobile-menu-btn').addEventListener('click', () => {
         document.getElementById('nav-links').classList.toggle('show');
     });
+
     await carregarAcademias();
     await carregarAlunos();
 };
@@ -77,13 +110,14 @@ window.mudarAba = function(abaId) {
     event.currentTarget.classList.add('active');
     document.getElementById('nav-links').classList.remove('show');
 }
+
 window.irParaRelatorios = function() {
     window.mudarAba('alunos');
     setTimeout(() => { document.getElementById('secao-graficos').scrollIntoView({ behavior: 'smooth' }); }, 100);
 }
 
 // ==========================================
-// 1. GESTÃO DE ACADEMIAS (LIMPEZA AUTOMÁTICA)
+// 1. GESTÃO DE ACADEMIAS (Visto Apenas pelo Admin Master, mas funções se mantêm)
 // ==========================================
 async function carregarAcademias() {
     try {
@@ -91,7 +125,6 @@ async function carregarAcademias() {
         academiasDBGlobais = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
         let nomesUnicos = new Set(academiasPadrao);
-        // Adiciona as do banco já limpando o nome
         academiasDBGlobais.forEach(ac => nomesUnicos.add(normalizarAcademia(ac.nome)));
         
         listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
@@ -100,39 +133,45 @@ async function carregarAcademias() {
         listaAcademias.forEach(ac => selectHtml += `<option value="${ac.nome}">${ac.nome}</option>`);
         
         const listaPainel = document.getElementById('listaAcademiasPainel');
-        listaPainel.innerHTML = '';
-
-        academiasDBGlobais.forEach(ac => {
-            let nomeLimpo = normalizarAcademia(ac.nome);
-            listaPainel.innerHTML += `
-                <div class="academia-card">
-                    <h4><i class="fas fa-map-marker-alt"></i> ${nomeLimpo}</h4>
-                    <p><strong>Prof:</strong> ${ac.professor || 'Não informado'}</p>
-                    <p><strong>E-mail:</strong> ${ac.email || 'Não informado'}</p>
-                    <div class="academia-actions">
-                        <button class="btn-edit-ac" onclick="abrirEditarAcademia('${ac.id}')"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${nomeLimpo}')"><i class="fas fa-trash"></i> Excluir</button>
-                    </div>
-                </div>`;
-        });
-        document.getElementById('filtroAcademia').innerHTML = selectHtml;
+        if (listaPainel) {
+            listaPainel.innerHTML = '';
+            academiasDBGlobais.forEach(ac => {
+                let nomeLimpo = normalizarAcademia(ac.nome);
+                listaPainel.innerHTML += `
+                    <div class="academia-card">
+                        <h4><i class="fas fa-map-marker-alt"></i> ${nomeLimpo}</h4>
+                        <p><strong>Prof:</strong> ${ac.professor || 'Não informado'}</p>
+                        <p><strong>E-mail:</strong> ${ac.email || 'Não informado'}</p>
+                        <div class="academia-actions">
+                            <button class="btn-edit-ac" onclick="abrirEditarAcademia('${ac.id}')"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${nomeLimpo}')"><i class="fas fa-trash"></i> Excluir</button>
+                        </div>
+                    </div>`;
+            });
+        }
+        
+        const filtroAcademia = document.getElementById('filtroAcademia');
+        if (filtroAcademia) filtroAcademia.innerHTML = selectHtml;
     } catch (e) { console.error(e); }
 }
 
-document.getElementById('formNovaAcademia').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    try {
-        let nomeRaw = document.getElementById('nomeAcademia').value;
-        await addDoc(collection(db, "academias"), { 
-            nome: normalizarAcademia(nomeRaw), // Salva já limpo
-            professor: document.getElementById('nomeProfessor').value, 
-            email: document.getElementById('emailProfessor').value, 
-            senha: document.getElementById('senhaProfessor').value, 
-            data: new Date().toISOString() 
-        });
-        alert("Academia cadastrada!"); e.target.reset(); carregarAcademias(); carregarAlunos();
-    } catch (err) { alert("Erro ao criar."); }
-});
+const formNovaAcademia = document.getElementById('formNovaAcademia');
+if(formNovaAcademia) {
+    formNovaAcademia.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            let nomeRaw = document.getElementById('nomeAcademia').value;
+            await addDoc(collection(db, "academias"), { 
+                nome: normalizarAcademia(nomeRaw), 
+                professor: document.getElementById('nomeProfessor').value, 
+                email: document.getElementById('emailProfessor').value, 
+                senha: document.getElementById('senhaProfessor').value, 
+                data: new Date().toISOString() 
+            });
+            alert("Academia cadastrada!"); e.target.reset(); carregarAcademias(); carregarAlunos();
+        } catch (err) { alert("Erro ao criar."); }
+    });
+}
 
 window.excluirAcademia = async function(id, nome) {
     if(confirm(`Deseja REALMENTE excluir a academia "${nome}"?`)) {
@@ -153,23 +192,26 @@ window.abrirEditarAcademia = function(id) {
 }
 window.fecharModalAcademia = () => document.getElementById('modalEditarAcademia').style.display = 'none';
 
-document.getElementById('formEditAcademia').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    let nomeRaw = document.getElementById('editNomeAcademia').value;
-    const objUpdate = {
-        nome: normalizarAcademia(nomeRaw),
-        professor: document.getElementById('editNomeProfessor').value,
-        email: document.getElementById('editEmailProfessor').value
-    };
-    const s = document.getElementById('editSenhaProfessor').value;
-    if(s.trim() !== "") objUpdate.senha = s;
+const formEditAcademia = document.getElementById('formEditAcademia');
+if (formEditAcademia) {
+    formEditAcademia.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        let nomeRaw = document.getElementById('editNomeAcademia').value;
+        const objUpdate = {
+            nome: normalizarAcademia(nomeRaw),
+            professor: document.getElementById('editNomeProfessor').value,
+            email: document.getElementById('editEmailProfessor').value
+        };
+        const s = document.getElementById('editSenhaProfessor').value;
+        if(s.trim() !== "") objUpdate.senha = s;
 
-    try {
-        await updateDoc(doc(db, "academias", academiaEditandoID), objUpdate);
-        alert("Dados atualizados com sucesso!");
-        fecharModalAcademia(); carregarAcademias(); carregarAlunos();
-    } catch(e) { alert("Erro ao editar."); }
-});
+        try {
+            await updateDoc(doc(db, "academias", academiaEditandoID), objUpdate);
+            alert("Dados atualizados com sucesso!");
+            fecharModalAcademia(); carregarAcademias(); carregarAlunos();
+        } catch(e) { alert("Erro ao editar."); }
+    });
+}
 
 
 // ==========================================
@@ -183,12 +225,20 @@ async function carregarAlunos() {
     } catch (e) { console.log(e); }
 }
 
-document.getElementById('filtroAcademia').addEventListener('change', aplicarFiltros);
-document.getElementById('buscaGeral').addEventListener('input', aplicarFiltros);
+const selectFiltroAcademia = document.getElementById('filtroAcademia');
+if (selectFiltroAcademia) selectFiltroAcademia.addEventListener('change', aplicarFiltros);
+
+const inputBusca = document.getElementById('buscaGeral');
+if (inputBusca) inputBusca.addEventListener('input', aplicarFiltros);
 
 function aplicarFiltros() {
-    const ac = document.getElementById('filtroAcademia').value;
-    const txt = document.getElementById('buscaGeral').value.toLowerCase();
+    let ac = document.getElementById('filtroAcademia') ? document.getElementById('filtroAcademia').value : "";
+    const txt = document.getElementById('buscaGeral') ? document.getElementById('buscaGeral').value.toLowerCase() : "";
+    
+    // TRAVA DE SEGURANÇA PARA PROFESSOR: Ele só pode ver a própria academia
+    if (usuarioLogado.role === 'professor') {
+        ac = usuarioLogado.academia;
+    }
     
     const filtrados = todosAlunos.filter(a => {
         const localLimpo = normalizarAcademia(a.localTreino);
@@ -201,13 +251,24 @@ function aplicarFiltros() {
 
 function renderizarGrid(alunos) {
     const grid = document.getElementById('gridAlunos');
+    if (!grid) return;
+    
     grid.innerHTML = '';
+    
     let optAc = '<option value="">Transferir para...</option>';
     listaAcademias.forEach(ac => { optAc += `<option value="${ac.nome}">${ac.nome}</option>`; });
 
     if(alunos.length === 0) { grid.innerHTML = '<p style="grid-column: 1/-1;">Nenhum aluno encontrado.</p>'; return; }
+    
     alunos.forEach(a => {
         let localLimpo = normalizarAcademia(a.localTreino);
+        
+        // Apenas Admin Master pode transferir alunos de academia
+        let htmlTransferencia = '';
+        if (usuarioLogado.role === 'admin') {
+            htmlTransferencia = `<select class="select-encaminhar" onchange="transferirAluno('${a.id}', this.value)">${optAc}</select>`;
+        }
+
         grid.innerHTML += `
             <div class="aluno-card">
                 <div class="card-top">
@@ -220,13 +281,14 @@ function renderizarGrid(alunos) {
                         <p>Status: <strong style="color:${a.statusAtual==='Ativo'?'#389E92':'#E74C3C'}">${a.statusAtual||'Ativo'}</strong></p>
                     </div>
                 </div>
-                <div class="card-bottom">
-                    <select class="select-encaminhar" onchange="transferirAluno('${a.id}', this.value)">${optAc}</select>
+                <div class="card-bottom" style="${usuarioLogado.role === 'professor' ? 'justify-content: flex-end;' : ''}">
+                    ${htmlTransferencia}
                     <button class="btn-detalhes" onclick="abrirModal('${a.id}')">Avaliar Evolução</button>
                 </div>
             </div>`;
     });
 }
+
 window.transferirAluno = async function(idAluno, novaAcademia) {
     if(novaAcademia === "") return;
     if(confirm(`Confirmar transferência para ${novaAcademia}?`)) {
@@ -239,11 +301,19 @@ window.transferirAluno = async function(idAluno, novaAcademia) {
 // ==========================================
 let notasAtuais = {};
 let criteriosAtivos = [];
+
 window.abrirModal = function(id) {
     alunoSelecionado = todosAlunos.find(a => a.id === id);
     deleteConfirm = false;
-    document.getElementById('btnExcluirModal').textContent = "Excluir Aluno";
-    document.getElementById('btnExcluirModal').classList.remove('confirm-danger');
+    
+    const btnExcluir = document.getElementById('btnExcluirModal');
+    btnExcluir.textContent = "Excluir Aluno";
+    btnExcluir.classList.remove('confirm-danger');
+    
+    // Opcional: Impedir que o professor exclua o aluno, deixando esse poder só para o admin
+    if (usuarioLogado.role === 'professor') {
+        btnExcluir.style.display = 'none';
+    }
 
     document.getElementById('modFoto').src = alunoSelecionado.fotoUrl || 'https://via.placeholder.com/90';
     document.getElementById('modNome').textContent = alunoSelecionado.nome;
@@ -415,12 +485,24 @@ function desenharGraficos(alunosAtuais) {
 
     criarGrafico('chartPiramide', 'bar', piramideLabels, piramideData, piramideColors, true);
     criarGrafico('chartFundamentos', 'bar', labelFundamentos, dataFundamentos, colorTeal, true);
-    criarGrafico('chartAcademias', 'doughnut', Object.keys(academiaCount), Object.values(academiaCount), [colorTeal, colorBlue, colorGreen, colorYellow, '#8E44AD']);
+    
+    // Gráfico de distribuição de academia faz sentido apenas se houver mais de uma
+    if (Object.keys(academiaCount).length > 1) {
+        criarGrafico('chartAcademias', 'doughnut', Object.keys(academiaCount), Object.values(academiaCount), [colorTeal, colorBlue, colorGreen, colorYellow, '#8E44AD']);
+        document.getElementById('chartAcademias').parentElement.parentElement.style.display = 'flex';
+    } else {
+        // Se for professor, esconde o gráfico de academias pois terá apenas uma
+        document.getElementById('chartAcademias').parentElement.parentElement.style.display = 'none';
+    }
+    
     criarGrafico('chartIdades', 'pie', ['Kids (Sub-12)', 'Adultos'], [kids, adultos], [colorGreen, colorBlue]);
 }
 
 function criarGrafico(canvasId, type, labels, data, colors, hideLegend = false) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     if(chartsInstances[canvasId]) chartsInstances[canvasId].destroy();
     
     chartsInstances[canvasId] = new Chart(ctx, {
