@@ -1,98 +1,78 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
-// Verificação de Segurança (Apenas Admin Master pode gerenciar o site)
-const sessaoString = sessionStorage.getItem('sessaoCapoeira');
-if (!sessaoString) window.location.href = 'login.html';
-const usuarioLogado = JSON.parse(sessaoString);
-if (usuarioLogado.role !== 'admin') {
-    alert("Acesso negado. Apenas o Administrador pode editar o site.");
-    window.location.href = 'admin.html';
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
+  authDomain: "capoeira-liberdade.firebaseapp.com",
+  projectId: "capoeira-liberdade"
+};
 
-const firebaseConfig = { /* Suas credenciais do Firebase aqui */ };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-// Preview de Imagem
-document.getElementById('fotoMestre').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('previewMestre').innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
-        }
-        reader.readAsDataURL(file);
-    }
-});
-
-// Cadastro de Mestre com Upload de Imagem
-document.getElementById('formMestres').addEventListener('submit', async (e) => {
+// === CADASTRO DE AGENDA ===
+document.getElementById('formAgenda').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fazendo Upload...';
-    btn.disabled = true;
-
-    const file = document.getElementById('fotoMestre').files[0];
-    const storageRef = ref(storage, 'site/professores/' + Date.now() + '_' + file.name);
-    
     try {
-        const uploadTask = await uploadBytesResumable(storageRef, file);
-        const downloadURL = await getDownloadURL(uploadTask.ref);
-
-        await addDoc(collection(db, "site_professores"), {
-            nome: document.getElementById('nomeMestre').value,
-            titulo: document.getElementById('tituloMestre').value,
-            bio: document.getElementById('bioMestre').value,
-            whatsapp: document.getElementById('whatsMestre').value,
-            maps: document.getElementById('mapsMestre').value,
-            fotoUrl: downloadURL,
-            ordem: Date.now()
+        const dataObj = new Date(document.getElementById('dataEvento').value);
+        await addDoc(collection(db, "site_agenda"), {
+            dataReal: dataObj.toISOString(),
+            dataStr: `${dataObj.getDate()} DE ${dataObj.toLocaleString('pt-BR', { month: 'short' }).toUpperCase()}`,
+            hora: `${dataObj.getHours()}h${dataObj.getMinutes() === 0 ? '00' : dataObj.getMinutes()}`,
+            titulo: document.getElementById('tituloEvento').value,
+            local: document.getElementById('localEvento').value,
+            fotosLink: document.getElementById('linkMidiaEvento').value
         });
-
-        alert("Profissional adicionado ao site com sucesso!");
-        e.target.reset();
-        document.getElementById('previewMestre').innerHTML = '<i class="fas fa-image"></i>';
-        carregarMestres();
-    } catch (error) {
-        alert("Erro ao fazer upload: " + error.message);
-    } finally {
-        btn.innerHTML = '<i class="fas fa-save"></i> Publicar Profissional no Site';
-        btn.disabled = false;
-    }
+        alert("Evento adicionado!"); e.target.reset(); carregarAgenda();
+    } catch(err) { alert("Erro ao salvar."); }
 });
 
-// Carregar e listar os mestres na tela do CMS
-async function carregarMestres() {
-    const lista = document.getElementById('listaMestres');
-    lista.innerHTML = 'Carregando...';
-    const querySnapshot = await getDocs(collection(db, "site_professores"));
+async function carregarAgenda() {
+    const lista = document.getElementById('listaAgenda');
     lista.innerHTML = '';
-    querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        lista.innerHTML += `
-            <div class="item-card">
-                <img src="${data.fotoUrl}">
-                <div>
-                    <h4 style="color: var(--primary-blue);">${data.nome}</h4>
-                    <p style="font-size: 0.85rem; color: #666;">${data.titulo}</p>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-excluir-aluno" onclick="excluirItem('site_professores', '${docSnap.id}')" style="margin:0; padding: 6px 12px;"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-        `;
+    const snap = await getDocs(collection(db, "site_agenda"));
+    snap.forEach(doc => {
+        const d = doc.data();
+        lista.innerHTML += `<div class="item-card">
+            <div><strong>${d.dataStr} - ${d.titulo}</strong><br><small>${d.local}</small></div>
+            <button class="btn-excluir-aluno" onclick="remover('site_agenda', '${doc.id}')">Excluir</button>
+        </div>`;
     });
 }
 
-window.excluirItem = async function(colecao, id) {
-    if(confirm("Tem certeza que deseja remover do site?")) {
+// === CADASTRO DE LOCAIS ===
+document.getElementById('formLocais').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+        await addDoc(collection(db, "site_locais"), {
+            nome: document.getElementById('nomePolo').value,
+            prof: document.getElementById('profPolo').value,
+            dias: document.getElementById('diasPolo').value,
+            endereco: document.getElementById('endPolo').value
+        });
+        alert("Polo adicionado!"); e.target.reset(); carregarLocais();
+    } catch(err) { alert("Erro."); }
+});
+
+async function carregarLocais() {
+    const lista = document.getElementById('listaLocais');
+    lista.innerHTML = '';
+    const snap = await getDocs(collection(db, "site_locais"));
+    snap.forEach(doc => {
+        lista.innerHTML += `<div class="item-card">
+            <div><strong>${doc.data().nome}</strong><br><small>${doc.data().prof}</small></div>
+            <button class="btn-excluir-aluno" onclick="remover('site_locais', '${doc.id}')">Excluir</button>
+        </div>`;
+    });
+}
+
+window.remover = async function(colecao, id) {
+    if(confirm("Excluir item?")) {
         await deleteDoc(doc(db, colecao, id));
-        carregarMestres();
+        if(colecao === 'site_agenda') carregarAgenda();
+        if(colecao === 'site_locais') carregarLocais();
     }
 }
 
-// Inicializa listas
-carregarMestres();
+carregarAgenda();
+carregarLocais();
