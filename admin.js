@@ -1,14 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ====== VERIFICAÇÃO DE SESSÃO ======
-// Executa imediatamente para barrar usuários não autenticados
 const sessaoString = sessionStorage.getItem('sessaoCapoeira');
 if (!sessaoString) {
     window.location.href = 'login.html';
 }
 const usuarioLogado = JSON.parse(sessaoString);
-// ===================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
@@ -22,7 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Função inteligente para remover "Academia " da frente de qualquer texto do Banco de Dados
 const normalizarAcademia = (nome) => {
     if (!nome) return 'Não informada';
     return nome.replace(/^Academia\s+/i, '').trim();
@@ -36,7 +32,6 @@ let academiaEditandoID = null;
 let deleteConfirm = false;
 let chartsInstances = {}; 
 
-// Array padrão já limpo (sem a palavra "Academia")
 const academiasPadrao = [
     "Mestre Profeta", "Professora Taynara", "Mestre Abraão", 
     "Mestre Omar", "Mestre Carlinhos", "Professor Maick", 
@@ -73,25 +68,20 @@ const criteriosRegras = [
 ];
 
 window.onload = async () => {
-    // 1. Atualiza o perfil visual no topo direito com o nome de quem logou
     const profileSpan = document.querySelector('.admin-profile span');
     if(profileSpan) profileSpan.textContent = usuarioLogado.nome;
 
-    // 2. Adaptação da Interface se for Professor
     if (usuarioLogado.role === 'professor') {
-        // Esconde abas de gestão e financeiro
         const abaAcademias = document.querySelector('a[onclick="mudarAba(\'academias\')"]');
         const abaFinanceiro = document.querySelector('a[onclick="mudarAba(\'financeiro\')"]');
         if (abaAcademias) abaAcademias.style.display = 'none';
         if (abaFinanceiro) abaFinanceiro.style.display = 'none';
         
-        // Altera o título para refletir a academia do professor
         const headerAlunos = document.querySelector('#aba-alunos .section-header h2');
         if (headerAlunos) {
             headerAlunos.innerHTML = `<i class="fas fa-users"></i> Alunos - Academia ${usuarioLogado.academia}`;
         }
 
-        // Esconde a sidebar de filtros (ele só verá a própria academia)
         const sidebar = document.querySelector('.sidebar');
         if(sidebar) sidebar.style.display = 'none';
     }
@@ -99,6 +89,16 @@ window.onload = async () => {
     document.getElementById('mobile-menu-btn').addEventListener('click', () => {
         document.getElementById('nav-links').classList.toggle('show');
     });
+
+    const btnLogout = document.getElementById('btnLogout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            if (confirm("Deseja realmente sair da conta?")) {
+                sessionStorage.removeItem('sessaoCapoeira');
+                window.location.href = 'login.html';
+            }
+        });
+    }
 
     await carregarAcademias();
     await carregarAlunos();
@@ -116,9 +116,6 @@ window.irParaRelatorios = function() {
     setTimeout(() => { document.getElementById('secao-graficos').scrollIntoView({ behavior: 'smooth' }); }, 100);
 }
 
-// ==========================================
-// 1. GESTÃO DE ACADEMIAS (Visto Apenas pelo Admin Master, mas funções se mantêm)
-// ==========================================
 async function carregarAcademias() {
     try {
         const snap = await getDocs(collection(db, "academias"));
@@ -213,10 +210,6 @@ if (formEditAcademia) {
     });
 }
 
-
-// ==========================================
-// 2. GRID E FILTROS DE ALUNOS
-// ==========================================
 async function carregarAlunos() {
     try {
         const snap = await getDocs(collection(db, "alunos"));
@@ -235,7 +228,6 @@ function aplicarFiltros() {
     let ac = document.getElementById('filtroAcademia') ? document.getElementById('filtroAcademia').value : "";
     const txt = document.getElementById('buscaGeral') ? document.getElementById('buscaGeral').value.toLowerCase() : "";
     
-    // TRAVA DE SEGURANÇA PARA PROFESSOR: Ele só pode ver a própria academia
     if (usuarioLogado.role === 'professor') {
         ac = usuarioLogado.academia;
     }
@@ -263,7 +255,6 @@ function renderizarGrid(alunos) {
     alunos.forEach(a => {
         let localLimpo = normalizarAcademia(a.localTreino);
         
-        // Apenas Admin Master pode transferir alunos de academia
         let htmlTransferencia = '';
         if (usuarioLogado.role === 'admin') {
             htmlTransferencia = `<select class="select-encaminhar" onchange="transferirAluno('${a.id}', this.value)">${optAc}</select>`;
@@ -296,9 +287,6 @@ window.transferirAluno = async function(idAluno, novaAcademia) {
     }
 }
 
-// ==========================================
-// 3. MÓDULO DE AVALIAÇÃO
-// ==========================================
 let notasAtuais = {};
 let criteriosAtivos = [];
 
@@ -310,7 +298,6 @@ window.abrirModal = function(id) {
     btnExcluir.textContent = "Excluir Aluno";
     btnExcluir.classList.remove('confirm-danger');
     
-    // Opcional: Impedir que o professor exclua o aluno, deixando esse poder só para o admin
     if (usuarioLogado.role === 'professor') {
         btnExcluir.style.display = 'none';
     }
@@ -414,9 +401,6 @@ window.salvarEdicaoAluno = async function() {
 
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
 
-// ==========================================
-// 4. GRÁFICOS (CHART.JS)
-// ==========================================
 function obterCorPorCordao(nome) {
     const mapa = {
         'Iniciante': '#CCCCCC', 'Cinza Claro': '#D3D3D3', 'Cinza e Bege': '#C0C0C0', 'Bege': '#DEB887',
@@ -486,12 +470,10 @@ function desenharGraficos(alunosAtuais) {
     criarGrafico('chartPiramide', 'bar', piramideLabels, piramideData, piramideColors, true);
     criarGrafico('chartFundamentos', 'bar', labelFundamentos, dataFundamentos, colorTeal, true);
     
-    // Gráfico de distribuição de academia faz sentido apenas se houver mais de uma
     if (Object.keys(academiaCount).length > 1) {
         criarGrafico('chartAcademias', 'doughnut', Object.keys(academiaCount), Object.values(academiaCount), [colorTeal, colorBlue, colorGreen, colorYellow, '#8E44AD']);
         document.getElementById('chartAcademias').parentElement.parentElement.style.display = 'flex';
     } else {
-        // Se for professor, esconde o gráfico de academias pois terá apenas uma
         document.getElementById('chartAcademias').parentElement.parentElement.style.display = 'none';
     }
     
