@@ -76,12 +76,15 @@ inputDataNasc.addEventListener('change', (e) => {
     
     inputIdade.value = idade;
 
-    if (idade >= 18) {
-        secaoResponsavel.classList.add('hidden');
+    // Regra de menor de idade (Ajustado para < 12 conforme o sistema de permissões, ou ajuste se preferir 18)
+    if (idade >= 12) {
+        secaoResponsavel.style.display = 'none';
         inputsResponsavel.forEach(input => { input.removeAttribute('required'); input.value = ''; });
     } else {
-        secaoResponsavel.classList.remove('hidden');
-        inputsResponsavel.forEach(input => input.setAttribute('required', 'true'));
+        secaoResponsavel.style.display = 'block';
+        // Torna obrigatórios os dados do responsável para menores
+        document.getElementById('inputResponsavel').setAttribute('required', 'true');
+        document.getElementById('celularResponsavel').setAttribute('required', 'true');
     }
 });
 
@@ -141,8 +144,7 @@ form.addEventListener('submit', async (e) => {
     const nomeAssinatura = document.getElementById('assinaturaNomeFicha');
     const dataHoraFicha = document.getElementById('dataHoraImpressaoFicha');
 
-    // Se maior de 18 usa o nome do aluno, se menor usa o nome do responsável
-    if (idadeAluno >= 18) {
+    if (idadeAluno >= 12) {
         nomeAssinatura.textContent = inputNome.value ? inputNome.value : "_________________________________";
     } else {
         nomeAssinatura.textContent = inputResponsavel.value ? inputResponsavel.value : "_________________________________";
@@ -165,8 +167,19 @@ form.addEventListener('submit', async (e) => {
         await uploadString(fotoRef, fotoDataUrl.value, 'data_url');
         const fotoFinalUrl = await getDownloadURL(fotoRef);
 
+        // Salvamento completo no Firestore estruturado para suportar login por Email ou Celular
         await addDoc(collection(db, "alunos"), {
-            ...data, fotoUrl: fotoFinalUrl, dataCadastro: new Date().toISOString(), statusPagamento: "Pendente", cordaoAtual: "Iniciante"
+            ...data,
+            email: (data.email || '').trim().toLowerCase(),
+            celular: (data.telefone || '').trim(),
+            senha: (data.senha || '').trim(),
+            emailResponsavel: (data.emailResponsavel || '').trim().toLowerCase(),
+            celularResponsavel: (data.emergenciaTel || '').trim(),
+            fotoUrl: fotoFinalUrl, 
+            dataCadastro: new Date().toISOString(), 
+            statusAtual: "Ativo", 
+            cordaoAtual: "Iniciante",
+            notas: {}
         });
         
         alert("Inscrição salva com sucesso! Gerando PDF para impressão...");
