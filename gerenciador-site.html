@@ -14,48 +14,67 @@
         .cms-form { background: white; padding: 25px; border-radius: 15px; border: 1px solid #ccc; margin-bottom: 30px; display: grid; gap: 15px; }
         .item-list { display: grid; gap: 10px; }
         .item-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center; }
+        textarea.input-padrao { resize: vertical; min-height: 80px; }
     </style>
 </head>
 <body>
     <header class="top-nav">
-        <div class="logo-area"><span style="font-weight: 800; font-size: 1.2rem; color: var(--primary-blue);">Painel CMS - Site Público</span></div>
-        <a href="admin.html" class="nav-item">Voltar ao Painel Master</a>
+        <div class="logo-area"><span style="font-weight: 800; font-size: 1.2rem; color: var(--primary-blue);">Painel CMS - Gestão do Site</span></div>
+        <a href="admin.html" class="nav-item"><i class="fas fa-arrow-left"></i> Voltar ao Painel Master</a>
     </header>
 
-    <div class="main-layout" style="max-width: 1200px;">
+    <div class="main-layout" style="max-width: 1300px;">
         <div class="cms-grid">
             <aside>
-                <button class="cms-btn active" onclick="mudarAbaCms('mestres')"><i class="fas fa-users"></i> Mestres</button>
-                <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar"></i> Agenda</button>
-                <button class="cms-btn" onclick="mudarAbaCms('locais')"><i class="fas fa-map-marker-alt"></i> Locais</button>
-                <button class="cms-btn" onclick="mudarAbaCms('loja')"><i class="fas fa-store"></i> Loja</button>
-                <button class="cms-btn" onclick="mudarAbaCms('kids')"><i class="fas fa-child"></i> Kids Slider</button>
+                <button class="cms-btn active" onclick="mudarAbaCms('profissionais')"><i class="fas fa-users"></i> Professores</button>
+                <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar"></i> Agenda / Mapas</button>
+                <button class="cms-btn" onclick="mudarAbaCms('locais')"><i class="fas fa-map-marker-alt"></i> Locais de Treino</button>
+                <button class="cms-btn" onclick="mudarAbaCms('loja')"><i class="fas fa-shopping-bag"></i> Loja Online</button>
+                <button class="cms-btn" onclick="mudarAbaCms('kids')"><i class="fas fa-child"></i> Slider Kids</button>
             </aside>
             <main>
+                <!-- ABA PROFISSIONAIS -->
+                <section id="aba-profissionais" class="aba-content active">
+                    <h2>Adicionar Membro da Equipe</h2>
+                    <p style="color: #666; margin-bottom: 15px;">Preencha para adicionar aos Mestres ou Professores no site público.</p>
+                    <form id="formEquipe" class="cms-form">
+                        <input type="text" id="eqNome" class="input-padrao" placeholder="Nome Completo" required>
+                        <select id="eqTipo" class="input-padrao" required>
+                            <option value="Mestre">Mestre</option>
+                            <option value="Professor">Professor</option>
+                        </select>
+                        <input type="url" id="eqImg" class="input-padrao" placeholder="URL da Imagem (Ex: Firebase Storage Link)" required>
+                        <textarea id="eqBio" class="input-padrao" placeholder="Breve Biografia" required></textarea>
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Profissional</button>
+                    </form>
+                    <div id="listaEquipe" class="item-list"></div>
+                </section>
+
                 <!-- ABA AGENDA -->
-                <section id="aba-agenda" class="aba-content active">
+                <section id="aba-agenda" class="aba-content">
                     <h2>Adicionar Evento na Agenda</h2>
                     <form id="formAgenda" class="cms-form">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <input type="datetime-local" id="dataEvento" class="input-padrao" required>
                             <input type="text" id="tituloEvento" class="input-padrao" placeholder="Título (Ex: Roda de Rua)" required>
                         </div>
-                        <input type="text" id="localEvento" class="input-padrao" placeholder="Endereço Completo" required>
-                        <input type="url" id="linkMidiaEvento" class="input-padrao" placeholder="Link do Álbum de Fotos (Preencha após o evento)">
-                        <button type="submit" class="btn-salvar-modal">Salvar Evento</button>
+                        <input type="text" id="localEvento" class="input-padrao" placeholder="Endereço Completo para exibição textual" required>
+                        <textarea id="iframeMapaEvento" class="input-padrao" placeholder="Cole aqui o link do Iframe (src) do Google Maps para exibir em Destaque" required></textarea>
+                        <input type="url" id="linkMidiaEvento" class="input-padrao" placeholder="Link do Álbum de Fotos (Opcional - botão aparece quando concluir)">
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Salvar Evento</button>
                     </form>
                     <div id="listaAgenda" class="item-list"></div>
                 </section>
 
                 <!-- ABA LOCAIS -->
                 <section id="aba-locais" class="aba-content">
-                    <h2>Cadastrar Nova Academia / Polo</h2>
+                    <h2>Cadastrar Polo de Treinamento</h2>
                     <form id="formLocais" class="cms-form">
                         <input type="text" id="nomePolo" class="input-padrao" placeholder="Nome do Polo (Ex: Rancho Alegre)" required>
                         <input type="text" id="profPolo" class="input-padrao" placeholder="Professor Responsável" required>
                         <input type="text" id="diasPolo" class="input-padrao" placeholder="Dias e Horários (Ex: Seg/Qua - 19h)" required>
-                        <input type="text" id="endPolo" class="input-padrao" placeholder="Rua, Número - Bairro" required>
-                        <button type="submit" class="btn-salvar-modal">Adicionar Local</button>
+                        <input type="url" id="linkMapsPolo" class="input-padrao" placeholder="URL do Google Maps do local" required>
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Local</button>
                     </form>
                     <div id="listaLocais" class="item-list"></div>
                 </section>
@@ -64,15 +83,23 @@
                 <section id="aba-loja" class="aba-content">
                     <h2>Adicionar Produto na Loja</h2>
                     <form id="formLoja" class="cms-form">
-                        <input type="file" id="fotoProduto" accept="image/*" required>
                         <input type="text" id="nomeProduto" class="input-padrao" placeholder="Nome do Produto" required>
                         <input type="text" id="precoProduto" class="input-padrao" placeholder="Preço (Ex: R$ 90,00)" required>
-                        <button type="submit" class="btn-salvar-modal">Adicionar Produto</button>
+                        <input type="url" id="imgProduto" class="input-padrao" placeholder="URL da Imagem do Produto" required>
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Produto</button>
                     </form>
+                    <div id="listaLoja" class="item-list"></div>
                 </section>
 
-                <section id="aba-mestres" class="aba-content"><p>Módulo de upload de Mestres ativo.</p></section>
-                <section id="aba-kids" class="aba-content"><p>Módulo de fotos Kids ativo.</p></section>
+                <section id="aba-kids" class="aba-content">
+                    <h2>Imagens do Slider Infantil</h2>
+                    <p style="color: #666; margin-bottom: 15px;">Cole as URLs das imagens que rodarão no banner das crianças.</p>
+                    <form id="formKids" class="cms-form">
+                        <input type="url" id="imgKids" class="input-padrao" placeholder="URL da Imagem" required>
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Foto ao Slider</button>
+                    </form>
+                    <div id="listaKids" class="item-list"></div>
+                </section>
             </main>
         </div>
     </div>
