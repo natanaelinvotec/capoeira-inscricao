@@ -10,53 +10,44 @@
 </head>
 <body>
 
-    <!-- HEADER E LOGO 3D -->
-    <header class="header">
-        <div class="header-top"><i class="fas fa-bolt"></i> Aulas de Capoeira em MS | Matricule-se Hoje!</div>
-        <div class="header-bg"></div>
-        <div class="nav-container">
-            <ul class="nav-menu left" id="nav-menu-left">
-                <li><a href="#inicio" class="nav-link">Início</a></li>
-                <li><a href="#equipe" class="nav-link">Equipe</a></li>
-                <li><a href="#agenda" class="nav-link">Agenda</a></li>
-            </ul>
-            <div class="logo-wrapper" id="logo-container">
-                <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo" class="logo-3d" id="logo-img"></a>
-            </div>
+    <!-- RED BULL STYLE HEADER -->
+    <header class="rb-header">
+        <div class="rb-header-left">
+            <i class="fas fa-th" style="font-size: 1.2rem; cursor: pointer;"></i>
+            <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo" class="rb-logo"></a>
+        </div>
+        
+        <nav class="rb-nav-center">
+            <a href="#inicio" class="rb-nav-item">Início</a>
+            <a href="#agenda" class="rb-nav-item">Agenda</a>
+            <a href="#equipe" class="rb-nav-item active">Nossa Equipe</a>
+            <a href="#academias" class="rb-nav-item">Academias <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 5px;"></i></a>
+        </nav>
+
+        <div class="rb-header-right">
+            <a href="login.html" class="rb-user-icon"><i class="far fa-user"></i></a>
             <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
-            <ul class="nav-menu right" id="nav-menu-right">
-                <li><a href="#academias" class="nav-link">Academias</a></li>
-                <li><a href="#kids" class="nav-link">Kids</a></li>
-                <li><a href="login.html" class="btn btn-primary"><i class="fas fa-user-circle"></i> Portal Aluno</a></li>
-            </ul>
         </div>
     </header>
 
-    <!-- HERO -->
-    <section id="inicio" class="hero">
-        <div class="hero-overlay"></div>
-        <i class="fas fa-music particle p1"></i><i class="fas fa-star particle p2"></i><i class="fas fa-fire particle p3"></i>
-        <div class="container hero-content">
-            <h1>LIBERDADE, EXPRESSÃO E CULTURA</h1>
-            <p>Desenvolva corpo e mente através da arte, música e ancestralidade afro-brasileira.</p>
-            <a href="#academias" class="btn btn-green"><i class="fas fa-play-circle"></i> Conheça Nossas Aulas</a>
+    <!-- RED BULL STYLE HERO & ATHLETE SLIDER -->
+    <section id="equipe" class="rb-hero">
+        <div class="rb-hero-gradient"></div>
+        <div class="rb-hero-content">
+            <h1>Mestres e Professores</h1>
+            <p>Conheça os profissionais da Capoeira Liberdade, suas trajetórias, conquistas e muito mais!</p>
         </div>
     </section>
 
-    <!-- EQUIPE: Estilo Red Bull Athletes Slider -->
-    <section id="equipe" class="container section-spacing mt-spaced">
-        <div class="section-title center">
-            <h2>Mestres e Professores</h2>
-            <p>Conheça os profissionais que guiarão sua trajetória, suas conquistas e história.</p>
+    <!-- SLIDER SOBREPONDO O HERO -->
+    <div class="rb-slider-wrapper">
+        <div class="rb-slider" id="equipe-container">
+            <!-- Injetado via main.js -->
         </div>
-        
-        <div class="redbull-slider" id="equipe-container">
-            <!-- Injetado via JS -->
-        </div>
-    </section>
+    </div>
 
     <!-- AGENDA -->
-    <section id="agenda" class="bg-white section-spacing">
+    <section id="agenda" class="bg-white section-spacing mt-spaced">
         <div class="container">
             <div class="section-title center">
                 <h2>Agenda do Semestre</h2>
@@ -68,15 +59,13 @@
                 </div>
                 <div class="destaque-card" id="card-destaque">
                     <span class="destaque-badge"><i class="fas fa-star"></i> DESTAQUE SELECIONADO</span>
-                    <h3 id="dest-title">Selecione um evento na lista</h3>
+                    <h3 id="dest-title">Selecione um evento</h3>
                     <div class="destaque-info"><i class="fas fa-calendar-check"></i> <span id="dest-date">--</span> | <i class="fas fa-clock"></i> <span id="dest-time">--</span></div>
                     <div class="destaque-info"><i class="fas fa-map-marked-alt"></i> <span id="dest-location">--</span></div>
                     
-                    <!-- MAPA DINÂMICO DO EVENTO -->
                     <div class="dest-map-container mt-spaced">
                         <iframe id="dest-map-iframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
-
                     <a href="#contato" class="btn btn-primary btn-full" style="margin-top: 20px;"><i class="fas fa-ticket-alt"></i> Confirmar Presença</a>
                 </div>
             </div>
@@ -90,17 +79,17 @@
             <p>Encontre o polo de treino mais próximo de você e agende sua aula.</p>
         </div>
         <div class="academias-grid" id="locais-container">
-            <!-- Injetado via JS -->
+            <!-- Injetado via JS (12+ locais) -->
         </div>
     </section>
 
-    <!-- MÓDULO KIDS -->
+    <!-- MÓDULO KIDS (BOLHAS E SLIDER) -->
     <section id="kids" class="kids-section">
         <div class="bubbles" id="bubbles-container"></div>
         <div class="container kids-content">
-            <div class="kids-text">
-                <h2>A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga"></i></h2>
-                <p>Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
+            <div style="color: white;">
+                <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px;">A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga"></i></h2>
+                <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 30px;">Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
                 <a href="#contato" class="btn btn-white-kids"><i class="fas fa-calendar-plus"></i> Agendar Aula Experimental</a>
             </div>
             
@@ -134,6 +123,48 @@
             </div>
         </div>
     </section>
+
+    <!-- FOOTER MODERNO -->
+    <footer class="rb-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="logo-liberdade390.png" alt="Logo" class="footer-logo">
+                    <p>Liberdade, Expressão e Cultura. Promovendo educação e cidadania através da capoeira.</p>
+                    <div class="footer-socials">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Navegação</h4>
+                    <a href="#inicio">Início</a>
+                    <a href="#equipe">Mestres</a>
+                    <a href="#agenda">Agenda de Eventos</a>
+                    <a href="#academias">Academias</a>
+                    <a href="#loja">Loja Oficial</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Suporte</h4>
+                    <a href="#">Área do Aluno</a>
+                    <a href="login.html">Painel do Professor</a>
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Política de Privacidade</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Fale Conosco</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Campo Grande / MS</p>
+                    <p><i class="fab fa-whatsapp"></i> (67) 99129-3269</p>
+                    <p><i class="fas fa-envelope"></i> contato@capoeiraliberdade.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Grupo de Capoeira Liberdade e Expressão. Desenvolvido via AtletaPay.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- MODAL DO PROFISSIONAL -->
     <div class="modal-prof" id="modalProf">
