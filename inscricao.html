@@ -1,157 +1,303 @@
-<!-- inscricao.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscrição - Capoeira Liberdade</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Inscrição - Capoeira Liberdade e Expressão</title>
+    <!-- Importação de fonte cursiva para simular a assinatura -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --primary-teal: #389E92; --primary-blue: #002D72; --bg-app: #EAF2F1; --text-dark: #2C3E50; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
-        body { background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal)); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .inscricao-container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); width: 100%; max-width: 600px; animation: slideUp 0.5s ease; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        h2 { color: var(--primary-blue); font-family: 'Montserrat', sans-serif; text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: var(--text-dark); font-size: 0.9rem; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; outline: none; font-size: 0.95rem; background: #fafafa; }
-        input:focus, select:focus { border-color: var(--primary-teal); background: #fff; }
-        .btn-submit { width: 100%; padding: 14px; background: var(--primary-teal); color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 20px; transition: 0.2s; }
-        .btn-submit:hover { background: var(--primary-blue); }
-        .responsavel-box { background: #f4f7f6; padding: 15px; border-radius: 10px; border: 1px solid #e0e6e5; margin-top: 15px; display: none; }
-        .voltar-login { text-align: center; margin-top: 15px; }
-        .voltar-login a { color: var(--primary-blue); text-decoration: none; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="inscricao.css">
 </head>
 <body>
-    <div class="inscricao-container">
-        <h2>Ficha de Inscrição / Cadastro</h2>
-        <form id="formInscricao">
-            <div class="form-group">
-                <label>Nome Completo do Aluno</label>
-                <input type="text" id="nomeAluno" required>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-group">
-                    <label>Idade</label>
-                    <input type="number" id="idadeAluno" min="3" max="100" required>
-                </div>
-                <div class="form-group">
-                    <label>Local de Treino (Academia)</label>
-                    <select id="localTreino" required>
-                        <option value="">Selecione...</option>
-                        <option value="Mestre Profeta">Mestre Profeta</option>
-                        <option value="Professora Taynara">Professora Taynara</option>
-                        <option value="Mestre Abraão">Mestre Abraão</option>
-                        <option value="Mestre Omar">Mestre Omar</option>
-                        <option value="Mestre Carlinhos">Mestre Carlinhos</option>
-                        <option value="Professor Maick">Professor Maick</option>
-                        <option value="Professor Tigoy">Professor Tigoy</option>
-                        <option value="Professor Rafinha">Professor Rafinha</option>
-                        <option value="Instrutor Leiliano">Instrutor Leiliano</option>
-                        <option value="Professor Lebrinha">Professor Lebrinha</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>E-mail (para login)</label>
-                <input type="email" id="emailAluno">
-            </div>
-            <div class="form-group">
-                <label>Celular / WhatsApp (para login)</label>
-                <input type="text" id="celularAluno" placeholder="(00) 00000-0000">
-            </div>
-            <div class="form-group">
-                <label>Senha de Acesso ao Painel</label>
-                <input type="password" id="senhaAluno" required placeholder="Crie uma senha segura">
-            </div>
-            <div class="form-group">
-                <label>Link da Foto de Perfil (Opcional)</label>
-                <input type="url" id="fotoAluno" placeholder="https://exemplo.com/foto.jpg">
-            </div>
 
-            <!-- Bloco para Menor de Idade -->
-            <div class="responsavel-box" id="boxResponsavel">
-                <h4 style="color: var(--primary-blue); margin-bottom: 10px;"><i class="fas fa-shield-alt"></i> Dados do Responsável (Obrigatório para menores de 12 anos)</h4>
-                <div class="form-group">
-                    <label>Nome do Responsável</label>
-                    <input type="text" id="nomeResponsavel">
-                </div>
-                <div class="form-group">
-                    <label>E-mail ou Celular do Responsável (para login)</label>
-                    <input type="text" id="identificadorResponsavel" placeholder="E-mail ou WhatsApp">
-                </div>
-            </div>
-
-            <button type="submit" class="btn-submit" id="btnSalvarInscricao">Concluir Inscrição</button>
-        </form>
-        <div class="voltar-login">
-            <a href="login.html"><i class="fas fa-arrow-left"></i> Voltar para o Login</a>
-        </div>
+    <div class="header">
+        <img src="logo-liberdade.jpg" alt="Logo Capoeira" class="logo-esfera">
+        <h1>Ficha de Inscrição Oficial</h1>
+        <p>Grupo de Capoeira Liberdade e Expressão</p>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <div class="container">
+        <!-- Barra de Progresso -->
+        <div class="progress-bar">
+            <div class="step-indicator active">1</div>
+            <div class="step-indicator">2</div>
+            <div class="step-indicator">3</div>
+            <div class="step-indicator">4</div>
+        </div>
 
-        const app = initializeApp({
-          apiKey: "AIzaSyBkwCDziiV-Uh7MLzsy9OYJmA_LMnn7jbg",
-          authDomain: "capoeira-liberdade.firebaseapp.com",
-          projectId: "capoeira-liberdade",
-          storageBucket: "capoeira-liberdade.firebasestorage.app",
-          messagingSenderId: "492022804215",
-          appId: "1:492022804215:web:c61aed556d9f1aa9576df2"
-        });
-        const db = getFirestore(app);
+        <form id="formInscricao">
+            
+            <!-- PASSO 1: DADOS PESSOAIS E CÂMERA -->
+            <div class="form-step active" id="step1">
+                <h2><i class="fas fa-camera"></i> Foto do Aluno</h2>
+                <div class="camera-container">
+                    <p>Tire uma foto para o seu perfil e carteirinha.</p>
+                    <div class="cam-controls">
+                        <button type="button" class="btn-cam" id="startCam"><i class="fas fa-video"></i> Iniciar Câmera</button>
+                        <button type="button" class="btn-cam btn-flip" id="flipCam" style="display:none;"><i class="fas fa-sync-alt"></i> Virar Câmera</button>
+                    </div>
+                    <video id="video" autoplay playsinline></video>
+                    <button type="button" class="btn-cam" id="snapBtn" style="display:none; background:var(--accent-green); width:100%; margin-top:10px;"><i class="fas fa-camera"></i> Capturar Foto</button>
+                    <canvas id="canvas"></canvas>
+                    <input type="hidden" id="fotoDataUrl" name="fotoDataUrl">
+                </div>
 
-        const idadeInput = document.getElementById('idadeAluno');
-        const boxResp = document.getElementById('boxResponsavel');
+                <h2>Dados Pessoais</h2>
+                <div class="form-group">
+                    <label>Local de Treinamento:</label>
+                    <select name="localTreino" required>
+                        <option value="">Selecione...</option>
+                        <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
+                        <option value="Academia Mestre Omar">Academia Mestre Omar</option>
+                        <option value="Academia Professor Rafinha">Academia Professor Rafinha</option>
+                        <option value="Academia Professor Tigoy">Academia Professor Tigoy</option>
+                        <option value="Academia Professor Maick">Academia Professor Maick</option>
+                        <option value="Academia Professor Lebrinha">Academia Professor Lebrinha</option>
+                        <option value="Academia Instrutor Leiliano">Academia Instrutor Leiliano</option>
+                        <option value="Academia Professora Taynara">Academia Professora Taynara</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome completo:</label>
+                    <input type="text" name="nome" id="inputNome" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Nascimento:</label>
+                        <input type="date" name="dataNasc" id="dataNasc" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Idade:</label>
+                        <input type="number" name="idade" id="campoIdade" readonly required>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>CPF ou RG:</label>
+                        <input type="text" name="documento" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone / WhatsApp:</label>
+                        <input type="text" name="telefone" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Endereço Completo:</label>
+                    <input type="text" name="endereco" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Bairro:</label>
+                        <input type="text" name="bairro" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cidade:</label>
+                        <input type="text" name="cidade" required>
+                    </div>
+                </div>
 
-        idadeInput.addEventListener('input', () => {
-            if(Number(idadeInput.value) < 12 && idadeInput.value !== "") {
-                boxResp.style.display = 'block';
-                document.getElementById('nomeResponsavel').required = true;
-                document.getElementById('identificadorResponsavel').required = true;
-            } else {
-                boxResp.style.display = 'none';
-                document.getElementById('nomeResponsavel').required = false;
-                document.getElementById('identificadorResponsavel').required = false;
-            }
-        });
+                <div id="secaoResponsavel">
+                    <h2>Contatos de Emergência (Responsável)</h2>
+                    <div class="form-group">
+                        <label>Nome do Responsável:</label>
+                        <input type="text" name="emergenciaNome" id="inputResponsavel" required>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Telefone:</label>
+                            <input type="text" name="emergenciaTel" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Parentesco:</label>
+                            <input type="text" name="parentesco" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        document.getElementById('formInscricao').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSalvarInscricao');
-            btn.innerHTML = 'Salvando...'; btn.disabled = true;
+            <!-- PASSO 2: SAÚDE E EXPERIÊNCIA -->
+            <div class="form-step" id="step2">
+                <h2>Informações de Saúde</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>1. Doença crônica?</label>
+                        <select name="doencaCronica"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                        <input type="text" name="qualDoenca" placeholder="Qual?" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>2. Problemas cardíacos?</label>
+                        <select name="cardiaco"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>3. Asma/Problemas respiratórios?</label>
+                        <select name="asma"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>4. Lesões (joelho, coluna, etc.)?</label>
+                        <select name="lesoes"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                        <input type="text" name="qualLesao" placeholder="Qual?" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>5. Já realizou cirurgia?</label>
+                        <select name="cirurgia"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                        <input type="text" name="qualCirurgia" placeholder="Qual?" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>6. Uso contínuo de medicamentos?</label>
+                        <select name="medicamentos"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                        <input type="text" name="qualMedicamento" placeholder="Qual?" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>7. Alergia a medicamentos?</label>
+                        <select name="alergia"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                        <input type="text" name="qualAlergia" placeholder="Qual?" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>8. Apto(a) para atividades físicas?</label>
+                        <select name="apto" required><option value="Sim">Sim</option><option value="Não">Não</option></select>
+                    </div>
+                </div>
 
-            const idade = Number(idadeInput.value);
-            const dadosNovoAluno = {
-                nome: document.getElementById('nomeAluno').value.trim(),
-                idade: idade,
-                localTreino: document.getElementById('localTreino').value,
-                email: document.getElementById('emailAluno').value.trim().toLowerCase(),
-                celular: document.getElementById('celularAluno').value.trim(),
-                senha: document.getElementById('senhaAluno').value.trim(),
-                fotoUrl: document.getElementById('fotoAluno').value.trim() || 'https://via.placeholder.com/150',
-                cordaoAtual: 'Iniciante',
-                statusAtivo: 'Ativo',
-                notas: {},
-                nomeResponsavel: idade < 12 ? document.getElementById('nomeResponsavel').value.trim() : '',
-                identificadorResponsavel: idade < 12 ? document.getElementById('identificadorResponsavel').value.trim().toLowerCase() : '',
-                dataCadastro: new Date().toISOString()
-            };
+                <h2>Experiência & Uniforme</h2>
+                <div class="form-group">
+                    <label>Já praticou capoeira antes?</label>
+                    <select name="jaPraticou"><option value="Não">Não</option><option value="Sim">Sim</option></select>
+                    <div class="grid-2" style="margin-top:5px;">
+                        <input type="text" name="ondePraticou" placeholder="Onde?">
+                        <input type="text" name="tempoPratica" placeholder="Tempo de prática?">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Tamanho da Camiseta:</label>
+                        <select name="tamCamiseta"><option value="P">P</option><option value="M">M</option><option value="G">G</option><option value="GG">GG</option><option value="Infantil">Infantil</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tamanho da Calça:</label>
+                        <select name="tamCalca"><option value="P">P</option><option value="M">M</option><option value="G">G</option><option value="GG">GG</option><option value="Infantil">Infantil</option></select>
+                    </div>
+                </div>
+            </div>
 
-            try {
-                await addDoc(collection(db, "alunos"), dadosNovoAluno);
-                alert("Inscrição realizada com sucesso! Faça seu login.");
-                window.location.href = 'login.html';
-            } catch(err) {
-                alert("Erro ao realizar inscrição.");
-                btn.innerHTML = 'Concluir Inscrição'; btn.disabled = false;
-            }
-        });
-    </script>
+            <!-- PASSO 3: REGRAS E ORIENTAÇÕES -->
+            <div class="form-step document-text" id="step3">
+                <h2>Primeiras Orientações ao Aluno e Responsável</h2>
+                
+                <div class="rule-box">
+                    <h3>Horários</h3>
+                    <ul>
+                        <li>Chegar com 10 a 15 minutos de antecedência.</li>
+                        <li>Após 15 minutos de atraso, o aluno poderá aguardar autorização para entrar.</li>
+                        <li>Evitar faltas sem justificativa. Em caso de ausência, avisar com antecedência.</li>
+                    </ul>
+                </div>
+
+                <div class="rule-box">
+                    <h3>Uniforme e Apresentação</h3>
+                    <p><strong>É obrigatório o uso do uniforme oficial do grupo:</strong></p>
+                    <ul>
+                        <li><strong>Treino:</strong> Camiseta oficial, calça branca, cordão, descalço.</li>
+                        <li><strong>Passeio/Eventos:</strong> Camiseta oficial de passeio, calça branca, cordão.</li>
+                    </ul>
+                    <p class="warning">⚠️ Não é permitido treinar de boné, chinelo, relógio, correntes ou acessórios que possam causar acidentes. Utilizar roupas apertadas ou inadequadas (legging, top, shorts curtos).</p>
+                    <p><strong>Manter sempre:</strong> Unha cortada, boa higiene pessoal e uniforme limpo.</p>
+                </div>
+
+                <div class="rule-box">
+                    <h3>Disciplina e Conduta</h3>
+                    <p>A capoeira é baseada em: Respeito aos mestres, professores e colegas; Obediência às orientações; Boa convivência e Linguagem adequada.</p>
+                    <h4 style="color: red; margin-top: 10px;">NÃO SERÁ PERMITIDO:</h4>
+                    <ul>
+                        <li>Brigas e Desrespeito.</li>
+                        <li>Palavrões.</li>
+                        <li>Uso de celular durante a aula.</li>
+                    </ul>
+                    <p><em>O aluno que não cumprir as regras poderá ser advertido.</em></p>
+                </div>
+                
+                <div class="rule-box">
+                    <h3>Sistema de Cordões e Pagamentos</h3>
+                    <p>Os cordões representam evolução, disciplina e tempo de dedicação, trocados mediante frequência e evolução técnica.</p>
+                    <ul>
+                        <li><strong>Mensalidade:</strong> R$ 50,00 por mês.</li>
+                    </ul>
+                    <div class="grid-2" style="margin-top: 10px;">
+                        <div class="form-group">
+                            <label>Melhor data para pagamento:</label>
+                            <select name="dataPagamento" required>
+                                <option value="">Selecione o dia...</option>
+                                <option value="Dia 5">Dia 5</option>
+                                <option value="Dia 10">Dia 10</option>
+                                <option value="Dia 15">Dia 15</option>
+                                <option value="Dia 20">Dia 20</option>
+                                <option value="Dia 25">Dia 25</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Forma de pagamento:</label>
+                            <select name="formaPagamento" required>
+                                <option value="">Selecione a forma...</option>
+                                <option value="Dinheiro">Dinheiro</option>
+                                <option value="PIX">PIX</option>
+                                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                                <option value="Cartão de Débito">Cartão de Débito</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSO 4: TERMOS E FINALIZAÇÃO -->
+            <div class="form-step document-text" id="step4">
+                <h2>Autorização e Termos</h2>
+                
+                <div class="rule-box">
+                    <h3>Autorização de Uso de Imagem</h3>
+                    <p>Eu autorizo o Grupo de Capoeira Liberdade e Expressão a utilizar minha imagem (ou do menor sob minha responsabilidade) em fotos e vídeos realizados durante aulas, treinos, eventos e apresentações, para fins de divulgação em redes sociais e materiais institucionais, sem qualquer ônus financeiro. Declaro estar ciente de que as imagens serão utilizadas de forma respeitosa e ética.</p>
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>Escolha uma opção:</label>
+                        <select name="usoImagem" required style="font-weight: bold; color: var(--primary-blue);">
+                            <option value="">Selecione...</option>
+                            <option value="AUTORIZO">AUTORIZO</option>
+                            <option value="NÃO AUTORIZO">NÃO AUTORIZO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="rule-box">
+                    <h3>Termo de Responsabilidade</h3>
+                    <p>Declaro que as informações preenchidas são verdadeiras e que estou ciente das atividades físicas desenvolvidas pelo Grupo de Capoeira Liberdade e Expressão, assumindo total responsabilidade por minha participação (ou do menor sob minha responsabilidade).</p>
+                    <label style="display: flex; gap: 10px; align-items: start; margin-top: 15px;">
+                        <input type="checkbox" required>
+                        <strong>Li e concordo com as regras de disciplina, uniforme, pagamentos e assumo a responsabilidade descrita acima.</strong>
+                    </label>
+                </div>
+                
+                <!-- Assinatura Estilizada Cursiva para Impressão -->
+                <div class="assinatura-print" style="display: none; margin-top: 50px; text-align: center;">
+                    <div class="linha-assinatura">
+                        <span id="assinaturaNomeFicha"></span>
+                    </div>
+                    <div style="margin-top: 2px; font-size: 0.9rem; font-weight: bold;">
+                        Assinatura do Aluno ou Responsável
+                    </div>
+                    <div style="margin-top: 8px; font-size: 0.85rem; color: #444;" id="dataHoraImpressaoFicha">
+                        Data e Hora: ___/___/______ --:--
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÕES DE NAVEGAÇÃO -->
+            <div class="form-navigation">
+                <button type="button" class="btn-nav" id="btnPrev" style="display: none;"><i class="fas fa-arrow-left"></i> Voltar</button>
+                <button type="button" class="btn-nav" id="btnNext" style="margin-left: auto;">Próximo <i class="fas fa-arrow-right"></i></button>
+                <button type="submit" class="btn-submit" id="btnSubmit" style="display: none;"><i class="fas fa-check-circle"></i> Enviar e Gerar PDF</button>
+            </div>
+        </form>
+    </div>
+
+    <script type="module" src="inscricao.js"></script>
 </body>
 </html>
