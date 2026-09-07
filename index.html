@@ -10,40 +10,39 @@
 </head>
 <body>
 
-    <!-- RED BULL STYLE HEADER -->
+    <!-- HEADER E LOGO 3D -->
     <header class="rb-header">
         <div class="rb-header-left">
-            <i class="fas fa-th" style="font-size: 1.2rem; cursor: pointer;"></i>
             <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo" class="rb-logo"></a>
         </div>
-        
         <nav class="rb-nav-center">
             <a href="#inicio" class="rb-nav-item">Início</a>
+            <a href="#equipe" class="rb-nav-item active">Atletas e Equipe</a>
             <a href="#agenda" class="rb-nav-item">Agenda</a>
-            <a href="#equipe" class="rb-nav-item active">Nossa Equipe</a>
-            <a href="#academias" class="rb-nav-item">Academias <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 5px;"></i></a>
+            <a href="#academias" class="rb-nav-item">Academias</a>
         </nav>
-
         <div class="rb-header-right">
-            <a href="login.html" class="rb-user-icon"><i class="far fa-user"></i></a>
+            <a href="login.html" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;"><i class="fas fa-user"></i> Portal</a>
             <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </header>
 
-    <!-- RED BULL STYLE HERO & ATHLETE SLIDER -->
-    <section id="equipe" class="rb-hero">
+    <!-- HERO -->
+    <section id="inicio" class="rb-hero">
         <div class="rb-hero-gradient"></div>
-        <div class="rb-hero-content">
-            <h1>Mestres e Professores</h1>
-            <p>Conheça os profissionais da Capoeira Liberdade, suas trajetórias, conquistas e muito mais!</p>
+        <div class="container rb-hero-content">
+            <h1>Atletas e Professores</h1>
+            <p>Conheça os atletas do mundo Liberdade, suas trajetórias, suas conquistas e muito mais!</p>
         </div>
     </section>
 
-    <!-- SLIDER SOBREPONDO O HERO -->
+    <!-- EQUIPE: SLIDER RED BULL STYLE -->
     <div class="rb-slider-wrapper">
+        <button class="slider-nav-btn prev-btn" id="prev-equipe"><i class="fas fa-chevron-left"></i></button>
         <div class="rb-slider" id="equipe-container">
-            <!-- Injetado via main.js -->
+            <!-- Injetado via JS do Firebase -->
         </div>
+        <button class="slider-nav-btn next-btn" id="next-equipe"><i class="fas fa-chevron-right"></i></button>
     </div>
 
     <!-- AGENDA -->
@@ -51,22 +50,20 @@
         <div class="container">
             <div class="section-title center">
                 <h2>Agenda do Semestre</h2>
-                <p>Clique nas datas ao lado para ver o local no mapa e detalhes do evento.</p>
+                <p>Acompanhe nossos eventos, batizados e rodas abertas.</p>
             </div>
             <div class="agenda-wrapper">
                 <div class="agenda-scroll-box" id="timeline-container">
                     <!-- Injetado via JS -->
                 </div>
                 <div class="destaque-card" id="card-destaque">
-                    <span class="destaque-badge"><i class="fas fa-star"></i> DESTAQUE SELECIONADO</span>
-                    <h3 id="dest-title">Selecione um evento</h3>
+                    <span class="destaque-badge"><i class="fas fa-star"></i> EVENTO EM DESTAQUE</span>
+                    <h3 id="dest-title">Carregando eventos...</h3>
                     <div class="destaque-info"><i class="fas fa-calendar-check"></i> <span id="dest-date">--</span> | <i class="fas fa-clock"></i> <span id="dest-time">--</span></div>
                     <div class="destaque-info"><i class="fas fa-map-marked-alt"></i> <span id="dest-location">--</span></div>
-                    
                     <div class="dest-map-container mt-spaced">
                         <iframe id="dest-map-iframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
-                    <a href="#contato" class="btn btn-primary btn-full" style="margin-top: 20px;"><i class="fas fa-ticket-alt"></i> Confirmar Presença</a>
                 </div>
             </div>
         </div>
@@ -79,34 +76,26 @@
             <p>Encontre o polo de treino mais próximo de você e agende sua aula.</p>
         </div>
         <div class="academias-grid" id="locais-container">
-            <!-- Injetado via JS (12+ locais) -->
+            <!-- Injetado via JS -->
         </div>
     </section>
 
-    <!-- MÓDULO KIDS (BOLHAS E SLIDER) -->
+    <!-- MÓDULO KIDS -->
     <section id="kids" class="kids-section">
         <div class="bubbles" id="bubbles-container"></div>
         <div class="container kids-content">
-            <div style="color: white;">
-                <h2 style="font-size: 3rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px;">A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga"></i></h2>
-                <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 30px;">Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
-                <a href="#contato" class="btn btn-white-kids"><i class="fas fa-calendar-plus"></i> Agendar Aula Experimental</a>
+            <div class="kids-text">
+                <h2>A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga"></i></h2>
+                <p>Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
+                <a href="#academias" class="btn btn-white-kids"><i class="fas fa-calendar-plus"></i> Agendar Aula Kids</a>
             </div>
-            
             <div class="figma-slider">
                 <div class="slider-images" id="kids-slider-track">
-                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800" class="slide active">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800" class="slide">
-                    <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=800" class="slide">
+                    <!-- Injetado via JS -->
                 </div>
                 <div class="slider-overlay">
                     <h3>Turmas Infantis</h3>
                     <p>Aprender brincando com segurança.</p>
-                </div>
-                <div class="slider-dots" id="slider-dots">
-                    <div class="dot active" data-idx="0"></div>
-                    <div class="dot" data-idx="1"></div>
-                    <div class="dot" data-idx="2"></div>
                 </div>
             </div>
         </div>
@@ -118,13 +107,17 @@
             <div class="section-title center">
                 <h2>Loja Oficial & Equipamentos</h2>
             </div>
-            <div class="scroll-container loja-scroll" id="loja-container">
-                <!-- Injetado via JS -->
+            <div class="rb-slider-wrapper">
+                <button class="slider-nav-btn prev-btn" id="prev-loja"><i class="fas fa-chevron-left"></i></button>
+                <div class="scroll-container loja-scroll" id="loja-container">
+                    <!-- Injetado via JS -->
+                </div>
+                <button class="slider-nav-btn next-btn" id="next-loja"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER MODERNO -->
+    <!-- FOOTER -->
     <footer class="rb-footer">
         <div class="container">
             <div class="footer-grid">
@@ -135,7 +128,6 @@
                         <a href="#"><i class="fab fa-instagram"></i></a>
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-tiktok"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="footer-links">
@@ -145,13 +137,6 @@
                     <a href="#agenda">Agenda de Eventos</a>
                     <a href="#academias">Academias</a>
                     <a href="#loja">Loja Oficial</a>
-                </div>
-                <div class="footer-links">
-                    <h4>Suporte</h4>
-                    <a href="#">Área do Aluno</a>
-                    <a href="login.html">Painel do Professor</a>
-                    <a href="#">Termos de Uso</a>
-                    <a href="#">Política de Privacidade</a>
                 </div>
                 <div class="footer-contact">
                     <h4>Fale Conosco</h4>
