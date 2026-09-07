@@ -1,3 +1,4 @@
+<!-- admin.html (Atualizado com inputs de edição para Nome, Idade e Foto) -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -44,7 +45,6 @@
     <div class="main-layout">
         <main class="content-area">
             
-            <!-- ABA ALUNOS E RELATÓRIOS -->
             <section id="aba-alunos" class="aba-content active">
                 <div class="section-header">
                     <h2>Lista Completa de Alunos - Painel de Controle e Distribuição</h2>
@@ -54,7 +54,6 @@
                     <p style="text-align: center; grid-column: 1/-1;">Carregando banco de dados...</p>
                 </div>
 
-                <!-- SEÇÃO DE GRÁFICOS (Relatórios) -->
                 <div id="secao-graficos" class="chart-section" style="margin-top: 50px;">
                     <div class="section-header" style="background: #002D72;">
                         <h2><i class="fas fa-chart-pie"></i> Inteligência de Dados e Evolução</h2>
@@ -65,28 +64,22 @@
                             <h3>Termômetro de Aprovação (Meta 70%)</h3>
                             <div class="canvas-container"><canvas id="chartTermometro"></canvas></div>
                         </div>
-                        
                         <div class="chart-box">
                             <h3>Status de Retenção (Ativos vs Inativos)</h3>
                             <div class="canvas-container"><canvas id="chartStatus"></canvas></div>
                         </div>
-
-                        <!-- Gráfico de Graduação (Ocupa as duas colunas) -->
                         <div class="chart-box full-width">
                             <h3>Pirâmide de Graduação (Quantidade por Cordão)</h3>
                             <div class="canvas-container"><canvas id="chartPiramide"></canvas></div>
                         </div>
-
                         <div class="chart-box full-width">
                             <h3>Desempenho por Fundamentos (Média do Grupo)</h3>
                             <div class="canvas-container"><canvas id="chartFundamentos"></canvas></div>
                         </div>
-
                         <div class="chart-box">
                             <h3>Distribuição por Academia</h3>
                             <div class="canvas-container"><canvas id="chartAcademias"></canvas></div>
                         </div>
-
                         <div class="chart-box">
                             <h3>Demografia (Kids vs Adultos)</h3>
                             <div class="canvas-container"><canvas id="chartIdades"></canvas></div>
@@ -95,7 +88,6 @@
                 </div>
             </section>
 
-            <!-- ABA ACADEMIAS -->
             <section id="aba-academias" class="aba-content">
                 <div class="section-header"><h2>Gestão de Academias e Permissões</h2></div>
                 <div class="card-padrao" style="margin-bottom: 20px;">
@@ -103,48 +95,42 @@
                     <form id="formNovaAcademia" style="display: grid; gap: 15px; margin-top: 15px;">
                         <input type="text" id="nomeAcademia" placeholder="Nome da Academia (Ex: Academia Mestre Profeta)" class="input-padrao" required>
                         <input type="text" id="nomeProfessor" placeholder="Nome do Professor Responsável" class="input-padrao" required>
-                        <input type="email" id="emailProfessor" placeholder="E-mail de Login do Professor" class="input-padrao" required>
+                        <input type="text" id="emailProfessor" placeholder="E-mail ou Celular de Login" class="input-padrao" required>
                         <input type="password" id="senhaProfessor" placeholder="Senha de Acesso" class="input-padrao" required>
                         <button type="submit" class="btn-detalhes" style="width: 250px;">Cadastrar Academia</button>
                     </form>
                 </div>
-                
                 <h3>Academias Registradas</h3>
-                <div class="academias-grid" id="listaAcademiasPainel">
-                    <!-- Lista injetada via JS -->
-                </div>
+                <div class="academias-grid" id="listaAcademiasPainel"></div>
             </section>
 
-            <!-- ABA FINANCEIRO -->
             <section id="aba-financeiro" class="aba-content">
                 <div class="section-header"><h2>Gestão Financeira e Pagamentos</h2></div>
                 <div class="card-padrao">
-                    <p>Módulo em construção para o próximo passo. Acompanhamento de PIX e mensalidades.</p>
+                    <p>Acompanhamento de mensalidades e vendas da lojinha em tempo real.</p>
                 </div>
             </section>
         </main>
 
-        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="widget">
                 <h3>Filtros Avançados</h3>
                 <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">Ao filtrar, os gráficos mostrarão apenas os dados da academia selecionada.</p>
                 <select class="input-padrao" id="filtroAcademia" style="margin-bottom: 10px;">
                     <option value="">Todas as Academias</option>
-                    <!-- Injetado dinamicamente -->
                 </select>
             </div>
         </aside>
     </div>
 
-    <!-- MODAL POPUP ALUNO -->
+    <!-- MODAL POPUP AVALIAÇÃO E EDIÇÃO DO ALUNO -->
     <div class="modal-overlay" id="modalAvaliacao">
         <div class="modal-content modal-large">
             <button class="close-modal" onclick="fecharModal()"><i class="fas fa-times"></i></button>
             <div class="modal-header-centered">
                 <img src="" id="modFoto" class="mod-foto-large">
-                <h2 id="modNome">NOME</h2>
-                <p><span id="modIdade">--</span> anos | <i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
+                <h2 id="modNomeTitulo">EDITAR ALUNO</h2>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="modAcademia">Academia</span></p>
             </div>
             <div class="cordao-container">
                 <div class="cordao-header"><span id="textoEvolucao">Progresso</span><span id="porcentagemEvolucao">0%</span></div>
@@ -152,13 +138,25 @@
             </div>
             <div class="modal-body-split">
                 <div class="mod-left">
-                    <div class="form-group-mod">
-                        <label>Status do Aluno:</label>
+                    <div class="form-group-mod" style="margin-bottom: 12px;">
+                        <label>Nome do Aluno:</label>
+                        <input type="text" id="modNomeInput" class="input-padrao">
+                    </div>
+                    <div class="form-group-mod" style="margin-bottom: 12px;">
+                        <label>Idade:</label>
+                        <input type="number" id="modIdadeInput" class="input-padrao">
+                    </div>
+                    <div class="form-group-mod" style="margin-bottom: 12px;">
+                        <label>URL da Foto:</label>
+                        <input type="text" id="modFotoInput" class="input-padrao">
+                    </div>
+                    <div class="form-group-mod" style="margin-bottom: 12px;">
+                        <label>Status:</label>
                         <select id="modStatus" class="input-padrao mod-input">
-                            <option value="Ativo">Ativo</option><option value="Inativo">Inativo</option><option value="Pausa">Pausa</option><option value="Lesionado">Lesionado</option><option value="Em Viagem">Em Viagem</option>
+                            <option value="Ativo">Ativo</option><option value="Inativo">Inativo</option><option value="Pausa">Pausa</option><option value="Lesionado">Lesionado</option>
                         </select>
                     </div>
-                    <div class="form-group-mod">
+                    <div class="form-group-mod" style="margin-bottom: 12px;">
                         <label>Graduação Atual:</label>
                         <select id="modCordao" class="input-padrao mod-input"></select>
                     </div>
@@ -169,13 +167,12 @@
                     <div class="criterios-grid" id="gridCriterios"></div>
                 </div>
             </div>
-            <div class="modal-footer-centered">
+            <div class="modal-footer-centered" style="margin-top: 20px;">
                 <button class="btn-salvar-modal" id="btnSalvarModal" onclick="salvarEdicaoAluno()"><i class="fas fa-save"></i> Atualizar Prontuário</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL EDITAR ACADEMIA -->
     <div class="modal-overlay" id="modalEditarAcademia">
         <div class="modal-content" style="max-width: 500px;">
             <button class="close-modal" onclick="fecharModalAcademia()"><i class="fas fa-times"></i></button>
@@ -183,7 +180,7 @@
             <form id="formEditAcademia" style="display: grid; gap: 15px;">
                 <div><label>Nome da Academia</label><input type="text" id="editNomeAcademia" class="input-padrao" required></div>
                 <div><label>Professor Responsável</label><input type="text" id="editNomeProfessor" class="input-padrao" required></div>
-                <div><label>E-mail de Login</label><input type="email" id="editEmailProfessor" class="input-padrao" required></div>
+                <div><label>E-mail ou Celular de Login</label><input type="text" id="editEmailProfessor" class="input-padrao" required></div>
                 <div><label>Nova Senha (opcional)</label><input type="password" id="editSenhaProfessor" class="input-padrao" placeholder="Deixe em branco para não alterar"></div>
                 <button type="submit" class="btn-salvar-modal" style="width: 100%; margin-top: 10px;"><i class="fas fa-save"></i> Salvar Alterações</button>
             </form>
