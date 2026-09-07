@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Capoeira Liberdade</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-teal: #389E92;
+            --primary-blue: #002D72;
+            --bg-app: #EAF2F1;
+            --text-dark: #2C3E50;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+        body { 
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal)); 
+            height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        
+        /* Círculos decorativos no fundo */
+        .shape { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.6; z-index: 1; }
+        .shape-1 { background: #00E676; width: 300px; height: 300px; top: -50px; left: -50px; animation: float 6s ease-in-out infinite; }
+        .shape-2 { background: #389E92; width: 400px; height: 400px; bottom: -100px; right: -50px; animation: float 8s ease-in-out infinite reverse; }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%; max-width: 400px;
+            z-index: 10; position: relative;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .header-login { text-align: center; margin-bottom: 30px; }
+        .header-login img { width: 80px; margin-bottom: 15px; border-radius: 50%; }
+        .header-login h2 { color: var(--primary-blue); font-family: 'Montserrat', sans-serif; font-size: 1.5rem; }
+        .header-login p { color: #7F8C8D; font-size: 0.9rem; margin-top: 5px; }
+
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-teal); }
+        .input-group input {
+            width: 100%; padding: 15px 15px 15px 45px;
+            border: 2px solid #E0E6E5; border-radius: 12px;
+            font-size: 1rem; outline: none; transition: 0.3s;
+            background: #F8FBFB; color: var(--text-dark);
+        }
+        .input-group input:focus { border-color: var(--primary-teal); box-shadow: 0 0 0 4px rgba(56, 158, 146, 0.1); background: #FFF; }
+        
+        .btn-login {
+            width: 100%; padding: 15px;
+            background: var(--primary-teal); color: white;
+            border: none; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; font-family: 'Montserrat', sans-serif;
+            cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-login:hover { background: var(--primary-blue); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,45,114,0.3); }
+        
+        .error-msg { color: #E74C3C; font-size: 0.85rem; text-align: center; margin-bottom: 15px; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+
+    <div class="login-container">
+        <div class="header-login">
+            <img src="logo-liberdade150.png" alt="Logo Capoeira">
+            <h2>Bem-vindo ao Painel</h2>
+            <p>Faça login para gerenciar seus alunos</p>
+        </div>
+
+        <div class="error-msg" id="errorMsg"><i class="fas fa-exclamation-circle"></i> E-mail ou senha incorretos.</div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Seu E-mail" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="senha" placeholder="Sua Senha" required>
+            </div>
+            <button type="submit" class="btn-login" id="btnAcessar">
+                Acessar Painel <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <script type="module" src="login.js"></script>
+</body>
+</html>
