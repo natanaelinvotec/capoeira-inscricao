@@ -1,10 +1,9 @@
+/* admin.js (Atualizado com suporte a edição de Nome, Idade e Foto do aluno) */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const sessaoString = sessionStorage.getItem('sessaoCapoeira');
-if (!sessaoString) {
-    window.location.href = 'login.html';
-}
+if (!sessaoString) { window.location.href = 'login.html'; }
 const usuarioLogado = JSON.parse(sessaoString);
 
 const firebaseConfig = {
@@ -81,7 +80,6 @@ window.onload = async () => {
         if (headerAlunos) {
             headerAlunos.innerHTML = `<i class="fas fa-users"></i> Alunos - Academia ${usuarioLogado.academia}`;
         }
-
         const sidebar = document.querySelector('.sidebar');
         if(sidebar) sidebar.style.display = 'none';
     }
@@ -120,10 +118,8 @@ async function carregarAcademias() {
     try {
         const snap = await getDocs(collection(db, "academias"));
         academiasDBGlobais = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
         let nomesUnicos = new Set(academiasPadrao);
         academiasDBGlobais.forEach(ac => nomesUnicos.add(normalizarAcademia(ac.nome)));
-        
         listaAcademias = Array.from(nomesUnicos).map(nome => ({ nome }));
         
         let selectHtml = '<option value="">Todas as Academias</option>';
@@ -138,7 +134,7 @@ async function carregarAcademias() {
                     <div class="academia-card">
                         <h4><i class="fas fa-map-marker-alt"></i> ${nomeLimpo}</h4>
                         <p><strong>Prof:</strong> ${ac.professor || 'Não informado'}</p>
-                        <p><strong>E-mail:</strong> ${ac.email || 'Não informado'}</p>
+                        <p><strong>Contato:</strong> ${ac.email || 'Não informado'}</p>
                         <div class="academia-actions">
                             <button class="btn-edit-ac" onclick="abrirEditarAcademia('${ac.id}')"><i class="fas fa-edit"></i> Editar</button>
                             <button class="btn-del-ac" onclick="excluirAcademia('${ac.id}', '${nomeLimpo}')"><i class="fas fa-trash"></i> Excluir</button>
@@ -146,7 +142,6 @@ async function carregarAcademias() {
                     </div>`;
             });
         }
-        
         const filtroAcademia = document.getElementById('filtroAcademia');
         if (filtroAcademia) filtroAcademia.innerHTML = selectHtml;
     } catch (e) { console.error(e); }
@@ -161,7 +156,7 @@ if(formNovaAcademia) {
             await addDoc(collection(db, "academias"), { 
                 nome: normalizarAcademia(nomeRaw), 
                 professor: document.getElementById('nomeProfessor').value, 
-                email: document.getElementById('emailProfessor').value, 
+                email: document.getElementById('emailProfessor').value.trim().toLowerCase(), 
                 senha: document.getElementById('senhaProfessor').value, 
                 data: new Date().toISOString() 
             });
@@ -197,7 +192,7 @@ if (formEditAcademia) {
         const objUpdate = {
             nome: normalizarAcademia(nomeRaw),
             professor: document.getElementById('editNomeProfessor').value,
-            email: document.getElementById('editEmailProfessor').value
+            email: document.getElementById('editEmailProfessor').value.trim().toLowerCase()
         };
         const s = document.getElementById('editSenhaProfessor').value;
         if(s.trim() !== "") objUpdate.senha = s;
@@ -244,7 +239,6 @@ function aplicarFiltros() {
 function renderizarGrid(alunos) {
     const grid = document.getElementById('gridAlunos');
     if (!grid) return;
-    
     grid.innerHTML = '';
     
     let optAc = '<option value="">Transferir para...</option>';
@@ -254,11 +248,7 @@ function renderizarGrid(alunos) {
     
     alunos.forEach(a => {
         let localLimpo = normalizarAcademia(a.localTreino);
-        
-        let htmlTransferencia = '';
-        if (usuarioLogado.role === 'admin') {
-            htmlTransferencia = `<select class="select-encaminhar" onchange="transferirAluno('${a.id}', this.value)">${optAc}</select>`;
-        }
+        let htmlTransferencia = usuarioLogado.role === 'admin' ? `<select class="select-encaminhar" onchange="transferirAluno('${a.id}', this.value)">${optAc}</select>` : '';
 
         grid.innerHTML += `
             <div class="aluno-card">
@@ -274,7 +264,7 @@ function renderizarGrid(alunos) {
                 </div>
                 <div class="card-bottom" style="${usuarioLogado.role === 'professor' ? 'justify-content: flex-end;' : ''}">
                     ${htmlTransferencia}
-                    <button class="btn-detalhes" onclick="abrirModal('${a.id}')">Avaliar Evolução</button>
+                    <button class="btn-detalhes" onclick="abrirModal('${a.id}')">Avaliar / Editar</button>
                 </div>
             </div>`;
     });
@@ -297,15 +287,15 @@ window.abrirModal = function(id) {
     const btnExcluir = document.getElementById('btnExcluirModal');
     btnExcluir.textContent = "Excluir Aluno";
     btnExcluir.classList.remove('confirm-danger');
-    
-    if (usuarioLogado.role === 'professor') {
-        btnExcluir.style.display = 'none';
-    }
 
     document.getElementById('modFoto').src = alunoSelecionado.fotoUrl || 'https://via.placeholder.com/90';
-    document.getElementById('modNome').textContent = alunoSelecionado.nome;
-    document.getElementById('modIdade').textContent = alunoSelecionado.idade;
+    document.getElementById('modNomeTitulo').textContent = alunoSelecionado.nome;
     document.getElementById('modAcademia').textContent = normalizarAcademia(alunoSelecionado.localTreino);
+    
+    // Inputs editáveis
+    document.getElementById('modNomeInput').value = alunoSelecionado.nome || '';
+    document.getElementById('modIdadeInput').value = alunoSelecionado.idade || '';
+    document.getElementById('modFotoInput').value = alunoSelecionado.fotoUrl || '';
     document.getElementById('modStatus').value = alunoSelecionado.statusAtual || 'Ativo';
 
     const selCordao = document.getElementById('modCordao');
@@ -363,19 +353,14 @@ function atualizarNota(idCrit, valor, starsArray) {
 
 function calcularPorcentagem() {
     let totalPontos = 0;
-    criteriosAtivos.forEach(c => {
-        if(notasAtuais[c.id]) totalPontos += Number(notasAtuais[c.id]);
-    });
-    
+    criteriosAtivos.forEach(c => { if(notasAtuais[c.id]) totalPontos += Number(notasAtuais[c.id]); });
     const maxPontos = criteriosAtivos.length * 10;
     let porc = maxPontos > 0 ? (totalPontos / maxPontos) * 100 : 0;
     
     document.getElementById('porcentagemEvolucao').textContent = `${Math.floor(porc > 100 ? 100 : porc)}%`;
     const cssCordao = document.getElementById('cordaoTrancado');
     cssCordao.style.width = `${porc > 100 ? 100 : porc}%`;
-    
-    if (porc >= 70) { cssCordao.style.boxShadow = "0 0 15px rgba(0, 230, 118, 0.8)"; } 
-    else { cssCordao.style.boxShadow = "none"; }
+    cssCordao.style.boxShadow = porc >= 70 ? "0 0 15px rgba(0, 230, 118, 0.8)" : "none";
 }
 
 window.excluirAlunoBtn = async function() {
@@ -394,9 +379,23 @@ window.salvarEdicaoAluno = async function() {
     const btn = document.getElementById('btnSalvarModal');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Atualizando...'; btn.disabled = true;
     try {
-        await updateDoc(doc(db, "alunos", alunoSelecionado.id), { statusAtual: document.getElementById('modStatus').value, cordaoAtual: document.getElementById('modCordao').value, notas: notasAtuais });
-        alert("Salvo!"); fecharModal(); carregarAlunos();
-    } catch(e) {} finally { btn.innerHTML = '<i class="fas fa-save"></i> Atualizar Prontuário'; btn.disabled = false; }
+        const novoNome = document.getElementById('modNomeInput').value.trim();
+        const novaIdade = Number(document.getElementById('modIdadeInput').value);
+        const novaFoto = document.getElementById('modFotoInput').value.trim();
+
+        await updateDoc(doc(db, "alunos", alunoSelecionado.id), { 
+            nome: novoNome,
+            idade: novaIdade,
+            fotoUrl: novaFoto,
+            statusAtual: document.getElementById('modStatus').value, 
+            cordaoAtual: document.getElementById('modCordao').value, 
+            notas: notasAtuais 
+        });
+        alert("Prontuário e dados atualizados com sucesso!"); 
+        fecharModal(); 
+        carregarAlunos();
+    } catch(e) { alert("Erro ao salvar."); } 
+    finally { btn.innerHTML = '<i class="fas fa-save"></i> Atualizar Prontuário'; btn.disabled = false; }
 }
 
 window.fecharModal = () => document.getElementById('modalAvaliacao').style.display = 'none';
@@ -418,7 +417,6 @@ function desenharGraficos(alunosAtuais) {
     alunosAtuais.forEach(a => {
         const idadeAluno = Number(a.idade) || 0;
         if(idadeAluno < 12) kids++; else adultos++;
-        
         if(a.statusAtual === 'Ativo') ativos++; else inativos++;
         const local = normalizarAcademia(a.localTreino); academiaCount[local] = (academiaCount[local] || 0) + 1;
         const rank = a.cordaoAtual || 'Iniciante'; rankCount[rank] = (rankCount[rank] || 0) + 1;
@@ -433,7 +431,7 @@ function desenharGraficos(alunosAtuais) {
 
         if(a.notas) {
             critAtivosAluno.forEach(c => {
-                if(a.notas[c.id] !== undefined && a.notas[c.id] !== null) {
+                if(a.notas[c.id] !== undefined) {
                     let notaVal = Number(a.notas[c.id]);
                     totalPontosAluno += notaVal;
                     fundamentosSoma[c.txt] += notaVal;
@@ -455,10 +453,7 @@ function desenharGraficos(alunosAtuais) {
     criarGrafico('chartTermometro', 'pie', ['Aptos (Candidatos Formatura)', 'Em Desenvolvimento'], [aptos, desenv], [colorGreen, colorYellow]);
     criarGrafico('chartStatus', 'doughnut', ['Ativos', 'Inativos/Pausa'], [ativos, inativos], [colorTeal, colorRed]);
     
-    let piramideLabels = [];
-    let piramideData = [];
-    let piramideColors = [];
-    
+    let piramideLabels = [], piramideData = [], piramideColors = [];
     ordemCordoes.forEach(nomeCordao => {
         if(rankCount[nomeCordao] !== undefined) {
             piramideLabels.push(nomeCordao);
@@ -483,20 +478,12 @@ function desenharGraficos(alunosAtuais) {
 function criarGrafico(canvasId, type, labels, data, colors, hideLegend = false) {
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    
     const ctx = canvas.getContext('2d');
     if(chartsInstances[canvasId]) chartsInstances[canvasId].destroy();
     
     chartsInstances[canvasId] = new Chart(ctx, {
         type: type,
-        data: {
-            labels: labels,
-            datasets: [{ data: data, backgroundColor: colors, borderWidth: 1 }]
-        },
-        options: { 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: { legend: { display: !hideLegend } }
-        }
+        data: { labels: labels, datasets: [{ data: data, backgroundColor: colors, borderWidth: 1 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: !hideLegend } } }
     });
 }
