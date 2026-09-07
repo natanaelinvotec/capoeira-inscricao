@@ -28,7 +28,7 @@
 
         <form id="formInscricao">
             
-            <!-- PASSO 1: DADOS PESSOAIS E CÂMERA -->
+            <!-- PASSO 1: DADOS PESSOAIS, CREDENCIAIS E CÂMERA -->
             <div class="form-step active" id="step1">
                 <h2><i class="fas fa-camera"></i> Foto do Aluno</h2>
                 <div class="camera-container">
@@ -43,19 +43,21 @@
                     <input type="hidden" id="fotoDataUrl" name="fotoDataUrl">
                 </div>
 
-                <h2>Dados Pessoais</h2>
+                <h2>Dados Pessoais e Acesso ao Painel</h2>
                 <div class="form-group">
                     <label>Local de Treinamento:</label>
                     <select name="localTreino" required>
                         <option value="">Selecione...</option>
-                        <option value="Academia Mestre Profeta">Academia Mestre Profeta</option>
-                        <option value="Academia Mestre Omar">Academia Mestre Omar</option>
-                        <option value="Academia Professor Rafinha">Academia Professor Rafinha</option>
-                        <option value="Academia Professor Tigoy">Academia Professor Tigoy</option>
-                        <option value="Academia Professor Maick">Academia Professor Maick</option>
-                        <option value="Academia Professor Lebrinha">Academia Professor Lebrinha</option>
-                        <option value="Academia Instrutor Leiliano">Academia Instrutor Leiliano</option>
-                        <option value="Academia Professora Taynara">Academia Professora Taynara</option>
+                        <option value="Mestre Profeta">Mestre Profeta</option>
+                        <option value="Professora Taynara">Professora Taynara</option>
+                        <option value="Mestre Abraão">Mestre Abraão</option>
+                        <option value="Mestre Omar">Mestre Omar</option>
+                        <option value="Mestre Carlinhos">Mestre Carlinhos</option>
+                        <option value="Professor Maick">Professor Maick</option>
+                        <option value="Professor Tigoy">Professor Tigoy</option>
+                        <option value="Professor Rafinha">Professor Rafinha</option>
+                        <option value="Instrutor Leiliano">Instrutor Leiliano</option>
+                        <option value="Professor Lebrinha">Professor Lebrinha</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -78,9 +80,17 @@
                         <input type="text" name="documento" required>
                     </div>
                     <div class="form-group">
-                        <label>Telefone / WhatsApp:</label>
-                        <input type="text" name="telefone" required>
+                        <label>Telefone / WhatsApp (Login por Celular):</label>
+                        <input type="text" name="telefone" id="celularAluno" placeholder="(00) 00000-0000" required>
                     </div>
+                </div>
+                <div class="form-group">
+                    <label>E-mail (Login por E-mail):</label>
+                    <input type="email" name="email" id="emailAluno" placeholder="seuemail@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>Senha de Acesso ao Painel:</label>
+                    <input type="password" name="senha" id="senhaAluno" required placeholder="Crie uma senha para acessar seu painel">
                 </div>
                 <div class="form-group">
                     <label>Endereço Completo:</label>
@@ -97,21 +107,26 @@
                     </div>
                 </div>
 
-                <div id="secaoResponsavel">
-                    <h2>Contatos de Emergência (Responsável)</h2>
+                <!-- Bloco dinâmico para menores de idade -->
+                <div id="secaoResponsavel" style="display:none; background:#f8fbfb; padding:15px; border-radius:10px; border:1px solid #e0e6e5; margin-top:20px;">
+                    <h2 style="font-size:1.2rem; color:var(--primary-blue);"><i class="fas fa-shield-alt"></i> Dados do Responsável (Obrigatório para menores de 12 anos)</h2>
                     <div class="form-group">
                         <label>Nome do Responsável:</label>
-                        <input type="text" name="emergenciaNome" id="inputResponsavel" required>
+                        <input type="text" name="emergenciaNome" id="inputResponsavel">
                     </div>
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Telefone:</label>
-                            <input type="text" name="emergenciaTel" required>
+                            <label>Telefone do Responsável (Login por Celular):</label>
+                            <input type="text" name="emergenciaTel" id="celularResponsavel" placeholder="(00) 00000-0000">
                         </div>
                         <div class="form-group">
                             <label>Parentesco:</label>
-                            <input type="text" name="parentesco" required>
+                            <input type="text" name="parentesco">
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail do Responsável (Login por E-mail):</label>
+                        <input type="email" name="emailResponsavel" id="emailResponsavel" placeholder="responsavel@exemplo.com">
                     </div>
                 </div>
             </div>
