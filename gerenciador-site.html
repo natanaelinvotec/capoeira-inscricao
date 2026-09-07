@@ -26,26 +26,23 @@
     <div class="main-layout" style="max-width: 1300px;">
         <div class="cms-grid">
             <aside>
-                <button class="cms-btn active" onclick="mudarAbaCms('profissionais')"><i class="fas fa-users"></i> Professores</button>
+                <button class="cms-btn active" onclick="mudarAbaCms('equipe')"><i class="fas fa-users"></i> Atletas e Equipe</button>
                 <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar"></i> Agenda / Mapas</button>
                 <button class="cms-btn" onclick="mudarAbaCms('locais')"><i class="fas fa-map-marker-alt"></i> Locais de Treino</button>
                 <button class="cms-btn" onclick="mudarAbaCms('loja')"><i class="fas fa-shopping-bag"></i> Loja Online</button>
-                <button class="cms-btn" onclick="mudarAbaCms('kids')"><i class="fas fa-child"></i> Slider Kids</button>
             </aside>
             <main>
-                <!-- ABA PROFISSIONAIS -->
-                <section id="aba-profissionais" class="aba-content active">
-                    <h2>Adicionar Membro da Equipe</h2>
-                    <p style="color: #666; margin-bottom: 15px;">Preencha para adicionar aos Mestres ou Professores no site público.</p>
+                <!-- ABA EQUIPE -->
+                <section id="aba-equipe" class="aba-content active">
+                    <h2>Adicionar Atleta / Professor</h2>
                     <form id="formEquipe" class="cms-form">
-                        <input type="text" id="eqNome" class="input-padrao" placeholder="Nome Completo" required>
-                        <select id="eqTipo" class="input-padrao" required>
-                            <option value="Mestre">Mestre</option>
-                            <option value="Professor">Professor</option>
-                        </select>
-                        <input type="url" id="eqImg" class="input-padrao" placeholder="URL da Imagem (Ex: Firebase Storage Link)" required>
-                        <textarea id="eqBio" class="input-padrao" placeholder="Breve Biografia" required></textarea>
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Profissional</button>
+                        <input type="text" id="eqNome" class="input-padrao" placeholder="Nome do Atleta/Mestre" required>
+                        <input type="text" id="eqTitulo" class="input-padrao" placeholder="Título (Ex: Skate, Capoeira)" required>
+                        <input type="url" id="eqCover" class="input-padrao" placeholder="URL Imagem de Ação (Capa Fundo)" required>
+                        <input type="url" id="eqImg" class="input-padrao" placeholder="URL Foto do Rosto (Avatar Redondo)" required>
+                        <textarea id="eqBio" class="input-padrao" placeholder="Biografia" required></textarea>
+                        <input type="text" id="eqWhats" class="input-padrao" placeholder="WhatsApp (Somente números 5567999999999)" required>
+                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar ao Site</button>
                     </form>
                     <div id="listaEquipe" class="item-list"></div>
                 </section>
@@ -73,6 +70,7 @@
                         <input type="text" id="nomePolo" class="input-padrao" placeholder="Nome do Polo (Ex: Rancho Alegre)" required>
                         <input type="text" id="profPolo" class="input-padrao" placeholder="Professor Responsável" required>
                         <input type="text" id="diasPolo" class="input-padrao" placeholder="Dias e Horários (Ex: Seg/Qua - 19h)" required>
+                        <input type="text" id="endPolo" class="input-padrao" placeholder="Endereço Físico" required>
                         <input type="url" id="linkMapsPolo" class="input-padrao" placeholder="URL do Google Maps do local" required>
                         <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Local</button>
                     </form>
@@ -89,16 +87,6 @@
                         <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Produto</button>
                     </form>
                     <div id="listaLoja" class="item-list"></div>
-                </section>
-
-                <section id="aba-kids" class="aba-content">
-                    <h2>Imagens do Slider Infantil</h2>
-                    <p style="color: #666; margin-bottom: 15px;">Cole as URLs das imagens que rodarão no banner das crianças.</p>
-                    <form id="formKids" class="cms-form">
-                        <input type="url" id="imgKids" class="input-padrao" placeholder="URL da Imagem" required>
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Foto ao Slider</button>
-                    </form>
-                    <div id="listaKids" class="item-list"></div>
                 </section>
             </main>
         </div>
