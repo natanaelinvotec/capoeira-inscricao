@@ -1,23 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. DADOS DA EQUIPE UNIFICADA (Red Bull Slider Style)
-    // coverImg: foto de ação de fundo, img: avatar de perfil
+    // 1. DADOS DA EQUIPE (Fotos Cover de Ação e Fotos de Perfil)
     const equipeData = [
-        { id: 1, nome: "Mestre Profeta", titulo: "Mestre Fundador", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200", coverImg: "https://images.unsplash.com/photo-1599839619722-39751411ea63?w=500", bio: "Mais de 30 anos dedicados à capoeira em MS.", whats: "5567991293269" },
-        { id: 2, nome: "Professora Taynara", titulo: "Professora", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200", coverImg: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500", bio: "Especialista em pedagogia infantil na capoeira.", whats: "5567991293269" },
-        { id: 3, nome: "Mestre Omar", titulo: "Mestre", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200", coverImg: "https://images.unsplash.com/photo-1543169174-ac58be27914f?w=500", bio: "Preservação da capoeira angola.", whats: "5567991293269" },
-        { id: 4, nome: "Mestre Abraão", titulo: "Mestre", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200", coverImg: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500", bio: "Musicalidade e tradição nas rodas.", whats: "5567991293269" },
-        { id: 5, nome: "Mestre Carlinhos", titulo: "Mestre Sênior", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200", coverImg: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500", bio: "Excelência técnica em fundamentos.", whats: "5567991293269" },
-        { id: 6, nome: "Professor Maick", titulo: "Professor", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200", coverImg: "https://images.unsplash.com/photo-1599839619722-39751411ea63?w=500", bio: "Alto rendimento físico.", whats: "5567991293269" },
-        { id: 7, nome: "Professor Tigoy", titulo: "Professor", img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200", coverImg: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500", bio: "Acrobacias e dinâmicas.", whats: "5567991293269" },
-        { id: 8, nome: "Professor Rafinha", titulo: "Professor", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200", coverImg: "https://images.unsplash.com/photo-1543169174-ac58be27914f?w=500", bio: "Aulas lúdicas.", whats: "5567991293269" },
-        { id: 9, nome: "Instrutor Leiliano", titulo: "Instrutor", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200", coverImg: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500", bio: "Apoio pedagógico diário.", whats: "5567991293269" },
-        { id: 10, nome: "Professor Lebrinha", titulo: "Professor", img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200", coverImg: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500", bio: "Respeito mútuo.", whats: "5567991293269" },
-        { id: 11, nome: "Visitante 1", titulo: "Convidado", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200", coverImg: "https://images.unsplash.com/photo-1599839619722-39751411ea63?w=500", bio: "Apoio.", whats: "5567991293269" },
-        { id: 12, nome: "Visitante 2", titulo: "Convidado", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200", coverImg: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=500", bio: "Apoio.", whats: "5567991293269" },
-        { id: 13, nome: "Visitante 3", titulo: "Convidado", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200", coverImg: "https://images.unsplash.com/photo-1543169174-ac58be27914f?w=500", bio: "Apoio.", whats: "5567991293269" },
-        { id: 14, nome: "Graduado Silva", titulo: "Monitor", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200", coverImg: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500", bio: "Apoio.", whats: "5567991293269" },
-        { id: 15, nome: "Graduado Souza", titulo: "Monitor", img: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200", coverImg: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500", bio: "Apoio.", whats: "5567991293269" }
+        { id: 1, nome: "L7NNON", titulo: "Skate", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200", coverImg: "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?w=500", whats: "5567991293269" },
+        { id: 2, nome: "Fernanda Maciel", titulo: "Corrida", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200", coverImg: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=500", whats: "5567991293269" },
+        { id: 3, nome: "João Chianca", titulo: "Surfe", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200", coverImg: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=500", whats: "5567991293269" },
+        { id: 4, nome: "Leticia Bufoni", titulo: "Skate", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200", coverImg: "https://images.unsplash.com/photo-1563299796-17596c35a7ea?w=500", whats: "5567991293269" },
+        { id: 5, nome: "Endrick", titulo: "Futebol", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200", coverImg: "https://images.unsplash.com/photo-1574629810360-7efbb211a53c?w=500", whats: "5567991293269" },
+        { id: 6, nome: "Mestre Profeta", titulo: "Capoeira", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200", coverImg: "https://images.unsplash.com/photo-1599839619722-39751411ea63?w=500", whats: "5567991293269" }
     ];
 
     let agendaData = [
@@ -43,16 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. RENDERIZAR EQUIPE (RED BULL STYLE SLIDER)
     const renderRBCard = (m) => `
         <div class="rb-card" data-id="${m.id}">
-            <div class="rb-media-wrapper">
-                <img src="${m.coverImg}" class="rb-cover" alt="Cover">
-                <img src="${m.img}" class="rb-avatar" alt="${m.nome}">
+            <div style="position:relative; height: 350px;">
+                <img src="${m.coverImg}" class="rb-card-cover" alt="Ação">
+                <img src="${m.img}" class="rb-card-avatar" alt="${m.nome}">
             </div>
-            <div class="rb-info">
-                <div class="rb-info-meta">
+            <div class="rb-card-body">
+                <div class="rb-card-flag">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/20px-Flag_of_Brazil.svg.png" alt="BR"> Brasil
                 </div>
-                <h3>${m.nome}</h3>
-                <p>${m.titulo}</p>
+                <div class="rb-card-name">${m.nome}</div>
+                <div class="rb-card-role">${m.titulo}</div>
             </div>
         </div>`;
 
@@ -60,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if(equipeContainer) {
         equipeContainer.innerHTML = equipeData.map(renderRBCard).join('');
 
-        // Modal Click Team
         const modalProf = document.getElementById('modalProf');
         document.querySelectorAll('.rb-card').forEach(card => {
             card.addEventListener('click', () => {
@@ -74,16 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         document.getElementById('closeProf').addEventListener('click', () => modalProf.classList.remove('show'));
-        
-        // Auto Scroll da Equipe
-        let sEq = 0;
-        setInterval(() => {
-            if(!equipeContainer.matches(':hover')) {
-                sEq += 1;
-                equipeContainer.scrollTo(sEq, 0);
-                if(sEq >= equipeContainer.scrollWidth - equipeContainer.clientWidth) sEq = 0;
-            }
-        }, 20);
     }
 
     // 3. AGENDA E MAPA INTERATIVO (Ordenação Automática)
@@ -202,23 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setInterval(() => { goSlide((currentSlide + 1) % slides.length); }, 4000);
     }
 
-    // 7. HEADER E LOGO 3D
+    // 7. HEADER E MENU
     document.getElementById('hamburger').addEventListener('click', () => {
-        document.getElementById('nav-menu-left').classList.toggle('active');
-        document.getElementById('nav-menu-right').classList.toggle('active');
+        document.querySelector('.rb-nav-center').classList.toggle('active');
     });
 
-    const logoContainer = document.getElementById('logo-container');
-    const logoImg = document.getElementById('logo-img');
-    if(logoContainer && logoImg) {
-        logoContainer.addEventListener('mousemove', (e) => {
-            const rect = logoContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            logoImg.style.transform = `rotateX(${-(y / 2)}deg) rotateY(${(x / 2)}deg) scale(1.1)`;
-        });
-        logoContainer.addEventListener('mouseleave', () => {
-            logoImg.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
-        });
-    }
 });
