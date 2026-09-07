@@ -15,6 +15,9 @@
         .item-list { display: grid; gap: 10px; }
         .item-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ccc; display: flex; justify-content: space-between; align-items: center; }
         textarea.input-padrao { resize: vertical; min-height: 80px; }
+        .action-btns { display: flex; gap: 10px; }
+        .btn-edit { background: var(--primary-blue); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+        .file-label { font-size: 0.85rem; font-weight: bold; color: var(--primary-blue); margin-bottom: -10px; }
     </style>
 </head>
 <body>
@@ -27,64 +30,75 @@
         <div class="cms-grid">
             <aside>
                 <button class="cms-btn active" onclick="mudarAbaCms('equipe')"><i class="fas fa-users"></i> Atletas e Equipe</button>
-                <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar"></i> Agenda / Mapas</button>
+                <button class="cms-btn" onclick="mudarAbaCms('agenda')"><i class="fas fa-calendar"></i> Agenda de Eventos</button>
                 <button class="cms-btn" onclick="mudarAbaCms('locais')"><i class="fas fa-map-marker-alt"></i> Locais de Treino</button>
                 <button class="cms-btn" onclick="mudarAbaCms('loja')"><i class="fas fa-shopping-bag"></i> Loja Online</button>
             </aside>
             <main>
                 <!-- ABA EQUIPE -->
                 <section id="aba-equipe" class="aba-content active">
-                    <h2>Adicionar Atleta / Professor</h2>
+                    <h2>Gerenciar Atleta / Professor</h2>
                     <form id="formEquipe" class="cms-form">
+                        <input type="hidden" id="editIdEquipe">
                         <input type="text" id="eqNome" class="input-padrao" placeholder="Nome do Atleta/Mestre" required>
                         <input type="text" id="eqTitulo" class="input-padrao" placeholder="Título (Ex: Skate, Capoeira)" required>
-                        <input type="url" id="eqCover" class="input-padrao" placeholder="URL Imagem de Ação (Capa Fundo)" required>
-                        <input type="url" id="eqImg" class="input-padrao" placeholder="URL Foto do Rosto (Avatar Redondo)" required>
+                        
+                        <label class="file-label">Foto de Fundo/Ação (Retangular)</label>
+                        <input type="file" id="eqCover" class="input-padrao" accept="image/*">
+                        
+                        <label class="file-label">Foto de Perfil (Avatar Redondo)</label>
+                        <input type="file" id="eqImg" class="input-padrao" accept="image/*">
+                        
                         <textarea id="eqBio" class="input-padrao" placeholder="Biografia" required></textarea>
                         <input type="text" id="eqWhats" class="input-padrao" placeholder="WhatsApp (Somente números 5567999999999)" required>
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar ao Site</button>
+                        <button type="submit" class="btn-salvar-modal" id="btnEq"><i class="fas fa-save"></i> Salvar Profissional</button>
                     </form>
                     <div id="listaEquipe" class="item-list"></div>
                 </section>
 
                 <!-- ABA AGENDA -->
                 <section id="aba-agenda" class="aba-content">
-                    <h2>Adicionar Evento na Agenda</h2>
+                    <h2>Gerenciar Evento na Agenda</h2>
                     <form id="formAgenda" class="cms-form">
+                        <input type="hidden" id="editIdAgenda">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <input type="datetime-local" id="dataEvento" class="input-padrao" required>
                             <input type="text" id="tituloEvento" class="input-padrao" placeholder="Título (Ex: Roda de Rua)" required>
                         </div>
-                        <input type="text" id="localEvento" class="input-padrao" placeholder="Endereço Completo para exibição textual" required>
-                        <textarea id="iframeMapaEvento" class="input-padrao" placeholder="Cole aqui o link do Iframe (src) do Google Maps para exibir em Destaque" required></textarea>
-                        <input type="url" id="linkMidiaEvento" class="input-padrao" placeholder="Link do Álbum de Fotos (Opcional - botão aparece quando concluir)">
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Salvar Evento</button>
+                        <input type="text" id="localEvento" class="input-padrao" placeholder="Endereço Completo (O Mapa será gerado automaticamente)" required>
+                        <label class="file-label">Link para Álbum de Fotos (Aparece ao concluir o evento)</label>
+                        <input type="url" id="linkMidiaEvento" class="input-padrao" placeholder="Link do Google Drive/Fotos (Opcional)">
+                        <button type="submit" class="btn-salvar-modal" id="btnAg"><i class="fas fa-save"></i> Salvar Evento</button>
                     </form>
                     <div id="listaAgenda" class="item-list"></div>
                 </section>
 
                 <!-- ABA LOCAIS -->
                 <section id="aba-locais" class="aba-content">
-                    <h2>Cadastrar Polo de Treinamento</h2>
+                    <h2>Gerenciar Polo de Treinamento</h2>
                     <form id="formLocais" class="cms-form">
+                        <input type="hidden" id="editIdLocais">
                         <input type="text" id="nomePolo" class="input-padrao" placeholder="Nome do Polo (Ex: Rancho Alegre)" required>
                         <input type="text" id="profPolo" class="input-padrao" placeholder="Professor Responsável" required>
                         <input type="text" id="diasPolo" class="input-padrao" placeholder="Dias e Horários (Ex: Seg/Qua - 19h)" required>
-                        <input type="text" id="endPolo" class="input-padrao" placeholder="Endereço Físico" required>
-                        <input type="url" id="linkMapsPolo" class="input-padrao" placeholder="URL do Google Maps do local" required>
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Local</button>
+                        <input type="text" id="endPolo" class="input-padrao" placeholder="Endereço Físico (Mapa Automático)" required>
+                        <button type="submit" class="btn-salvar-modal" id="btnLoc"><i class="fas fa-save"></i> Salvar Local</button>
                     </form>
                     <div id="listaLocais" class="item-list"></div>
                 </section>
                 
                 <!-- ABA LOJA -->
                 <section id="aba-loja" class="aba-content">
-                    <h2>Adicionar Produto na Loja</h2>
+                    <h2>Gerenciar Produto na Loja</h2>
                     <form id="formLoja" class="cms-form">
+                        <input type="hidden" id="editIdLoja">
                         <input type="text" id="nomeProduto" class="input-padrao" placeholder="Nome do Produto" required>
                         <input type="text" id="precoProduto" class="input-padrao" placeholder="Preço (Ex: R$ 90,00)" required>
-                        <input type="url" id="imgProduto" class="input-padrao" placeholder="URL da Imagem do Produto" required>
-                        <button type="submit" class="btn-salvar-modal"><i class="fas fa-save"></i> Adicionar Produto</button>
+                        
+                        <label class="file-label">Foto do Produto</label>
+                        <input type="file" id="imgProduto" class="input-padrao" accept="image/*">
+                        
+                        <button type="submit" class="btn-salvar-modal" id="btnLoja"><i class="fas fa-save"></i> Salvar Produto</button>
                     </form>
                     <div id="listaLoja" class="item-list"></div>
                 </section>
