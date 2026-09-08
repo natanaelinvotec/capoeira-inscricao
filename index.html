@@ -10,16 +10,22 @@
 </head>
 <body>
 
-    <!-- HEADER E LOGO 3D -->
+    <!-- ===================== CURSOR DE ENERGIA (AXÉ) ===================== -->
+    <canvas id="axe-trail-canvas"></canvas>
+    <div id="axe-cursor"></div>
+
+    <!-- ===================== HEADER GLASS PILL ===================== -->
     <header class="rb-header">
         <div class="rb-header-left">
-            <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo" class="rb-logo"></a>
+            <a href="#inicio"><img src="logo-liberdade390.png" alt="Logo Capoeira Liberdade" class="rb-logo" onerror="this.style.opacity=0"></a>
         </div>
-        <nav class="rb-nav-center">
-            <a href="#inicio" class="rb-nav-item">Início</a>
-            <a href="#equipe" class="rb-nav-item active">Atletas e Equipe</a>
+        <nav class="rb-nav-center" id="mainNav">
+            <a href="#inicio" class="rb-nav-item active">Início</a>
+            <a href="#equipe" class="rb-nav-item">Atletas e Equipe</a>
             <a href="#agenda" class="rb-nav-item">Agenda</a>
             <a href="#academias" class="rb-nav-item">Academias</a>
+            <a href="#kids" class="rb-nav-item">Kids</a>
+            <a href="#loja" class="rb-nav-item">Loja</a>
         </nav>
         <div class="rb-header-right">
             <a href="login.html" class="btn btn-primary" style="padding: 8px 15px; font-size: 0.8rem;"><i class="fas fa-user"></i> Portal</a>
@@ -27,102 +33,110 @@
         </div>
     </header>
 
-    <!-- HERO -->
+    <!-- ===================== HERO 3D ===================== -->
     <section id="inicio" class="rb-hero">
+        <span class="hero-bg-word" data-parallax-speed="0.15">GINGA</span>
+        <canvas id="three-hero-canvas"></canvas>
         <div class="rb-hero-gradient"></div>
         <div class="container rb-hero-content">
-            <h1>Atletas e Professores</h1>
-            <p>Conheça os atletas do mundo Liberdade, suas trajetórias, suas conquistas e muito mais!</p>
+            <span class="eyebrow-line">Grupo Capoeira Liberdade e Expressão · Campo Grande / MS</span>
+            <h1><span class="reveal-up">Axé em cada</span><span class="reveal-up">movimento.</span></h1>
+            <p class="reveal-up">Tradição afro-brasileira, disciplina e comunidade. Conheça nossos mestres, nossa agenda de rodas e batizados, e os polos de treino perto de você.</p>
+            <div class="hero-cta-row reveal-up">
+                <a href="#equipe" class="btn btn-primary"><i class="fas fa-users"></i> Conhecer a Equipe</a>
+                <a href="#academias" class="btn btn-green"><i class="fas fa-map-marker-alt"></i> Encontrar um Polo</a>
+            </div>
+        </div>
+        <div class="scroll-hint">Role para explorar<div class="line"></div></div>
+    </section>
+
+    <!-- ===================== EQUIPE: DUPLO CARROSSEL RED BULL ===================== -->
+    <section id="equipe" class="section-spacing bg-white">
+        <div class="container">
+            <div class="section-title center reveal-up">
+                <h2>Atletas e Professores</h2>
+                <p>Conheça os atletas do mundo Liberdade, suas trajetórias e conquistas.</p>
+            </div>
+        </div>
+        <div class="rb-slider-wrapper">
+            <div class="marquee-track-wrap">
+                <div class="marquee-track" id="equipe-row-1"></div>
+            </div>
+            <div class="marquee-track-wrap">
+                <div class="marquee-track row-reverse" id="equipe-row-2"></div>
+            </div>
         </div>
     </section>
 
-    <!-- EQUIPE: SLIDER RED BULL STYLE -->
-    <div class="rb-slider-wrapper">
-        <button class="slider-nav-btn prev-btn" id="prev-equipe"><i class="fas fa-chevron-left"></i></button>
-        <div class="rb-slider" id="equipe-container">
-            <!-- Injetado via JS do Firebase -->
-        </div>
-        <button class="slider-nav-btn next-btn" id="next-equipe"><i class="fas fa-chevron-right"></i></button>
-    </div>
-
-    <!-- AGENDA -->
-    <section id="agenda" class="bg-white section-spacing mt-spaced">
+    <!-- ===================== AGENDA 4D ===================== -->
+    <section id="agenda" class="bg-white section-spacing">
         <div class="container">
-            <div class="section-title center">
+            <div class="section-title center reveal-up">
                 <h2>Agenda do Semestre</h2>
                 <p>Acompanhe nossos eventos, batizados e rodas abertas.</p>
             </div>
             <div class="agenda-wrapper">
-                <div class="agenda-scroll-box" id="timeline-container">
-                    <!-- Injetado via JS -->
-                </div>
-                <div class="destaque-card" id="card-destaque">
+                <div class="agenda-scroll-box reveal-esquiva" id="timeline-container"></div>
+                <div class="destaque-card reveal-esquiva reveal-right" id="card-destaque">
                     <span class="destaque-badge"><i class="fas fa-star"></i> EVENTO EM DESTAQUE</span>
                     <h3 id="dest-title">Carregando eventos...</h3>
                     <div class="destaque-info"><i class="fas fa-calendar-check"></i> <span id="dest-date">--</span> | <i class="fas fa-clock"></i> <span id="dest-time">--</span></div>
-                    <div class="destaque-info"><i class="fas fa-map-marked-alt"></i> <span id="dest-location">--</span></div>
-                    <div class="dest-map-container mt-spaced">
-                        <iframe id="dest-map-iframe" src="" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="destaque-info" style="margin-bottom: 16px;"><i class="fas fa-map-marked-alt"></i> <span id="dest-location">--</span></div>
+                    <div class="dest-globe-container">
+                        <canvas id="globe-canvas"></canvas>
+                        <span class="pin-label" id="globe-pin-label">localizando...</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ACADEMIAS E LOCAIS -->
+    <!-- ===================== ACADEMIAS ===================== -->
     <section id="academias" class="container section-spacing">
-        <div class="section-title center">
+        <div class="section-title center reveal-up">
             <h2>Academias & Locais</h2>
             <p>Encontre o polo de treino mais próximo de você e agende sua aula.</p>
         </div>
-        <div class="academias-grid" id="locais-container">
-            <!-- Injetado via JS -->
-        </div>
+        <div class="academias-grid" id="locais-container"></div>
     </section>
 
-    <!-- MÓDULO KIDS -->
+    <!-- ===================== MÓDULO KIDS ===================== -->
     <section id="kids" class="kids-section">
         <div class="bubbles" id="bubbles-container"></div>
         <div class="container kids-content">
-            <div class="kids-text">
-                <h2>A CAPOEIRA MAIS DIVERTIDA PARA SEUS FILHOS! <i class="fas fa-child avatar-ginga"></i></h2>
-                <p>Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica.</p>
+            <div class="kids-text reveal-esquiva">
+                <h2>A capoeira mais divertida para seus filhos <i class="fas fa-child avatar-ginga"></i></h2>
+                <p>Desenvolvemos coordenação motora, respeito e disciplina de forma 100% lúdica. Estoure as bolhas aqui do lado — é só o começo da brincadeira!</p>
                 <a href="#academias" class="btn btn-white-kids"><i class="fas fa-calendar-plus"></i> Agendar Aula Kids</a>
             </div>
-            <div class="figma-slider">
-                <div class="slider-images" id="kids-slider-track">
-                    <!-- Injetado via JS -->
-                </div>
-                <div class="slider-overlay">
-                    <h3>Turmas Infantis</h3>
-                    <p>Aprender brincando com segurança.</p>
-                </div>
+            <div class="kids-media reveal-esquiva reveal-right">
+                <div class="card-stack" id="card-stack"></div>
+                <p class="stack-hint"><i class="fas fa-hand-pointer"></i> Arraste as fotos para o lado</p>
             </div>
         </div>
     </section>
 
-    <!-- LOJA ONLINE -->
+    <!-- ===================== LOJA ONLINE ===================== -->
     <section id="loja" class="bg-white section-spacing">
         <div class="container">
-            <div class="section-title center">
+            <div class="section-title center reveal-up">
                 <h2>Loja Oficial & Equipamentos</h2>
+                <p>Berimbaus, pandeiros, abadás e mais — direto para a sua roda.</p>
             </div>
             <div class="rb-slider-wrapper">
                 <button class="slider-nav-btn prev-btn" id="prev-loja"><i class="fas fa-chevron-left"></i></button>
-                <div class="scroll-container loja-scroll" id="loja-container">
-                    <!-- Injetado via JS -->
-                </div>
+                <div class="scroll-container loja-scroll" id="loja-container" style="display:flex; gap:25px; overflow-x:auto; padding: 20px 10px 40px; scroll-snap-type:x mandatory;"></div>
                 <button class="slider-nav-btn next-btn" id="next-loja"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- ===================== FOOTER ===================== -->
     <footer class="rb-footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <img src="logo-liberdade390.png" alt="Logo" class="footer-logo">
+                    <img src="logo-liberdade390.png" alt="Logo" class="footer-logo" onerror="this.style.opacity=0">
                     <p>Liberdade, Expressão e Cultura. Promovendo educação e cidadania através da capoeira.</p>
                     <div class="footer-socials">
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -146,12 +160,12 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Grupo de Capoeira Liberdade e Expressão. Desenvolvido via AtletaPay.</p>
+                <p>&copy; 2026 Grupo de Capoeira Liberdade e Expressão.</p>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL DO PROFISSIONAL -->
+    <!-- ===================== MODAL PROFISSIONAL ===================== -->
     <div class="modal-prof" id="modalProf">
         <div class="modal-prof-content">
             <button class="close-modal" id="closeProf"><i class="fas fa-times"></i></button>
@@ -165,6 +179,13 @@
         </div>
     </div>
 
-    <script type="module" src="main.js"></script>
+    <button class="btn-sound" id="soundToggle" title="Ativar som ambiente (berimbau)"><i class="fas fa-volume-mute"></i></button>
+
+    <!-- ===================== ENGINES: THREE.JS, GSAP, LENIS ===================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
